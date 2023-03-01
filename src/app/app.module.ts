@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
 
 import { ConfigurationComponent} from './components/configuration/configuration.component';
 import { ResultsComponent } from './components/results/results.component';
@@ -22,7 +23,8 @@ import { ResultsComponent } from './components/results/results.component';
     AppRoutingModule,
     FormsModule,
     InputTextareaModule,
-    TableModule
+    TableModule,
+    ButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
