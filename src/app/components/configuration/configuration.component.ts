@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { SequenceService } from 'src/app/sequence.service';
 
 @Component({
   selector: 'app-configuration',
@@ -10,14 +11,21 @@ export class ConfigurationComponent {
   sequenceData: string = '>seq1\nasdfasdfkjasdfkladf\n>seq2\nsoidfjowierj\n>seq3\nasoidfjosadifoweir';
   validationText: string = 'Click Validate button to validate sequence.';
   isValid: boolean = false;
+  jobID: number;
+  sendData: string[] = [];
   
-  constructor(private router: Router) {}
+  constructor(private router: Router, private _sequenceService: SequenceService) {}
 
   submitData() {
     if (this.isValid) {
       // send sequence to backend
       // jump to results page
-      this.router.navigateByUrl('/results');
+      // this.router.navigateByUrl('/results');
+      this.jobID = this._sequenceService.getResponse(this.sendData);
+      // this._sequenceService.getResponse(this.sendData)
+      //   .subscribe(data => this.jobID = data);
+      this.router.navigate(['/results', this.jobID]);
+      
     }
     else {
       this.router.navigateByUrl('/configuration');

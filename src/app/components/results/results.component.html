@@ -1,3 +1,7 @@
+<p-progressBar *ngIf="!contentLoaded" mode="indeterminate" color="#224063"></p-progressBar>
+<br>
+<p-skeleton *ngIf="!contentLoaded" width="100%" height="10rem"></p-skeleton>
+<br>
 <p-table [value]="rows">
     <ng-template pTemplate="header">
         <tr>
