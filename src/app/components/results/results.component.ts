@@ -2,12 +2,15 @@ import { Component } from '@angular/core';
 
 import { PredictionRow } from '../../models';
 
+
 @Component({
   selector: 'app-results',
   templateUrl: './results.component.html',
   styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent {
+  contentLoaded: boolean = true;
+  // subscribe to result service to get the predictionRow. after receive, set contentLoaded to false.
   rows: PredictionRow[] = [
     {
       sequence: 'abc',

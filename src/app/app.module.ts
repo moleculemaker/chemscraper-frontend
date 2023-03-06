@@ -8,9 +8,14 @@ import { AppComponent } from './app.component';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { SkeletonModule } from 'primeng/skeleton';
 
 import { ConfigurationComponent} from './components/configuration/configuration.component';
 import { ResultsComponent } from './components/results/results.component';
+
+import { SequenceService } from './sequence.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -24,9 +29,12 @@ import { ResultsComponent } from './components/results/results.component';
     FormsModule,
     InputTextareaModule,
     TableModule,
-    ButtonModule
+    ButtonModule,
+    ProgressBarModule,
+    SkeletonModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [SequenceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
