@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ResultService } from 'src/app/result.service';
 
 import { PredictionRow } from '../../models';
 
@@ -9,18 +10,18 @@ import { PredictionRow } from '../../models';
   styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent {
-  contentLoaded: boolean = true;
+  contentLoaded: boolean = false;
   // subscribe to result service to get the predictionRow. after receive, set contentLoaded to false.
-  rows: PredictionRow[] = [
-    {
-      sequence: 'abc',
-      ecNumbers: ['EC1.1.1.1, EC2.2.2.2'],
-      score: 0.1
-    },
-    {
-      sequence: 'def',
-      ecNumbers: ['EC3.3.3.3, EC4.4.4.4'],
-      score: 0.3
-    }
-  ];
+  rows: PredictionRow[] = [];
+
+  constructor(private _resultService: ResultService) {}
+
+  ngOnInit(): void {
+    this.getResult();
+  }
+
+  getResult(): void {
+    this.rows = this._resultService.getResult();
+    this.contentLoaded = true;
+  }
 }
