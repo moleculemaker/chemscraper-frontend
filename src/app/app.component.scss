@@ -1,0 +1,146 @@
+/**************** app ******************/
+
+//@import './css/core';
+
+//import the main styles here (only once!) as it is the main app css
+@import './css/styles';
+@import './css/shared';
+
+
+//use primeng theme colors whenver possible
+//https://www.primefaces.org/primeng/colors
+
+//**************** custom mixins ******************
+
+
+//**************** css ******************
+
+header {
+    display: flex;
+    align-items: center; //flex-end;
+    gap: $padding;
+
+    padding: $padding ($padding * 2);
+
+    .label {
+        color: css_var('header_label');
+
+        font: {
+            //design called for Montserrat font, kept as Inter to avoid loading extra fonts only used here?
+            size: .65rem;
+        }
+        text: {
+            transform: uppercase;
+        }
+    }
+
+    h3 {
+        margin: 0px;
+    }
+
+    .divider {
+        flex-shrink: 0;
+        width: 20px;
+        height: 100%;
+
+        border: {
+            left: 1px solid #f00;
+        }
+    }
+
+    .separator {
+        flex-grow: 1;
+    }
+}
+
+.tool_header {
+    color: css_var('background');
+    background: {
+        color: css_var('header_background');
+        image: css_var('header_background_gradient');
+    }
+
+    .container {
+        display: flex;
+        align-items: center;
+        gap: $padding;
+    }
+
+    .clean_logo {
+        font: {
+            size: 1.65rem;
+            weight: bold;
+        }
+
+        background: {
+            image: css_var('clean_logo_gradient');
+        }
+
+        @include background-clip(text);
+        @include text-fill-color(transparent);
+    }
+
+    .tagline {
+        font: {
+            size: .7rem;
+            weight: 600;
+        }
+
+        @include opacity(65);
+
+        .line {
+            position: relative;
+
+            height: 3px;
+
+            background: {
+                image: css_var('clean_logo_gradient_reverse');
+            }
+
+            margin: {
+                top: 2px;
+            }
+
+            &:before {
+                content: '';
+                position: absolute;
+                left: -($padding * .65);
+                bottom: 0px;
+                z-index: 100;
+
+                width: 3px;
+                height: 3px;
+
+                background: {
+                    color: css_var('clean_logo');
+                }
+            }
+        }
+    }
+
+    .link {
+        font: {
+            size: .75rem;
+        }
+
+        a,
+        a:link,
+        a:visited {
+            display: flex;
+            align-items: center;
+            gap: $padding * .25;
+
+            color: css_var('background');
+
+            @include opacity(65);
+        }
+
+        a:hover {
+            @include opacity(100);
+        }
+    }
+
+    .spacer {
+        flex-grow: 1;
+    }
+}

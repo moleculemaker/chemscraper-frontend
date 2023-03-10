@@ -355,6 +355,13 @@
 	background-clip: $clip;
 }
 
+// text fill color
+@mixin text-fill-color($color) {
+	-webkit-text-fill-color: $color;
+	-moz-text-fill-color: $color;
+	text-fill-color: $color;
+}
+
 @mixin tab-focus() {
 	//Default
 	outline: thin dotted #333;

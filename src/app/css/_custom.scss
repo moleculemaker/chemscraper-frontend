@@ -15,8 +15,15 @@ $colors: map.merge($colors, (
 	button_label: #fff,
 	button_secondary: lighten(get_color('text'), 30%), //same as text_light
 
+	clean_logo: #5689F5,
+	clean_logo_gradient: linear-gradient(to right, #D5618C, #5689F5),
+	clean_logo_gradient_reverse: linear-gradient(to right, #5689F5, #D5618C),
+
 	divider: #eee,
 
+	header_background: #224064,
+	header_background_gradient: linear-gradient(to right, #152438, #224064),
+	header_label: #9ca5ad,
 /*
 	section_type: #6ea,
 	section_type_dark: darken(#6ea, 10%),
@@ -47,3 +54,12 @@ $indexes: map.merge($indexes, (
 ));
 
 //**************** function and mixin ******************
+
+
+//**************** webfont ******************
+
+$font_family: 'Inter', sans-serif;
+$font_family_header: 'Inter', sans-serif;
+
+//place webfont into styles.scss that the main page loads...would love to figure out how to add it here instead in the future
+//@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400;600;700&display=swap');

@@ -12,6 +12,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { TableModule } from 'primeng/table';
 
 import { ConfigurationComponent} from './components/configuration/configuration.component';
+import { LandingPageComponent} from './components/landing-page/landing-page.component';
 import { ResultsComponent } from './components/results/results.component';
 
 import { SequenceService } from './sequence.service';
@@ -21,6 +22,7 @@ import { HttpClientModule } from '@angular/common/http';
   declarations: [
     AppComponent,
     ConfigurationComponent,
+    LandingPageComponent,
     ResultsComponent
   ],
   imports: [

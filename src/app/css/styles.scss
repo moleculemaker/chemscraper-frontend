@@ -13,6 +13,8 @@ example: document.documentElement.style.setProperty('--text-color', '#ff0000');
 
 */
 
+
+
 //****************
 //root css variables
 
@@ -54,12 +56,11 @@ example: document.documentElement.style.setProperty('--text-color', '#ff0000');
 
 @import 'core/reset';
 
-
 //**************** host ******************
 
 //for angular, change the html,body to :host
 
-body {
+:host {
 	color: css_var('text');
 	background: {
 		color: css_var('background');
