@@ -1,0 +1,45 @@
+<div class="page_container">
+    <div class="container">
+        <h3>Enter your protein sequence here</h3>
+        <h5>Choose an input method below</h5>
+
+        <p-panel styleClass="padded">
+            <ng-template pTemplate="header">
+                <p-selectButton [options]="inputMethods" [(ngModel)]="selectedInputMethod" optionValue="value" >
+                    <ng-template let-item>
+                        <i [class]="item.icon"></i>{{item.label}}
+                    </ng-template>
+                </p-selectButton>
+            </ng-template>
+
+            <div class="panel_content">
+                <ng-container *ngIf="selectedInputMethod == 'copy_and_paste'">
+                    <textarea pInputTextarea [rows]="8" [(ngModel)]="sequenceData"></textarea>
+<!--
+                    <p-button label="Validate" (click)="submitValidate()"></p-button>
+                    <p>{{validationText}}</p>
+-->
+                </ng-container>
+                <ng-container *ngIf="selectedInputMethod == 'use_example'">
+                    use example
+                </ng-container>
+            </div>
+
+<!--
+            <ng-template pTemplate="footer">
+                Footer content here
+            </ng-template>
+-->
+        </p-panel>
+
+        <div class="controls">
+            <div class="" *ngIf="selectedInputMethod == 'copy_and_paste'">
+                Validation
+            </div>
+
+            <div class="">
+                <p-button label="Get the CLEAN Result" (click)="submitData()" icon="pi-arrow-right" iconPos="right"></p-button>
+            </div>
+        </div>
+    </div>
+</div>

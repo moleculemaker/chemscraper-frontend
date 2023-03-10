@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ResultService } from 'src/app/result.service';
 
-import { PredictionRow } from '../../models';
+import { PredictionRow } from '../../../models';
 
 
 @Component({

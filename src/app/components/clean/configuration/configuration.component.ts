@@ -13,6 +13,12 @@ export class ConfigurationComponent {
   isValid: boolean = false;
   jobID: number;
   sendData: string[] = [];
+
+  inputMethods = [
+    {label: 'Copy and Paste', icon: 'pi pi-copy', value: 'copy_and_paste'},
+    {label: 'Use an example Sequence', icon: 'pi pi-table', value: 'use_example'}
+  ];
+  selectedInputMethod: any|null = 'copy_and_paste'; //this.inputMethods[0];
   
   constructor(private router: Router, private _sequenceService: SequenceService) {}
 
@@ -24,11 +30,11 @@ export class ConfigurationComponent {
       this.jobID = this._sequenceService.getResponse(this.sendData);
       // this._sequenceService.getResponse(this.sendData)
       //   .subscribe(data => this.jobID = data);
-      this.router.navigate(['/results', this.jobID]);
+      this.router.navigate(['/clean/results', this.jobID]);
       
     }
     else {
-      this.router.navigateByUrl('/configuration');
+      this.router.navigateByUrl('/clean');
     }
   }
 

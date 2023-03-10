@@ -1,0 +1,41 @@
+/**************** configuration ******************/
+
+//@import './css/core';
+
+//import the main styles here (only once!) as it is the main app css
+@import '../../../css/styles';
+@import '../../../css/shared';
+
+
+//use primeng theme colors whenver possible
+//https://www.primefaces.org/primeng/colors
+
+//**************** custom mixins ******************
+
+
+//**************** css ******************
+
+.panel_content {
+    //fill the space with the textarea
+    margin: -($padding * .75) -($padding * .5);
+
+    textarea {
+        display: block;
+
+        padding: ($padding) ($padding * 1.25);
+
+        border: 0px;
+
+        @include input-block-level();
+    }
+}
+
+::ng-deep p-selectbutton {
+    .p-button {
+        padding: ($padding * .5) ($padding);
+
+        font: {
+            size: .75rem;
+        }
+    }
+}

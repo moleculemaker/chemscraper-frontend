@@ -38,7 +38,7 @@ h1 {
 
     & + h3 {
         margin: {
-            top: 0px;
+            top: $padding * .2;
         }
     }
 }
@@ -51,7 +51,7 @@ h2 {
 
     & + h4 {
         margin: {
-            top: 0px;
+            top: $padding * .2;
         }
     }
 }
@@ -63,7 +63,7 @@ h3 {
 
     & + h5 {
         margin: {
-            top: 0px;
+            top: $padding * .2;
         }
     }
 }
@@ -85,6 +85,12 @@ h5 {
     }
     text: {
         transform: uppercase;
+    }
+}
+
+::ng-deep .padded {
+    margin: {
+        top: $padding;
     }
 }
 

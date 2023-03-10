@@ -15,6 +15,15 @@
 
 //**************** css ******************
 
+:host {
+    display: flex;
+    flex-direction: column;
+
+    min: {
+        height: 100vh;
+    }
+}
+
 header {
     display: flex;
     align-items: center; //flex-end;
@@ -54,6 +63,10 @@ header {
 }
 
 .tool_header {
+    top: 0px;
+    z-index: get_index(interface);
+    @include position(sticky);
+
     color: css_var('background');
     background: {
         color: css_var('header_background');
@@ -142,5 +155,31 @@ header {
 
     .spacer {
         flex-grow: 1;
+    }
+}
+
+.content {
+    flex-grow: 1;
+
+    padding: $padding;
+}
+
+footer {
+    border: {
+        top: 1px solid #C6C6C6;
+    }
+
+    font: {
+        size: .75rem;
+    }
+    text: {
+        transform: uppercase;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: $padding * .5;
     }
 }
