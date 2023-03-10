@@ -1,0 +1,49 @@
+//**************** custom ******************
+//this file should ONLY have custom variables, functions, or mixins that will be used across the project
+//use shared.scss for custom css classes that are inserted as needed
+
+
+//**************** variables ******************
+
+//$section_colors: type, category, area;
+
+$colors: map.merge($colors, (
+	background_faded: rgba(get_color('background'), .9),
+
+	button: get_color('primary'),
+	button_hover: darken(get_color('primary'), 10%),
+	button_label: #fff,
+	button_secondary: lighten(get_color('text'), 30%), //same as text_light
+
+	divider: #eee,
+
+/*
+	section_type: #6ea,
+	section_type_dark: darken(#6ea, 10%),
+	section_category: #e6a,
+	section_category_dark: darken(#e6a, 10%),
+	section_area: #6ae,
+	section_area_dark: darken(#6ae, 10%),
+*/
+));
+
+//create an alternative map here for dark color scheme color variables
+$dark_scheme_colors: map.merge($colors, (
+	background: get_color('text'),
+	background_faded: rgba(get_color('text'), .9),
+
+	button_secondary: #777,
+
+	divider: #777,
+
+	text: get_color('background'),
+));
+
+$automatic_dark_scheme_colors: false;
+
+
+$indexes: map.merge($indexes, (
+	controls: 5000,
+));
+
+//**************** function and mixin ******************

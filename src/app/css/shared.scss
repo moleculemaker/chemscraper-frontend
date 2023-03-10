@@ -1,0 +1,280 @@
+//**************** shared ******************
+
+$shortcut_delay: 1s;
+
+
+//**************** css ******************
+
+.centered {
+	overflow: {
+//		y: auto; //removed to allow final_score to get really big
+	}
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: $padding;
+
+	max: {
+//		width: 50rem;
+//		height: calc(100vh - (1rem * 6)); //removed to allow final_score to get really big
+	}
+
+	color: css_var('text');
+
+	@include not_app_small_size() {
+		margin: {
+			//a guess on how tall the content will be to center (not ideal way of doing it, but it does keep the content locked at top when dynamic height happens...centered moves around too much)
+			top: calc(50vh - (16rem));
+		}
+	}
+	padding: $padding;
+
+//$app_min_width: 880px;
+//$app_min_height: 700px;
+
+
+	&.inline {
+		overflow: {
+			y: auto; //removed to allow final_score to get really big
+		}
+
+		max: {
+			height: 100vh; //calc(100vh - (6rem));
+		}
+
+		margin: 0px;
+	}
+
+	&.absolute {
+		@include not_app_small_size() {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			z-index: get_interface();
+
+			min: {
+				width: calc(100vw - (16rem)); //help expand some text that tends to collapse without a parent width
+			}
+
+			margin: 0px;
+
+			@include translate(-50%, -50%);
+		}
+	}
+
+	p {
+		max: {
+			width: 45rem;
+		}
+
+		&.intro {
+			color: css_var('text_light');
+
+			line: {
+				height: 200%;
+			}
+		}
+	}
+
+	h1,
+	h3,
+	h4,
+	h5 {
+		&.emphasis {
+			text: {
+				transform: uppercase;
+			}
+		}
+	}
+
+	h1 {
+		color: css_var('primary');
+
+		font: {
+			size: 200%; //2rem;
+		}
+	}
+
+	h3 {
+		font: {
+			size: 130%; //1.3rem;
+			weight: bold;
+		}
+	}
+
+	h4 {
+		font: {
+			size: 90%; //.9rem;
+			weight: bold;
+		}
+		text: {
+			transform: uppercase;
+		}
+	}
+
+	h5 {
+		color: css_var('text_light');
+
+		font: {
+			size: 90%; //.9rem;
+		}
+	}
+
+	.center {
+		text: {
+			align: center;
+		}
+	}
+}
+
+.group {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: $padding * .5;
+
+	&.group_top {
+		align-items: flex-start;
+	}
+
+	&.group_wide_gap {
+		gap: $padding * 2;
+	}
+
+	@include is_app_small_size() {
+		flex-direction: column;
+	}
+}
+
+.padding {
+	@include is_app_small_size() {
+		margin: {
+//			top: $padding;
+		}
+	}
+
+	@include not_app_small_size() {
+		margin: {
+			top: $padding * 1.5;
+		}
+	}
+}
+
+.button {
+	cursor: pointer;
+	position: relative;
+
+	color: css_var('button_label');
+	background: {
+		color: css_var('quiz_button');
+	}
+
+	padding: ($padding * .5) ($padding);
+
+	@include border-radius($border_radius);
+
+	&:hover {
+		background: {
+			color: css_var('quiz_button_hover');
+		}
+
+		&[data-shortcut]:after {
+			@include opacity(100);
+			@include transition-delay($shortcut_delay);
+		}
+	}
+
+	&.button_secondary:not(:hover) {
+		background: {
+			color: css_var('button_secondary');
+		}
+	}
+
+	&.button_text {
+		color: css_var('quiz_button');
+		background: none !important;
+
+		&:hover {
+			color: css_var('button');
+			background: none !important;
+		}
+
+		&.button_secondary:not(:hover) {
+			color: css_var('button_secondary');
+		}
+	}
+
+	&[data-shortcut]:after {
+		//use data-shortcut attribute from <button data-shortcut="">
+		content: attr(data-shortcut);
+
+		display: flex;
+		position: absolute;
+		left: -($padding * .5);
+		top: 0%;
+		z-index: 100;
+
+		color: css_var('shortcut_text');
+		background: {
+			color: css_var('shortcut_background');
+		}
+
+		padding: 0px ($padding * .25);
+
+		font: {
+			size: $font_size_min;
+		}
+		text: {
+			transform: uppercase;
+		}
+
+		border: 1px solid css_var('background');
+
+		@include border-radius(2px);
+		@include translate(0%, -65%);
+		@include opacity(0);
+
+		@include transition(#{opacity .2s easing($ease-in-out-quad)});
+		@include transition-delay(0s);
+	}
+
+	.secondary {
+		color: inherit;
+
+		font: {
+			size: 75%;
+		}
+
+		@include opacity(50);
+	}
+}
+
+.divider {
+	@include is_app_small_size() {
+		width: 80vw;
+	}
+
+	@include not_app_small_size() {
+		min: {
+			width: (.65rem * 36);
+		}
+	}
+
+	border: {
+		bottom: .65rem dotted css_var('divider');
+	}
+}
+
+:deep(.secondary) {
+	color: css_var('text_light');
+
+	font: {
+		size: 80%; //.8rem   $font_size_min
+		style: italic;
+	}
+}
+
+.nowrap {
+	white-space: nowrap;
+}

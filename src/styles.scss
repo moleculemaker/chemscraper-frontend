@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+
+//use for base app and primeNG components
+body,
+body .p-component {
+  font: {
+    size: .9rem;
+    family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+  }
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+}

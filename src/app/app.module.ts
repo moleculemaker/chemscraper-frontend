@@ -5,11 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { InputTextareaModule } from 'primeng/inputtextarea';
-import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { SkeletonModule } from 'primeng/skeleton';
+import { TableModule } from 'primeng/table';
 
 import { ConfigurationComponent} from './components/configuration/configuration.component';
 import { ResultsComponent } from './components/results/results.component';
@@ -27,11 +27,13 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    InputTextareaModule,
-    TableModule,
+
     ButtonModule,
+    InputTextareaModule,
     ProgressBarModule,
     SkeletonModule,
+    TableModule,
+
     HttpClientModule
   ],
   providers: [SequenceService],
