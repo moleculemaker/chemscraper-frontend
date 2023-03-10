@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -10,6 +11,8 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { SkeletonModule } from 'primeng/skeleton';
+import { FileUploadModule } from 'primeng/fileupload';
+import { PanelModule } from 'primeng/panel';
 
 import { ConfigurationComponent} from './components/configuration/configuration.component';
 import { ResultsComponent } from './components/results/results.component';
@@ -32,6 +35,9 @@ import { HttpClientModule } from '@angular/common/http';
     ButtonModule,
     ProgressBarModule,
     SkeletonModule,
+    FileUploadModule,
+    PanelModule,
+    BrowserAnimationsModule,
     HttpClientModule
   ],
   providers: [SequenceService],

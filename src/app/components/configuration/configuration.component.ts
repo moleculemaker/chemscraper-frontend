@@ -13,6 +13,8 @@ export class ConfigurationComponent {
   isValid: boolean = false;
   jobID: number;
   sendData: string[] = [];
+  seqNum: number = 0;
+  private validAminoAcid= new RegExp("[^GPAVLIMCFYWHKRQNEDST]", "i");
   
   constructor(private router: Router, private _sequenceService: SequenceService) {}
 
@@ -36,15 +38,32 @@ export class ConfigurationComponent {
     return (new Set(array)).size !== array.length;
   }
 
+  isInvalidFasta(seq: string) {
+    if(this.validAminoAcid.test(seq)) {
+      return true;
+    }
+   return false;
+  }
+
   submitValidate () {
     let splitString: string[] = this.sequenceData.split('>').slice(1);
     let headers: string[] = [];
     let shouldSkip: boolean = false;
+    this.seqNum = 0;
 
     splitString.forEach((seq:string) => {
+      this.seqNum += 1;
       headers.push(seq.split('\n')[0]);
       
-      if (seq.split('\n')[1].length > 1022) {
+      if (this.isInvalidFasta(seq.split('\n').slice(1).join(''))) {
+        console.log(seq.split('\n')[0])
+        this.validationText = 'Invalid sequence: ' + seq.split('\n')[0] + ', This is not a valid fasta file format!';
+        this.isValid = false;
+        shouldSkip = true;
+        return
+      }
+
+      if (seq.split('\n').slice(1).join('').length > 1022) {
         this.validationText = 'Invalid sequence: ' + seq.split('\n')[0] + ', sequence Length is greater than 1022!';
         this.isValid = false;
         shouldSkip = true;
@@ -53,13 +72,13 @@ export class ConfigurationComponent {
     });
 
     if (this.hasDuplicateHeaders(headers)) {
-      this.validationText = 'Invalid sequence, contain duplicate headers!';
+      this.validationText = 'The file contains duplicated sequence identifier. All of them will be deleted automatically for better results.';
       this.isValid = false;
       shouldSkip = true;
       return
     }
     if (!shouldSkip) {
-      this.validationText = 'This is a valid sequence, click submit to submit your sequence.';
+      this.validationText = 'Valid No. of Sequences: ' + this.seqNum + ' Sequences';
       this.isValid = true;
     }
     
