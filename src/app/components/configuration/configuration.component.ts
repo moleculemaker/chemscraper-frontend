@@ -2,16 +2,18 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SequenceService } from 'src/app/sequence.service';
 
+import { PostResponse } from '../../models';
+
 @Component({
   selector: 'app-configuration',
   templateUrl: './configuration.component.html',
   styleUrls: ['./configuration.component.scss']
 })
 export class ConfigurationComponent {
-  sequenceData: string = '>seq1\nasdfasdfkjasdfkladf\n>seq2\nsoidfjowierj\n>seq3\nasoidfjosadifoweir';
+  sequenceData: string = '>seq1\nAVLIMCFYWH\n>seq2\nLIMCFYWHKRQNED\n>seq3\nMCFYPARQNEDVLWHKRQ';
   validationText: string = 'Click Validate button to validate sequence.';
   isValid: boolean = false;
-  jobID: number;
+  postRespond: PostResponse;
   sendData: string[] = [];
   seqNum: number = 0;
   private validAminoAcid= new RegExp("[^GPAVLIMCFYWHKRQNEDST]", "i");
@@ -23,10 +25,18 @@ export class ConfigurationComponent {
       // send sequence to backend
       // jump to results page
       // this.router.navigateByUrl('/results');
-      this.jobID = this._sequenceService.getResponse(this.sendData);
-      // this._sequenceService.getResponse(this.sendData)
-      //   .subscribe(data => this.jobID = data);
-      this.router.navigate(['/results', this.jobID]);
+      // this.jobID = this._sequenceService.getResponse(this.sendData);
+      this._sequenceService.getResponse(this.sendData)
+        .subscribe(
+          data => {
+            this.postRespond = data
+          },
+          error => {
+            console.error('Error getting contacts via subscribe() method:', error);
+          },
+          () => {
+            this.router.navigate(['/results', this.postRespond.jobId]);
+        });
       
     }
     else {

@@ -2,7 +2,7 @@
 <br>
 <p-skeleton *ngIf="!contentLoaded" width="100%" height="10rem"></p-skeleton>
 
-<p-table *ngIf="contentLoaded" [value]="rows">
+<p-table *ngIf="contentLoaded && !failedJob" [value]="rows">
     <ng-template pTemplate="header">
         <tr>
             <th>Sequence</th>
@@ -18,3 +18,7 @@
         </tr>
     </ng-template>
 </p-table>
+
+<h2 *ngIf="contentLoaded && failedJob">
+    JobID: {{jobID}} has failed!
+</h2>
