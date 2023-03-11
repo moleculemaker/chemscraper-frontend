@@ -50,7 +50,9 @@ export class ConfigurationComponent {
 
   isInvalidFasta(seq: string) {
     if(this.validAminoAcid.test(seq)) {
-      return true;
+isInvalidFasta(seq: string) {
+  return this.validAminoAcid.test(seq);
+}
     }
    return false;
   }
