@@ -34,7 +34,14 @@ export class ConfigurationComponent {
           error => {
             console.error('Error getting contacts via subscribe() method:', error);
           },
-          () => {
+this._sequenceService.getResponse(this.sendData)
+        .subscribe(
+          data => {
+            this.router.navigate(['/results', data.jobId]);
+          },
+          error => {
+            console.error('Error getting contacts via subscribe() method:', error);             
+        });
             this.router.navigate(['/results', this.postRespond.jobId]);
         });
       
