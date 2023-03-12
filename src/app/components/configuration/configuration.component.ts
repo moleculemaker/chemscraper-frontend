@@ -29,20 +29,10 @@ export class ConfigurationComponent {
       this._sequenceService.getResponse(this.sendData)
         .subscribe(
           data => {
-            this.postRespond = data
-          },
-          error => {
-            console.error('Error getting contacts via subscribe() method:', error);
-          },
-this._sequenceService.getResponse(this.sendData)
-        .subscribe(
-          data => {
             this.router.navigate(['/results', data.jobId]);
           },
           error => {
             console.error('Error getting contacts via subscribe() method:', error);             
-        });
-            this.router.navigate(['/results', this.postRespond.jobId]);
         });
       
     }
@@ -56,12 +46,7 @@ this._sequenceService.getResponse(this.sendData)
   }
 
   isInvalidFasta(seq: string) {
-    if(this.validAminoAcid.test(seq)) {
-isInvalidFasta(seq: string) {
-  return this.validAminoAcid.test(seq);
-}
-    }
-   return false;
+    return this.validAminoAcid.test(seq);
   }
 
   submitValidate () {
