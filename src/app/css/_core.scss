@@ -27,7 +27,7 @@ $activate_dark_scheme_colors: false;
 
 //**************** font ******************
 
-$font_size_default: 1rem;
+$font_size_default: .9rem;
 $font_family: sans-serif;
 $font_family_header: sans-serif;
 
@@ -60,7 +60,7 @@ $app_desired_height: 720px;
 $app_min_width: $mobile; //trigger minimum breakpoint
 $app_min_height: $mobile;
 
-$border_radius: 4px;
+$border_radius: 6px; //match default primeNG border-radius
 
 $font_size_min: 10px;
 

@@ -1,20 +1,79 @@
-<p-progressBar *ngIf="!contentLoaded" mode="indeterminate" color="#224063"></p-progressBar>
-<br>
-<p-skeleton *ngIf="!contentLoaded" width="100%" height="10rem"></p-skeleton>
-<br>
-<p-table [value]="rows">
-    <ng-template pTemplate="header">
-        <tr>
-            <th>Sequence</th>
-            <th>Predictions</th>
-            <th>Score</th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-row>
-        <tr>
-            <td>{{row.sequence}}</td>
-            <td>{{row.ecNumbers.join(', ')}}</td>
-            <td>{{row.score}}</td>
-        </tr>
-    </ng-template>
-</p-table>
+<div class="page_container">
+    <div class="container">
+        <div class="header">
+            <div class="info">
+                <h3>
+                    Job ID: Copy&Paste01/11/2023/18:00
+                    <i class="pi pi-copy copy_and_paste_button" (click)="copyAndPasteURL()"></i>
+                </h3>
+
+                <div class="details">
+                    <div class="sequence_count">Valid No. of Sequences: 1 Sequence </div>
+                    <div class="sequence_time">Submission Time: 01/11/2023 18:10</div>
+                </div>
+            </div>
+
+            <div class="spacer"></div>
+
+            <div class="buttons">
+                <button pButton label="Cancel" class="p-button-outlined p-button-secondary p-button-xs"></button>
+                <button pButton label="Run a new Request" icon="pi pi-plus" class="p-button-outlined p-button-sm"></button>
+            </div>
+        </div>
+
+        <div class="loader" *ngIf="!contentLoaded">
+            <p-progressBar mode="indeterminate" color="#224063"></p-progressBar>
+
+            <p-skeleton height="18rem" styleClass="padded"></p-skeleton>
+        </div>
+
+        <ng-container *ngIf="contentLoaded">
+            <p-table
+                #table
+                [value]="rows"
+
+                [rowsPerPageOptions]="[10,25,50]"
+                [paginator]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            >
+                <ng-template pTemplate="caption">
+                    <div class="table_caption">
+                        <div class="info">
+                            <h3>EC Number Prediction Results</h3>
+<!--
+turned this off, since only totalRecords appears to be accessible from the #table reference...will be shown in the bottom instead
+                            <h5 class="count">Showing {{table.first}} - {{table.last}} of {{table.totalRecords}} results</h5>
+-->
+                        </div>
+
+                        <button pButton label="Download Results" icon="pi pi-download" class="p-button-sm"></button>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="sequence">Identifier <p-sortIcon field="sequence"></p-sortIcon></th>
+                        <th pSortableColumn="ecNumbers">Predicted EC Number <p-sortIcon field="ecNumbers"></p-sortIcon></th>
+                        <th pSortableColumn="score">Confidence Score <p-sortIcon field="score"></p-sortIcon></th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-row>
+                    <tr>
+                        <td>{{row.sequence}}</td>
+                        <td>{{row.ecNumbers.join(', ')}}</td>
+                        <td>{{row.score}}</td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="3">
+                            <h3>No results.</h3>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>            
+        </ng-container>
+    </div>
+</div>

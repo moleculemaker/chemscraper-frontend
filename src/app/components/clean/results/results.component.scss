@@ -1,0 +1,96 @@
+/**************** app ******************/
+
+@import '../../../css/core';
+
+//use primeng theme colors whenver possible
+//https://www.primefaces.org/primeng/colors
+
+//**************** custom mixins ******************
+
+
+//**************** css ******************
+
+::ng-deep .p-progressbar {
+    height: .5rem;
+}
+
+.header {
+    @include on_desktop() {
+        display: flex;
+        align-items: flex-end;
+        gap: $padding;
+    }
+
+    margin: {
+        bottom: $padding * 2;
+    }
+
+    h3 {
+        margin: 0px;
+    }
+
+    .info {
+        .details {
+            @include on_desktop() {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: flex-start;
+                gap: (0px) $padding;
+            }
+
+            margin: {
+                top: $padding * .2;
+            }
+
+            font: {
+                size: .75rem;
+            }
+
+            > div {
+                white-space: nowrap;
+            }
+        }
+    }
+
+    .buttons {
+        display: flex;
+        align-items: center;
+        gap: $padding * .5;
+
+        @include not_desktop() {
+            margin: {
+                top: $padding;
+            }
+        }
+
+        .p-button {
+            white-space: nowrap;
+        }
+    }
+
+    .spacer {
+        flex-grow: 1;
+    }
+
+    .copy_and_paste_button {
+        cursor: pointer;
+
+        &:hover {
+            color: css_var(primary-color);
+        }
+    }
+}
+
+.loader {
+}
+
+.table_caption {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; //flex-end;
+    gap: $padding;
+
+    h3 {
+        margin: 0px;
+    }
+}

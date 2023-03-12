@@ -24,4 +24,8 @@ export class ResultsComponent {
     this.rows = this._resultService.getResult();
     this.contentLoaded = true;
   }
+
+  copyAndPasteURL(): void {
+    console.log('copy and paste url');
+  }
 }

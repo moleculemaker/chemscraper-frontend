@@ -1,11 +1,6 @@
 /**************** configuration ******************/
 
-//@import './css/core';
-
-//import the main styles here (only once!) as it is the main app css
-@import '../../../css/styles';
-@import '../../../css/shared';
-
+@import '../../../css/core';
 
 //use primeng theme colors whenver possible
 //https://www.primefaces.org/primeng/colors
@@ -17,12 +12,18 @@
 
 .panel_content {
     //fill the space with the textarea
-    margin: -($padding * .75) -($padding * .5);
+//    margin: -($padding * .75) (-($padding * .5));
+    margin: {
+        top: -($padding * 1.25);
+        right: -($padding * 1.25);
+        bottom: -($padding * 1.25);
+        left: -($padding * 1.25);
+    }
 
     textarea {
         display: block;
 
-        padding: ($padding) ($padding * 1.25);
+        padding: ($padding) ($padding * 1.5);
 
         border: 0px;
 
@@ -32,10 +33,158 @@
 
 ::ng-deep p-selectbutton {
     .p-button {
-        padding: ($padding * .5) ($padding);
+        display: inline-flex;
+        gap: $padding * .35;
 
         font: {
             size: .75rem;
         }
+
+        @include p-button-xs();
     }
+}
+
+.panel_bar {
+    display: flex;
+    align-items: center;
+    gap: $padding * .5;
+
+    padding: ($padding * .5) ($padding * 1.5);
+
+    border: {
+        bottom: 1px solid #dee2e6;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        margin: 0px;
+    }
+
+    .spacer {
+        flex-grow: 1;
+    }
+}
+
+.validation {
+    border: 1px solid #eee;
+
+    @include border-radius($border_radius); //css_var('border-radius', '', '')); //use primeng setting
+
+    .status {
+        display: flex;
+        align-items: flex-start;
+        gap: $padding * .5;
+
+        padding: $padding ($padding * 1.5);
+
+        @include border-top-radius($border_radius);
+
+        &.error {
+            color: css_var('status_error_text');
+            background: {
+                color: css_var('status_error');
+            }
+        }
+
+        &.warning {
+            color: css_var('status_warning_text');
+            background: {
+                color: css_var('status_warning');
+            }
+        }
+
+        .status_label {
+            font: {
+                weight: bold;
+            }
+        }
+    }
+
+    .info {
+        display: flex;
+        align-items: flex-start;
+        gap: $padding * .5;
+
+        padding: $padding ($padding * 1.5);
+
+        .message {
+            flex-grow: 1;
+
+            padding: {
+                top: $padding * .25;
+            }
+        }
+
+        .progress_icon {
+            .pi {
+                margin: .2rem;
+
+                font: {
+                    size: 1.25rem;
+                }
+            }
+        }
+    }
+}
+
+.controls {
+    @include on_desktop() {
+        display: flex;
+        align-items: flex-start;
+        gap: $padding * 2;
+    }
+
+    margin: {
+        top: $padding;
+    }
+
+    .review {
+        flex-grow: 1;
+
+        h3 {
+            margin: 0px;
+        }
+    }
+
+    .buttons {
+        padding: {
+            top: $padding * 1.5;
+        }
+
+        .p-button {
+            &:disabled {
+                color: css_var('button_disabled_label');
+                background: {
+                    color: css_var('button_disabled');
+                }
+
+                border: {
+                    color: css_var('button_disabled');
+                }
+            }
+        }
+
+        ::ng-deep .p-button-label {
+            white-space: nowrap;
+        }
+    }
+}
+
+.example_data {
+    overflow: {
+        y: auto;
+    }
+    min: {
+        height: 8rem;
+    }
+    max: {
+        height: 16rem;
+    }
+
+    padding: $padding ($padding * 1.5);
+
+    overflow-wrap: break-word;
 }

@@ -55,12 +55,11 @@ example: document.documentElement.style.setProperty('--text-color', '#ff0000');
 //****************
 
 @import 'core/reset';
+@import 'shared';
 
 //**************** host ******************
 
-//for angular, change the html,body to :host
-
-:host {
+html, body {
 	color: css_var('text');
 	background: {
 		color: css_var('background');

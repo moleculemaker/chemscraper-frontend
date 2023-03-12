@@ -8,12 +8,20 @@
 //$section_colors: type, category, area;
 
 $colors: map.merge($colors, (
+	primary: #224063,
+	primary_hover: lighten(#224063, 10%)
+));
+
+//these can override primeNG theme (but will need to update the primeng_theme.css file to use var() instead of hard coding)
+$colors: map.merge($colors, (
 	background_faded: rgba(get_color('background'), .9),
 
 	button: get_color('primary'),
 	button_hover: darken(get_color('primary'), 10%),
 	button_label: #fff,
 	button_secondary: lighten(get_color('text'), 30%), //same as text_light
+	button_disabled: #f2f5fc,
+	button_disabled_label: #6c757d,
 
 	clean_logo: #5689F5,
 	clean_logo_gradient: linear-gradient(to right, #D5618C, #5689F5),
@@ -24,6 +32,11 @@ $colors: map.merge($colors, (
 	header_background: #224064,
 	header_background_gradient: linear-gradient(to right, #152438, #224064),
 	header_label: #9ca5ad,
+
+	status_error: #f88,
+	status_error_text: #a33,
+	status_warning: #fef2e8,
+	status_warning_text: #d46213,
 /*
 	section_type: #6ea,
 	section_type_dark: darken(#6ea, 10%),
@@ -55,11 +68,17 @@ $indexes: map.merge($indexes, (
 
 //**************** function and mixin ******************
 
+@mixin p-button-xs() {
+    padding: ($padding * .65) ($padding);
+
+	.p-button-label {
+		font: {
+			weight: normal;
+		}
+	}
+}
 
 //**************** webfont ******************
 
 $font_family: 'Inter', sans-serif;
 $font_family_header: 'Inter', sans-serif;
-
-//place webfont into styles.scss that the main page loads...would love to figure out how to add it here instead in the future
-//@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400;600;700&display=swap');

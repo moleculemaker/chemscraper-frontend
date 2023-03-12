@@ -1,20 +1,24 @@
 //**************** shared across the entire project and components ******************
 
-//**************** css ******************
+//**************** webfont and primary body tags ******************
 
-.page_container {
-    display: flex;
-    justify-content: center;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600;700&display=swap');
 
-    .container {
-        max: {
-            width: $page_width;
-        }
-        width: 100%;
-
-        padding: $padding;
-    }
+//use for base app and primeNG components
+body,
+body .p-component {
+  font: {
+    family: $font_family;
+    size: $font_size_default;
+  }
 }
+
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+//**************** css ******************
 
 h1,
 h2,
@@ -58,6 +62,7 @@ h2 {
 
 h3 {
     font: {
+        size: 1.1rem;
         weight: 600;
     }
 
@@ -86,11 +91,31 @@ h5 {
     text: {
         transform: uppercase;
     }
+
+    @include opacity(60);
 }
 
-::ng-deep .padded {
+.padded {
     margin: {
         top: $padding;
+    }
+}
+
+.p-button-xs {
+    @include p-button-xs();
+}
+
+.page_container {
+    display: flex;
+    justify-content: center;
+
+    .container {
+        max: {
+            width: $page_width;
+        }
+        width: 100%;
+
+        padding: $padding;
     }
 }
 

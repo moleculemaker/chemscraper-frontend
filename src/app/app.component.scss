@@ -1,11 +1,6 @@
 /**************** app ******************/
 
-//@import './css/core';
-
-//import the main styles here (only once!) as it is the main app css
-@import './css/styles';
-@import './css/shared';
-
+@import './css/core';
 
 //use primeng theme colors whenver possible
 //https://www.primefaces.org/primeng/colors
@@ -29,7 +24,11 @@ header {
     align-items: center; //flex-end;
     gap: $padding;
 
-    padding: $padding ($padding * 2);
+    padding: 0px ($padding * 2);
+
+    > div {
+        padding: $padding 0px;
+    }
 
     .label {
         color: css_var('header_label');
@@ -48,12 +47,12 @@ header {
     }
 
     .divider {
-        flex-shrink: 0;
-        width: 20px;
-        height: 100%;
+        height: 4.75rem;
+
+        padding: 0px;
 
         border: {
-            left: 1px solid #f00;
+            left: 1px solid rgba(#495057, .3);
         }
     }
 

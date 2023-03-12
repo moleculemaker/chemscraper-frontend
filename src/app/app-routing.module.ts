@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { ConfigurationComponent } from './components/clean/configuration/configuration.component';
-import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { ResultsComponent } from './components/clean/results/results.component';
+
+import { LandingPageComponent } from './components/landing-page/landing-page.component';
 
 const routes: Routes = [
   { path: 'clean', component: ConfigurationComponent },
