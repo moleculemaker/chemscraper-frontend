@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SequenceService } from 'src/app/sequence.service';
 
-import { PostResponse } from '../../../models';
+import { PostResponse, PostSeqData, SingleSeqData } from '../../../models';
 
 @Component({
   selector: 'app-configuration',
@@ -31,6 +31,9 @@ export class ConfigurationComponent {
 
   seqNum: number = 0;
   private validAminoAcid= new RegExp("[^GPAVLIMCFYWHKRQNEDST]", "i");
+  realSendData: PostSeqData = {
+    input_fasta: []
+  };
   
   constructor(private router: Router, private _sequenceService: SequenceService) {}
 
@@ -42,7 +45,7 @@ export class ConfigurationComponent {
     if (this.isValid) {
       // send sequence to backend
       // jump to results page
-      this._sequenceService.getResponse(this.sendData)
+      this._sequenceService.getResponse(this.realSendData)
         .subscribe(
           data => {
             this.router.navigate(['/clean/results', data.jobId]);
@@ -70,21 +73,34 @@ export class ConfigurationComponent {
     let headers: string[] = [];
     let shouldSkip: boolean = false;
     this.seqNum = 0;
+    this.realSendData.input_fasta = [];
+    
+    
 
     splitString.forEach((seq:string) => {
+      let singleSeq: SingleSeqData = {
+        header: '',
+        sequence: ''
+      };
       this.seqNum += 1;
-      headers.push(seq.split('\n')[0]);
+      let aminoHeader: string = seq.split('\n')[0];
+      let aminoSeq: string = seq.split('\n').slice(1).join('');
       
-      if (this.isInvalidFasta(seq.split('\n').slice(1).join(''))) {
+      headers.push(aminoHeader);
+      singleSeq.header = aminoHeader;
+      singleSeq.sequence = aminoSeq;
+      this.realSendData.input_fasta.push(singleSeq);
+
+      if (this.isInvalidFasta(aminoSeq)) {
         console.log(seq.split('\n')[0])
-        this.validationText = 'Invalid sequence: ' + seq.split('\n')[0] + ', This is not a valid fasta file format!';
+        this.validationText = 'Invalid sequence: ' + aminoHeader + ', This is not a valid fasta file format!';
         this.isValid = false;
         shouldSkip = true;
         return
       }
 
-      if (seq.split('\n').slice(1).join('').length > 1022) {
-        this.validationText = 'Invalid sequence: ' + seq.split('\n')[0] + ', sequence Length is greater than 1022!';
+      if (aminoSeq.length > 1022) {
+        this.validationText = 'Invalid sequence: ' + aminoHeader + ', sequence Length is greater than 1022!';
         this.isValid = false;
         shouldSkip = true;
         return

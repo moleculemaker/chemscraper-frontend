@@ -14,6 +14,15 @@ export interface SeqResult {
   result: SingleSeqResult[];
 }
 
+export interface SingleSeqData {
+  header: string;
+  sequence: string;
+}
+
+export interface PostSeqData {
+  input_fasta: SingleSeqData[];
+}
+
 export interface PostResponse {
   jobId: string;
   url: string;

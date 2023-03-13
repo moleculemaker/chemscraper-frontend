@@ -14,7 +14,7 @@ export class ResultService {
   _url: string = '/backendAPI/getResult';
   dummyChooseArray: number[] = [0, 0, 0, 0, 0];
   private dummyRunningResult: PullingResponse = {
-    jobId: "b01f8a6b-2f3e-4160-8f5d-c9a2c5eead78",
+    jobId: "1",
     url: "mmli.clean.com/jobId/b01f8a6b-2f3e-4160-8f5d-c9a2c5eead78",
     status: "RUNNING",
     created_at: "2020-01-01 10:10:10",
@@ -22,7 +22,7 @@ export class ResultService {
   };
 
   private dummyFailedResult: PullingResponse = {
-    jobId: "b01f8a6b-2f3e-4160-8f5d-c9a2c5eead78",
+    jobId: "2",
     url: "mmli.clean.com/jobId/b01f8a6b-2f3e-4160-8f5d-c9a2c5eead78",
     status: "FAILED",
     created_at: "2020-01-01 10:10:10",
@@ -30,7 +30,7 @@ export class ResultService {
   };
 
   private dummyCompleteResult: PullingResponse = {
-    jobId: "b01f8a6b-2f3e-4160-8f5d-c9a2c5eead78",
+    jobId: "1",
     url: "mmli.clean.com/jobId/b01f8a6b-2f3e-4160-8f5d-c9a2c5eead78",
     status: "COMPLETE",
     created_at: "2020-01-01 10:10:10",
