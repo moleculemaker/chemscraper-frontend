@@ -61,7 +61,7 @@ export class ResultService {
   };
 
   constructor(private http: HttpClient) {
-    this.resuts$ = timer(1, 2000).pipe(
+    this.resuts$ = timer(1, 1000).pipe(
       switchMap((x) =>
         this.tempSelectResult(this.dummyChooseArray[x])
       ),

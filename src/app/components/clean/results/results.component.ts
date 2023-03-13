@@ -32,7 +32,6 @@ export class ResultsComponent {
     //   console.log(userId);
     // });
     this.sendJobID = Number(window.location.href.split('/').at(-1));
-    console.log('parse jobID: ', this.sendJobID);
     this.getResult();
   }
     

@@ -24,7 +24,7 @@ export class SequenceService {
 
   getResponse(sequence: string[]): Observable<PostResponse>{
     const respond = of(this.responseFromBackend);
-    const dealyRespond = respond.pipe(delay(1000));
+    const dealyRespond = respond.pipe(delay(200));
     return dealyRespond;
   }
   // getResponse(sequence: string[]): Observable<PostResponse>{

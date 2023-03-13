@@ -45,7 +45,6 @@ export class ConfigurationComponent {
       this._sequenceService.getResponse(this.sendData)
         .subscribe(
           data => {
-            console.log(data.jobId);
             this.router.navigate(['/clean/results', data.jobId]);
           },
           error => {
