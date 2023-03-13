@@ -32,6 +32,7 @@ export class ConfigurationComponent {
       this._sequenceService.getResponse(this.realSendData)
         .subscribe(
           data => {
+            console.log(data.jobId);
             this.router.navigate(['/results', data.jobId]);
           },
           error => {
