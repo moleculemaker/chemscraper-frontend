@@ -14,6 +14,8 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TableModule } from 'primeng/table';
+import { FileUploadModule } from 'primeng/fileupload';
+
 
 import { LandingPageComponent} from './components/landing-page/landing-page.component';
 
@@ -45,7 +47,9 @@ import { HttpClientModule } from '@angular/common/http';
     SelectButtonModule,
     SkeletonModule,
     TableModule,
-
+    FileUploadModule,
+    PanelModule,
+    BrowserAnimationsModule,
     HttpClientModule
   ],
   providers: [SequenceService],

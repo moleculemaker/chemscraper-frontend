@@ -19,12 +19,13 @@
 
                         <div class="spacer"></div>
 
-                        <button pButton label="Clear all" class="p-button-text p-button-plain p-button-xs"></button>
+                        <button pButton label="Clear all" (click)="clearAll()" class="p-button-text p-button-plain p-button-xs"></button>
+                        <button pButton label="Validate" (click)="submitValidate()" class="p-button-text p-button-plain p-button-xs"></button>
                     </div>
 
                     <textarea pInputTextarea [rows]="8" [(ngModel)]="sequenceData"></textarea>
 <!--
-                    <p-button label="Validate" (click)="submitValidate()"></p-button>
+                    
                     <p>{{validationText}}</p>
 -->
                 </ng-container>
@@ -61,9 +62,9 @@
                     <h3>Review</h3>
 
                     <div class="validation">
-                        <div class="status warning">
+                        <div *ngIf="!isValid" class="status warning">
                             <div class="status_label">Warning:</div>
-                            <div class="status_message">The file contains duplicated sequence identifier. All of them will be deleted automatically for better results. -- A123456</div>
+                            <div class="status_message">{{validationText}}</div>
                         </div>
 
                         <div class="info">
@@ -74,11 +75,11 @@
                                 </svg>                                    
                             </div>
 
-                            <div class="message">Valid No. of Sequences: 3 Sequences</div>
+                            <div class="message">Valid No. of Sequences: {{seqNum}} Sequences</div>
 
                             <div class="progress_icon">
-                                <i class="pi pi-spin pi-spinner"></i>
-                                <i class="pi pi-check-circle"></i>
+                                <i class="pi pi-spin pi-spinner" *ngIf="!isValid"></i>
+                                <i class="pi pi-check-circle" *ngIf="isValid"></i>
                             </div>
                         </div>
                     </div>

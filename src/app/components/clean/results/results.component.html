@@ -62,14 +62,14 @@ turned this off, since only totalRecords appears to be accessible from the #tabl
                     <tr>
                         <td>{{row.sequence}}</td>
                         <td>{{row.ecNumbers.join(', ')}}</td>
-                        <td>{{row.score}}</td>
+                        <td>{{row.score.join(', ')}}</td>
                     </tr>
                 </ng-template>
 
                 <ng-template pTemplate="emptymessage">
                     <tr>
                         <td colspan="3">
-                            <h3>No results.</h3>
+                            <h3>JobID: {{jobID}} has failed.</h3>
                         </td>
                     </tr>
                 </ng-template>
