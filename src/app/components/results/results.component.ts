@@ -42,12 +42,12 @@ export class ResultsComponent {
       let temp: PredictionRow = {
         sequence: '',
         ecNumbers: [],
-        score: 0
+        score: []
       };
       temp.sequence = seq.sequence;
       seq.result.forEach((ecNum: SingleSeqResult) => {
         temp.ecNumbers.push(ecNum.ecNumber);
-        temp.score = ecNum.score;
+        temp.score.push(ecNum.score);
       });
       this.rows.push(temp);
     })

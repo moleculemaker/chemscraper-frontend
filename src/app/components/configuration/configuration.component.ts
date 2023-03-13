@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SequenceService } from 'src/app/sequence.service';
 
-import { PostResponse } from '../../models';
+import { PostResponse, PostSeqData, SingleSeqData } from '../../models';
 
 @Component({
   selector: 'app-configuration',
@@ -17,6 +17,9 @@ export class ConfigurationComponent {
   sendData: string[] = [];
   seqNum: number = 0;
   private validAminoAcid= new RegExp("[^GPAVLIMCFYWHKRQNEDST]", "i");
+  realSendData: PostSeqData = {
+    input_fasta: []
+  };
   
   constructor(private router: Router, private _sequenceService: SequenceService) {}
 
@@ -26,7 +29,7 @@ export class ConfigurationComponent {
       // jump to results page
       // this.router.navigateByUrl('/results');
       // this.jobID = this._sequenceService.getResponse(this.sendData);
-      this._sequenceService.getResponse(this.sendData)
+      this._sequenceService.getResponse(this.realSendData)
         .subscribe(
           data => {
             this.router.navigate(['/results', data.jobId]);
@@ -54,11 +57,19 @@ export class ConfigurationComponent {
     let headers: string[] = [];
     let shouldSkip: boolean = false;
     this.seqNum = 0;
+    this.realSendData.input_fasta = [];
+    let singleSeq: SingleSeqData = {
+      header: '',
+      sequence: ''
+    };
 
     splitString.forEach((seq:string) => {
       this.seqNum += 1;
       headers.push(seq.split('\n')[0]);
-      
+      singleSeq.header = seq.split('\n')[0];
+      singleSeq.sequence = seq.split('\n').slice(1).join('');
+      this.realSendData.input_fasta.push(singleSeq);
+
       if (this.isInvalidFasta(seq.split('\n').slice(1).join(''))) {
         console.log(seq.split('\n')[0])
         this.validationText = 'Invalid sequence: ' + seq.split('\n')[0] + ', This is not a valid fasta file format!';

@@ -1,7 +1,7 @@
 export interface PredictionRow {
   sequence: string;
   ecNumbers: string[];
-  score: number;
+  score: number[];
 }
 
 export interface SingleSeqResult {
@@ -12,6 +12,15 @@ export interface SingleSeqResult {
 export interface SeqResult {
   sequence: string;
   result: SingleSeqResult[];
+}
+
+export interface SingleSeqData {
+  header: string;
+  sequence: string;
+}
+
+export interface PostSeqData {
+  input_fasta: SingleSeqData[];
 }
 
 export interface PostResponse {

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
 
-import { PostResponse } from './models';
+import { PostResponse, PostSeqData } from './models';
 
 @Injectable({
   providedIn: 'root'
@@ -22,13 +22,13 @@ export class SequenceService {
 
   constructor(private http: HttpClient) { }
 
-  getResponse(sequence: string[]): Observable<PostResponse>{
+  getResponse(sequenceData: PostSeqData): Observable<PostResponse>{
     const respond = of(this.responseFromBackend);
     const dealyRespond = respond.pipe(delay(1000));
     return dealyRespond;
   }
-  // getResponse(sequence: string[]): Observable<PostResponse>{
+  // getResponse(sequenceData: PostSeqData): Observable<PostResponse>{
     
-  //   return this.http.post<number>(this._url, sequence); //should return a jobID
+  //   return this.http.post<number>(this._url, sequenceData); //should return a jobID
   // }
 }
