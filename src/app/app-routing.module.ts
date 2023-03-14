@@ -7,11 +7,11 @@ import { ResultsComponent } from './components/clean/results/results.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 
 const routes: Routes = [
-  { path: 'clean', component: ConfigurationComponent },
-  { path: 'clean/results', component: ResultsComponent },
-  { path: 'clean/results/:id', component: ResultsComponent },
-  { path: '', component: LandingPageComponent },
-//  { path: '', redirectTo: '/configuration', pathMatch: 'full' }
+  { path: 'configuration', component: ConfigurationComponent },
+  { path: 'results', component: ResultsComponent },
+  { path: 'results/:id', component: ResultsComponent },
+  { path: '', redirectTo: 'configuration', pathMatch: 'full' }
+  // { path: '', component: LandingPageComponent },
 ];
 
 @NgModule({

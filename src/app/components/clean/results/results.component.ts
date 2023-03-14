@@ -3,6 +3,7 @@ import { ResultService } from 'src/app/result.service';
 import { interval } from "rxjs/internal/observable/interval";
 import { Subscription } from 'rxjs';
 import { startWith, switchMap } from "rxjs/operators";
+import { Router } from '@angular/router';
 
 import { PredictionRow, PullingResponse, SingleSeqResult, SeqResult } from '../../../models';
 
@@ -14,29 +15,28 @@ import { PredictionRow, PullingResponse, SingleSeqResult, SeqResult } from '../.
   styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent {
+  // subscribe to result service to get the predictionRow. after receive, set contentLoaded to false.
   timeInterval: Subscription;
   contentLoaded: boolean = false;
-  // subscribe to result service to get the predictionRow. after receive, set contentLoaded to false.
   rows: PredictionRow[] = [];
   getResponse: PullingResponse;
   failedJob: boolean = false;
   jobID: string;
   sendJobID: number;
-  constructor(private _resultService: ResultService) {
+  downloadRows: string[][] = [['Identifier', 'Predicted EC Number']];
+  constructor(private router: Router, private _resultService: ResultService) {
     
   }
 
   ngOnInit(): void {
-    // this.activatedRoute.queryParams.subscribe(params => {
-    //   const userId = params['id'];
-    //   console.log(userId);
-    // });
     this.sendJobID = Number(window.location.href.split('/').at(-1));
-    console.log('parse jobID: ', this.sendJobID);
     this.getResult();
   }
     
-  
+  goToConfiture(): void {
+    // this.router.navigateByUrl('/configuration');
+    window.open('http://localhost:4200/configuration', '_blank')?.focus();
+  }
 
   parseResult(): void {
     this.jobID = this.getResponse.jobId;
@@ -56,7 +56,7 @@ export class ResultsComponent {
   }
 
   getResult(): void {
-    this._resultService.getResult(this.sendJobID)
+    this.timeInterval = this._resultService.getResult(this.sendJobID)
     .subscribe(
       data => {
         // console.log(data);
@@ -76,6 +76,22 @@ export class ResultsComponent {
         this.contentLoaded = true;
     });
     
+  }
+
+  downloadResult(): void {
+    this.downloadRows = [['Identifier', 'Predicted EC Number']];
+
+    this.rows.forEach(row => {
+      let temp = [row.sequence, row.ecNumbers.join(',')]
+      this.downloadRows.push(temp);
+    });
+    console.log(this.downloadRows);
+
+    let csvContent = this.downloadRows.map(e => e.join(",")).join("\n");
+    console.log(csvContent);
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url= window.URL.createObjectURL(blob);
+    window.open(url);
   }
 
   copyAndPasteURL(): void {

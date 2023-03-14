@@ -20,14 +20,11 @@
                         <div class="spacer"></div>
 
                         <button pButton label="Clear all" (click)="clearAll()" class="p-button-text p-button-plain p-button-xs"></button>
-                        <button pButton label="Validate" (click)="submitValidate()" class="p-button-text p-button-plain p-button-xs"></button>
+                        <!-- <button pButton label="Validate" (click)="submitValidate()" class="p-button-text p-button-plain p-button-xs"></button> -->
                     </div>
 
-                    <textarea pInputTextarea [rows]="8" [(ngModel)]="sequenceData"></textarea>
-<!--
-                    
-                    <p>{{validationText}}</p>
--->
+                    <textarea pInputTextarea [rows]="8" [(ngModel)]="sequenceData" #sequenceDataHtml="ngModel" (change)="submitValidate()"></textarea>
+
                 </ng-container>
 
                 <ng-container *ngIf="selectedInputMethod == 'use_example'">
@@ -62,7 +59,7 @@
                     <h3>Review</h3>
 
                     <div class="validation">
-                        <div *ngIf="!isValid" class="status warning">
+                        <div *ngIf="!isValid && hasChanged" class="status warning">
                             <div class="status_label">Warning:</div>
                             <div class="status_message">{{validationText}}</div>
                         </div>
@@ -78,7 +75,8 @@
                             <div class="message">Valid No. of Sequences: {{seqNum}} Sequences</div>
 
                             <div class="progress_icon">
-                                <i class="pi pi-spin pi-spinner" *ngIf="!isValid"></i>
+                                <i class="pi pi-times-circle" *ngIf="!isValid && hasChanged"></i>
+                                <!-- <i class="pi pi-spin pi-spinner" *ngIf="isValidating"></i> -->
                                 <i class="pi pi-check-circle" *ngIf="isValid"></i>
                             </div>
                         </div>
@@ -87,7 +85,7 @@
             </div>
 
             <div class="buttons">
-                <button pButton type="button" label="Get the CLEAN Result" (click)="submitData()" icon="pi pi-arrow-right" iconPos="right" styleClass="p-button-xs" [disabled]="false"></button>
+                <button pButton type="button" label="Get the CLEAN Result" (click)="submitData()" icon="pi pi-arrow-right" iconPos="right" styleClass="p-button-xs" [disabled]="!isValid"></button>
             </div>
         </div>
     </div>
