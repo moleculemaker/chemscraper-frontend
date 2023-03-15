@@ -4,6 +4,11 @@ export interface PredictionRow {
   score: number[];
 }
 
+export interface ExampleData {
+  label: string;
+  data: string;
+}
+
 export interface SingleSeqResult {
   ecNumber: string;
   score: number;

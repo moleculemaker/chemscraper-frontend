@@ -5,7 +5,7 @@
 
         <p-panel styleClass="padded">
             <ng-template pTemplate="header">
-                <p-selectButton [options]="inputMethods" [(ngModel)]="selectedInputMethod" optionValue="value">
+                <p-selectButton [options]="inputMethods" [(ngModel)]="selectedInputMethod" optionValue="value" (onOptionClick)="makeExampleValid()">
                     <ng-template let-item>
                         <i [class]="item.icon"></i>{{item.label}}
                     </ng-template>
@@ -31,7 +31,7 @@
                     <div class="panel_bar">
                         <h3>Example</h3>
 
-                        <p-selectButton [options]="exampleData" [(ngModel)]="selectedExample">
+                        <p-selectButton [options]="exampleData" [(ngModel)]="selectedExample" (onOptionClick)="selectExample()">
                             <ng-template let-item>
                                 {{item.label}}
                             </ng-template>

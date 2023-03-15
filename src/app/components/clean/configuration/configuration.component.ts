@@ -1,8 +1,11 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SequenceService } from 'src/app/sequence.service';
 
-import { PostResponse, PostSeqData, SingleSeqData } from '../../../models';
+
+import { PostResponse, PostSeqData, SingleSeqData, ExampleData } from '../../../models';
+import { ResultsComponent } from '../results/results.component';
 
 @Component({
   selector: 'app-configuration',
@@ -25,11 +28,11 @@ export class ConfigurationComponent {
   ];
   selectedInputMethod: any | null = 'copy_and_paste'; //this.inputMethods[0];
 
-  exampleData = [
-    { label: 'H. sapiens hemoglobin', data: '>sp|P69905|HBA_HUMAN Hemoglobin subunit alpha OS=Homo sapiens OX=9606 GN=HBA1 PE=1 SV=2 MVLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP AVHASLDKFLASVSTVLTSKYR' },
-    { label: 'H. sapiens amylase', data: '>sp|P69905|HBA_HUMAN Hemoglobin subunit alpha OS=Homo sapiens OX=9606 GN=HBA1 PE=1 SV=2 MVLSPADKTNVKAAWGKVGALVTLAAHLPAEFTPYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP AVHASLDKFLASVSTVLTSKYR MVLSPADKTNVKALVTLAAHLPAEFTPHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP' },
-    { label: 'E. coli TrpCF', data: '>sp|P69905|HBA_HUMAN Hemoglobin subunit alpha OS=Homo sapiens OX=9606 GN=HBA1 PE=1 SV=2 MVLAVHASLDKFLASVSTVLTSKYRPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP ' },
-  ];
+  exampleData: ExampleData[] = [];
+  // exampleData = [
+  //   { label: 'H. sapiens amylase', data: '>sp|P69905|HBA_HUMAN Hemoglobin subunit alpha OS=Homo sapiens OX=9606 GN=HBA1 PE=1 SV=2 MVLSPADKTNVKAAWGKVGALVTLAAHLPAEFTPYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP AVHASLDKFLASVSTVLTSKYR MVLSPADKTNVKALVTLAAHLPAEFTPHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP' },
+  //   { label: 'E. coli TrpCF', data: '>sp|P69905|HBA_HUMAN Hemoglobin subunit alpha OS=Homo sapiens OX=9606 GN=HBA1 PE=1 SV=2 MVLAVHASLDKFLASVSTVLTSKYRPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP ' },
+  // ];
   selectedExample: any | null = this.exampleData[0];
 
   seqNum: number = 0;
@@ -38,16 +41,49 @@ export class ConfigurationComponent {
     input_fasta: []
   };
 
-  constructor(private router: Router, private _sequenceService: SequenceService) { }
+  constructor(private router: Router, private _sequenceService: SequenceService, private httpClient: HttpClient) { }
+
+  ngOnInit() {
+    this.getExampleData();
+    // console.log(this.exampleData);
+  }
+
+  getExampleData() {
+    let tempExampleData: ExampleData = {label: 'price150', data: ''}
+    this.httpClient.get('../../../../assets/price.fasta', { responseType: 'text' })
+      .subscribe(
+        data => {
+          tempExampleData.data = data;
+          this.exampleData.push(tempExampleData)
+        }
+      );
+  }
+
+  selectExample() {
+    this.isValid = true;
+  }
+
+  makeExampleValid() {
+    if (this.selectedInputMethod == 'copy_and_paste') {
+      this.isValid = false;
+    }
+  }
 
   clearAll() {
     this.sequenceData = '';
   }
 
   submitData() {
-    // send sequence to backend
-    // jump to results page
-    this._sequenceService.getResponse(this.realSendData)
+    // if the user uses example file, return precompiled result
+    // else send sequence to backend, jump to results page
+    if (this.selectedInputMethod == 'use_example') {
+      this._sequenceService.getExampleResponse(this.selectedExample.label)
+        .subscribe( data => {
+          this.router.navigate(['/results', data.jobId]);
+        });
+    }
+    else {
+      this._sequenceService.getResponse(this.realSendData)
       .subscribe(
         data => {
           this.router.navigate(['/results', data.jobId]);
@@ -55,6 +91,8 @@ export class ConfigurationComponent {
         error => {
           console.error('Error getting contacts via subscribe() method:', error);
         });
+    }
+    
   }
 
   hasDuplicateHeaders(array: string[]) {
@@ -82,7 +120,7 @@ export class ConfigurationComponent {
     }
 
     if (splitString.length > 10) {
-      this.validationText = 'Please enter less than 100 sequences.';
+      this.validationText = 'Please enter less than 10 sequences.';
       this.isValid = false;
       shouldSkip = true;
       return
