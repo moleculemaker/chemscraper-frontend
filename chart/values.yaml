@@ -1,0 +1,8 @@
+ingress:
+  hostname: clean.frontend.localhost
+  tls: false
+  annotations: {}
+
+controller:
+  image: moleculemaker/clean-frontend
+
