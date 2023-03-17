@@ -49,9 +49,9 @@ export class ResultsComponent {
     
   }
     
-  goToConfiture(): void {
-    window.open('http://localhost:4200/configuration', '_blank')?.focus();
-  }
+  // goToConfiture(): void {
+  //   window.open('http://localhost:4200/configuration', '_blank')?.focus();
+  // }
 
   parseResult(): void {
     this.jobID = this.getResponse.jobId;
@@ -110,7 +110,7 @@ export class ResultsComponent {
 
   getExampleResult(): void {
     if (this.sendJobID == 'price150') {
-      this.httpClient.get('../../../../assets/price_maxsep.csv', { responseType: 'text' })
+      this.httpClient.get('assets/price_maxsep.csv', { responseType: 'text' })
       .subscribe(
         data => {
           this.exampleResponse = data;
@@ -134,7 +134,11 @@ export class ResultsComponent {
     console.log(csvContent);
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url= window.URL.createObjectURL(blob);
-    window.open(url);
+    var anchor = document.createElement("a");
+    anchor.download = this.sendJobID + '.csv';
+    // window.open(url);
+    anchor.href = url;
+    anchor.click();
   }
 
   copyAndPasteURL(): void {

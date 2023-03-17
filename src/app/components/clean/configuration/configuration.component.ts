@@ -21,6 +21,7 @@ export class ConfigurationComponent {
   hasChanged: boolean = false;
   postRespond: PostResponse;
   sendData: string[] = [];
+  private maxSeqNum: number = 10;
 
   inputMethods = [
     { label: 'Copy and Paste', icon: 'pi pi-copy', value: 'copy_and_paste' },
@@ -50,7 +51,7 @@ export class ConfigurationComponent {
 
   getExampleData() {
     let tempExampleData: ExampleData = {label: 'price150', data: ''}
-    this.httpClient.get('../../../../assets/price.fasta', { responseType: 'text' })
+    this.httpClient.get('assets/price.fasta', { responseType: 'text' })
       .subscribe(
         data => {
           tempExampleData.data = data;
@@ -119,8 +120,8 @@ export class ConfigurationComponent {
       return
     }
 
-    if (splitString.length > 10) {
-      this.validationText = 'Please enter less than 10 sequences.';
+    if (splitString.length > this.maxSeqNum) {
+      this.validationText = 'Please enter no more than ' + this.maxSeqNum + ' sequences.';
       this.isValid = false;
       shouldSkip = true;
       return
@@ -164,7 +165,7 @@ export class ConfigurationComponent {
     });
 
     if (this.hasDuplicateHeaders(headers)) {
-      this.validationText = 'The file contains duplicated sequence identifier. All of them will be deleted automatically for better results.';
+      this.validationText = 'The file contains duplicated sequence identifier.';
       this.isValid = false;
       shouldSkip = true;
       return
