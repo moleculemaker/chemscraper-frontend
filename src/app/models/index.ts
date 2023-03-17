@@ -35,7 +35,14 @@ export interface PostResponse {
   created_at: string;
 }
 
-export interface PullingResponse {
+export interface PollingResponseStatus {
+  jobId: string;
+  url: string;
+  status: string;
+  created_at: string;
+}
+
+export interface PollingResponseResult {
   jobId: string;
   url: string;
   status: string;

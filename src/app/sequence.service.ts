@@ -25,15 +25,15 @@ export class SequenceService {
     created_at: "2020-01-01 10:10:10"
   };
 
-  private _url: string = 'backend/postSequence';
+  private _url: string = 'https://jobmgr.mmli1.ncsa.illinois.edu/api/v1' + '/job/submit';
 
   constructor(private http: HttpClient) { }
 
-  getResponse(sequenceData: PostSeqData): Observable<PostResponse>{
-    const respond = of(this.responseFromBackend);
-    const dealyRespond = respond.pipe(delay(200));
-    return dealyRespond;
-  }
+  // getResponse(sequenceData: PostSeqData): Observable<PostResponse>{
+  //   const respond = of(this.responseFromBackend);
+  //   const dealyRespond = respond.pipe(delay(200));
+  //   return dealyRespond;
+  // }
 
   getExampleResponse(dataLabel: string): Observable<PostResponse>{
     this.responseFromExample.jobId = dataLabel;
@@ -42,8 +42,7 @@ export class SequenceService {
   }
 
 
-  // getResponse(sequenceData: PostSeqData): Observable<PostResponse>{
-    
-  //   return this.http.post<number>(this._url, sequenceData); //should return a jobID
-  // }
+  getResponse(sequenceData: PostSeqData): Observable<PostResponse>{
+    return this.http.post<PostResponse>(this._url, sequenceData); //should return a jobID
+  }
 }
