@@ -1,0 +1,79 @@
+<div class="page_container">
+    <div class="container">
+        <div class="header">
+            <div class="info">
+                <h3>
+                    Job ID: {{sendJobID}}
+                    <i class="pi pi-copy copy_and_paste_button" (click)="copyAndPasteURL()"></i>
+                </h3>
+
+                <div class="details">
+                    <div class="sequence_count">Valid No. of Sequences: 1 Sequence </div>
+                    <div class="sequence_time">Submission Time: {{statusResponse?.created_at}}</div>
+                </div>
+            </div>
+
+            <div class="spacer"></div>
+
+            <div class="buttons">
+                <button pButton label="Cancel" class="p-button-outlined p-button-secondary p-button-xs"></button>
+                <button pButton label="Run a new Request" icon="pi pi-plus" class="p-button-outlined p-button-sm" href="/configuration" target="_blank"></button>
+            </div>
+        </div>
+
+        <div class="loader" *ngIf="!contentLoaded">
+            <p-progressBar mode="indeterminate" color="#224063"></p-progressBar>
+
+            <p-skeleton height="18rem" styleClass="padded"></p-skeleton>
+        </div>
+
+        <ng-container *ngIf="contentLoaded">
+            <p-table
+                #table
+                [value]="rows"
+
+                [rowsPerPageOptions]="[10,25,50]"
+                [paginator]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            >
+                <ng-template pTemplate="caption">
+                    <div class="table_caption">
+                        <div class="info">
+                            <h3>EC Number Prediction Results</h3>
+<!--
+turned this off, since only totalRecords appears to be accessible from the #table reference...will be shown in the bottom instead
+                            <h5 class="count">Showing {{table.first}} - {{table.last}} of {{table.totalRecords}} results</h5>
+-->
+                        </div>
+
+                        <button pButton label="Download Results" icon="pi pi-download" class="p-button-sm" (click)="downloadResult()"></button>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="sequence">Identifier <p-sortIcon field="sequence"></p-sortIcon></th>
+                        <th pSortableColumn="ecNumbers">Predicted EC Number <p-sortIcon field="ecNumbers"></p-sortIcon></th>
+                        <!-- <th pSortableColumn="score">Confidence Score <p-sortIcon field="score"></p-sortIcon></th> -->
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-row>
+                    <tr>
+                        <td>{{row.sequence}}</td>
+                        <td>{{row.ecNumbers.join(', ')}}</td>
+                        <!-- <td>{{row.score.join(', ')}}</td> -->
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="3">
+                            <h3>JobID: {{jobID}} has failed.</h3>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>            
+        </ng-container>
+    </div>
+</div>

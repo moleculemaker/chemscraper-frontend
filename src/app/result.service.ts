@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, delay, timer, Subscription, Subject } from 'rxjs';
-import { PullingResponse } from './models';
+import { PollingResponseStatus, PollingResponseResult } from './models';
 import { switchMap, tap, share, retry, takeUntil } from 'rxjs/operators';
 
 @Injectable({
@@ -9,30 +9,32 @@ import { switchMap, tap, share, retry, takeUntil } from 'rxjs/operators';
 })
 export class ResultService {
 
-  private resuts$: Observable<PullingResponse>;
+  private resuts$: Observable<PollingResponseStatus>;
   private stopPolling = new Subject();
-  _url: string = '/backendAPI/getResult';
-  dummyChooseArray: number[] = [0, 0, 0, 0, 0, 0, 0];
-  private dummyRunningResult: PullingResponse = {
-    jobId: "b01f8a6b-2f3e-4160-8f5d-c9a2c5eead78",
+  _url_status: string = 'https://jobmgr.mmli1.ncsa.illinois.edu/api/v1' + '/job/status';
+  _url_result: string = 'https://jobmgr.mmli1.ncsa.illinois.edu/api/v1' + '/job/result';
+  jobID: string;
+  dummyChooseArray: number[] = [0, 0, 0, 0, 0];
+  private dummyRunningResult: PollingResponseResult = {
+    jobId: "1",
     url: "mmli.clean.com/jobId/b01f8a6b-2f3e-4160-8f5d-c9a2c5eead78",
-    status: "RUNNING",
+    status: "executing",
     created_at: "2020-01-01 10:10:10",
     results: []
   };
 
-  private dummyFailedResult: PullingResponse = {
-    jobId: "b01f8a6b-2f3e-4160-8f5d-c9a2c5eead78",
+  private dummyFailedResult: PollingResponseResult = {
+    jobId: "2",
     url: "mmli.clean.com/jobId/b01f8a6b-2f3e-4160-8f5d-c9a2c5eead78",
-    status: "FAILED",
+    status: "error",
     created_at: "2020-01-01 10:10:10",
     results: []
   };
 
-  private dummyCompleteResult: PullingResponse = {
-    jobId: "b01f8a6b-2f3e-4160-8f5d-c9a2c5eead78",
+  private dummyCompleteResult: PollingResponseResult = {
+    jobId: "1",
     url: "mmli.clean.com/jobId/b01f8a6b-2f3e-4160-8f5d-c9a2c5eead78",
-    status: "COMPLETE",
+    status: "completed",
     created_at: "2020-01-01 10:10:10",
     results: [
       {
@@ -61,40 +63,42 @@ export class ResultService {
   };
 
   constructor(private http: HttpClient) {
-    this.resuts$ = timer(1, 2000).pipe(
+    this.resuts$ = timer(1, 10000).pipe(
       switchMap((x) =>
-        this.tempSelectResult(this.dummyChooseArray[x])
+        this.http.post<PollingResponseResult>(this._url_status, {'jobId' : this.jobID})
+        // this.tempSelectResult()
       ),
       retry(),
       takeUntil(this.stopPolling)
     );
   }
 
-  tempSelectResult(choseResponse: number): Observable<PullingResponse> {
-    const runningRespond = of(this.dummyRunningResult);
-    const dealyRunningRespond = runningRespond.pipe(delay(200));
+  // tempSelectResult(): Observable<PollingResponseResult> {
+    // const runningRespond = of(this.dummyRunningResult);
+    // const dealyRunningRespond = runningRespond.pipe(delay(200));
 
-    const failedResult = of(this.dummyFailedResult);
-    const dealyFailedRespond = failedResult.pipe(delay(200));
+    // const failedResult = of(this.dummyFailedResult);
+    // const dealyFailedRespond = failedResult.pipe(delay(200));
 
-    const completeResult = of(this.dummyCompleteResult);
-    const dealyCompleteResult = completeResult.pipe(delay(200));
+    // const completeResult = of(this.dummyCompleteResult);
+    // const dealyCompleteResult = completeResult.pipe(delay(200));
 
-    if (choseResponse == 0) {
-      return dealyRunningRespond;
-    }
-    else if (choseResponse == 1) {
-      return dealyCompleteResult;
-    }
-    else {
-      return dealyFailedRespond;
-    }
-  }
+    // if (choseResponse == 0) {
+    //   return dealyRunningRespond;
+    // }
+    // else if (choseResponse == 1) {
+    //   return dealyCompleteResult;
+    // }
+    // else {
+    //   return dealyFailedRespond;
+    // }
+    // return this.http.post<PollingResponseResult>(this._url_status, this.jobID);
+  // }
 
-  getResult(responseNumber: number): Observable<PullingResponse> {
-    this.dummyChooseArray.push(responseNumber);
-    return this.resuts$;
-  }
+  // getResult(responseNumber: number): Observable<PollingResponseResult> {
+  //   this.dummyChooseArray.push(responseNumber);
+  //   return this.resuts$;
+  // }
 
   gotEndResult() {
     this.stopPolling.next(1);
@@ -104,10 +108,14 @@ export class ResultService {
     this.stopPolling.next(1);
   }
 
-  // getResponse(sequence: string[]): Observable<number>{
-  //   return this.http.post<number>(this._url, sequence) //should return a jobID
-  // }
-  // getResult(jobID: number) {
-  //   return this.http.get(this._url, jobID);
-  // }
+  getResponse(jobID: any): Observable<PollingResponseResult>{
+    this.jobID = jobID;
+    return this.http.post<PollingResponseResult>(this._url_result, {'jobId' : jobID}) //should return a jobID
+  }
+  getResult(jobID: any): Observable<PollingResponseStatus>{
+    this.jobID = jobID;
+    return this.resuts$;
+    // return this.http.post<PollingResponseStatus>(this._url_status, jobID);
+  }
+
 }

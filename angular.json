@@ -30,10 +30,11 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/primeicons/primeicons.css",
-              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+              "src/app/css/primeng_theme.scss",
               "node_modules/primeng/resources/primeng.min.css",
-              "src/styles.scss"
+              "node_modules/primeicons/primeicons.css",
+              "src/styles.scss",
+              "src/app/css/styles.scss"
             ],
             "scripts": []
           },
@@ -96,10 +97,11 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
-              "src/styles.scss"
+              "node_modules/primeicons/primeicons.css",
+              "src/styles.scss",
+              "src/app/css/styles.scss"
             ],
             "scripts": []
           }

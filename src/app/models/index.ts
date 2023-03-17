@@ -1,7 +1,12 @@
 export interface PredictionRow {
   sequence: string;
   ecNumbers: string[];
-  score: number;
+  score: number[];
+}
+
+export interface ExampleData {
+  label: string;
+  data: string;
 }
 
 export interface SingleSeqResult {
@@ -14,6 +19,15 @@ export interface SeqResult {
   result: SingleSeqResult[];
 }
 
+export interface SingleSeqData {
+  header: string;
+  sequence: string;
+}
+
+export interface PostSeqData {
+  input_fasta: SingleSeqData[];
+}
+
 export interface PostResponse {
   jobId: string;
   url: string;
@@ -21,7 +35,14 @@ export interface PostResponse {
   created_at: string;
 }
 
-export interface PullingResponse {
+export interface PollingResponseStatus {
+  jobId: string;
+  url: string;
+  status: string;
+  created_at: string;
+}
+
+export interface PollingResponseResult {
   jobId: string;
   url: string;
   status: string;
