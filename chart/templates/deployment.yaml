@@ -1,0 +1,24 @@
+# Defines the deployment of the app running in a pod on any worker node
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: clean-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: clean-frontend
+  template:
+    metadata:
+      labels:
+        app: clean-frontend
+    spec:
+      containers:
+        - name: clean-frontend
+          image: {{ .Values.controller.image }}
+
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always
