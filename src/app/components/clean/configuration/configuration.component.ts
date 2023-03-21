@@ -56,7 +56,6 @@ export class ConfigurationComponent {
         data => {
           tempExampleData.data = data;
           this.exampleData.push(tempExampleData);
-          console.log(this.exampleData[0]);
         }
       );
   }
@@ -143,7 +142,7 @@ export class ConfigurationComponent {
       this.realSendData.input_fasta.push(singleSeq);
 
       if (this.isInvalidFasta(aminoSeq)) {
-        console.log(seq.split('\n')[0])
+        // console.log(seq.split('\n')[0])
         this.validationText = 'Invalid sequence: ' + aminoHeader + ', This is not a valid fasta file format!';
         this.isValid = false;
         shouldSkip = true;

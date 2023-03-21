@@ -17,14 +17,14 @@
 
             <div class="buttons">
                 <button pButton label="Cancel" class="p-button-outlined p-button-secondary p-button-xs"></button>
-                <button pButton label="Run a new Request" icon="pi pi-plus" class="p-button-outlined p-button-sm" onclick=" window.open('/configuration','_blank')"></button>
+                <a pButton label="Run a new Request" icon="pi pi-plus" class="p-button-outlined p-button-sm" target="_blank" [routerLink]="['/configuration']"></a>
             </div>
         </div>
 
         <div class="loader" *ngIf="!contentLoaded">
             <div>
                 <h2>
-                    This may take a few minitues, please copy and save the link.
+                    This may take a few minutes. The page will refresh automatically when results are available, or you can bookmark this page and return later.
                 </h2>
             </div>
             <p-progressBar mode="indeterminate" color="#224063"></p-progressBar>

@@ -152,10 +152,10 @@ export class ResultsComponent {
       let temp = [row.sequence, row.ecNumbers.join(',')]
       this.downloadRows.push(temp);
     });
-    console.log(this.downloadRows);
+    // console.log(this.downloadRows);
 
     let csvContent = this.downloadRows.map(e => e.join(",")).join("\n");
-    console.log(csvContent);
+    // console.log(csvContent);
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url= window.URL.createObjectURL(blob);
     var anchor = document.createElement("a");
@@ -171,7 +171,8 @@ export class ResultsComponent {
     selBox.style.left = '0';
     selBox.style.top = '0';
     selBox.style.opacity = '0';
-    selBox.value = 'https://clean.frontend.mmli1.ncsa.illinois.edu/results/' + this.sendJobID;
+    // selBox.value = 'https://clean.frontend.mmli1.ncsa.illinois.edu/results/' + this.sendJobID;
+    selBox.value = window.location.href;
     document.body.appendChild(selBox);
     selBox.focus();
     selBox.select();
