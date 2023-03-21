@@ -19,7 +19,7 @@ export class SequenceService {
   };
 
   responseFromExample: PostResponse = {
-    jobId: "price150",
+    jobId: "price149",
     url: "mmli.clean.com/jobId/b01f8a6b-2f3e-4160-8f5d-c9a2c5eead78",
     status: 1, 
     created_at: "2020-01-01 10:10:10"
