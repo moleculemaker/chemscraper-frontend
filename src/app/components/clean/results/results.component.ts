@@ -27,6 +27,7 @@ export class ResultsComponent {
   downloadRows: string[][] = [['Identifier', 'Predicted EC Number']];
   exampleResponse: string;
   statusResponse: PollingResponseStatus;
+  // today: string = '2013-02-01T12:52:34+09:00';
   
   constructor(private router: Router, private _resultService: ResultService, private httpClient: HttpClient) {
     
@@ -34,15 +35,15 @@ export class ResultsComponent {
 
   ngOnInit(): void {
     this.sendJobID = window.location.href.split('/').at(-1);
-    if (this.sendJobID != 'price150'){
+    if (this.sendJobID != 'price149'){
       this.getResult();
     }
     else {
       this.getResponse = {
-        jobId: "price150",
+        jobId: "price149",
         url: "mmli.clean.com/jobId/b01f8a6b-2f3e-4160-8f5d-c9a2c5eead78",
         status: "completed",
-        created_at: "2020-01-01 10:10:10",
+        created_at: String(Date.now()),
         results: []
       };
       this.getExampleResult();
@@ -105,7 +106,7 @@ export class ResultsComponent {
       },
       () => {
         this.getResponseResult();
-        console.log(this.contentLoaded);
+        // console.log(this.contentLoaded);
         // this.parseResult();
         // this.contentLoaded = true;
     });
@@ -132,7 +133,7 @@ export class ResultsComponent {
   }
 
   getExampleResult(): void {
-    if (this.sendJobID == 'price150') {
+    if (this.sendJobID == 'price149') {
       this.httpClient.get('assets/price_maxsep.csv', { responseType: 'text' })
       .subscribe(
         data => {

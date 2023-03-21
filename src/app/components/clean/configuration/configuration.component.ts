@@ -50,12 +50,13 @@ export class ConfigurationComponent {
   }
 
   getExampleData() {
-    let tempExampleData: ExampleData = {label: 'price150', data: ''}
+    let tempExampleData: ExampleData = {label: 'price149', data: ''}
     this.httpClient.get('assets/price.fasta', { responseType: 'text' })
       .subscribe(
         data => {
           tempExampleData.data = data;
-          this.exampleData.push(tempExampleData)
+          this.exampleData.push(tempExampleData);
+          console.log(this.exampleData[0]);
         }
       );
   }
