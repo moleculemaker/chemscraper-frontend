@@ -166,8 +166,19 @@ export class ResultsComponent {
   }
 
   copyAndPasteURL(): void {
-    console.log('copy and paste url');
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = 'https://clean.frontend.mmli1.ncsa.illinois.edu/results/' + this.sendJobID;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
   }
+
   ngOnDestroy(): void {
     this.timeInterval.unsubscribe();
   }
