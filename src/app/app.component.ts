@@ -6,4 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  emailstring= "mailto:moleculemaker@illinois.edu?Subject=User feedback for CLEAN";
 }

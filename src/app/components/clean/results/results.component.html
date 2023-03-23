@@ -8,7 +8,7 @@
                 </h3>
 
                 <div class="details">
-                    <div class="sequence_count">Valid No. of Sequences: 1 Sequence(s) </div>
+                    <div class="sequence_count">Valid No. of Sequences: {{this.numOfSeq}} Sequence(s) </div>
                     <div class="sequence_time">Submission Time: {{statusResponse?.created_at | date:'short' }}</div>
                 </div>
             </div>
@@ -30,6 +30,12 @@
             <p-progressBar mode="indeterminate" color="#224063"></p-progressBar>
 
             <p-skeleton height="18rem" styleClass="padded"></p-skeleton>
+        </div>
+
+        <div *ngIf="useExample">
+            <h2>
+                This is a precomputed result, if you want to see real time computation, please use the copy and paste function.
+            </h2>
         </div>
 
         <ng-container *ngIf="contentLoaded">

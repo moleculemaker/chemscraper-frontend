@@ -27,25 +27,27 @@ export class ResultsComponent {
   downloadRows: string[][] = [['Identifier', 'Predicted EC Number']];
   exampleResponse: string;
   statusResponse: PollingResponseStatus;
-  // today: string = '2013-02-01T12:52:34+09:00';
+  numOfSeq: number;
+  useExample: boolean = false;
   
   constructor(private router: Router, private _resultService: ResultService, private httpClient: HttpClient) {
     
   }
 
   ngOnInit(): void {
-    this.sendJobID = window.location.href.split('/').at(-1);
+    this.sendJobID = window.location.href.split('/').at(-2);
+    this.numOfSeq = Number(window.location.href.split('/').at(-1));
     if (this.sendJobID != 'price149'){
       this.getResult();
     }
     else {
-      this.getResponse = {
+      this.statusResponse = {
         jobId: "price149",
         url: "mmli.clean.com/jobId/b01f8a6b-2f3e-4160-8f5d-c9a2c5eead78",
         status: "completed",
         created_at: String(Date.now()),
-        results: []
       };
+      this.useExample = true;
       this.getExampleResult();
     }
     
@@ -159,7 +161,7 @@ export class ResultsComponent {
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url= window.URL.createObjectURL(blob);
     var anchor = document.createElement("a");
-    anchor.download = this.sendJobID + '.csv';
+    anchor.download = 'CLEAN_Result_' + this.sendJobID + '.csv';
     // window.open(url);
     anchor.href = url;
     anchor.click();

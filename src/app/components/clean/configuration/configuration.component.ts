@@ -80,14 +80,14 @@ export class ConfigurationComponent {
     if (this.selectedInputMethod == 'use_example') {
       this._sequenceService.getExampleResponse(this.selectedExample.label)
         .subscribe( data => {
-          this.router.navigate(['/results', data.jobId]);
+          this.router.navigate(['/results', data.jobId, '149']);
         });
     }
     else {
       this._sequenceService.getResponse(this.realSendData)
       .subscribe(
         data => {
-          this.router.navigate(['/results', data.jobId]);
+          this.router.navigate(['/results', data.jobId, String(this.seqNum)]);
         },
         error => {
           console.error('Error getting contacts via subscribe() method:', error);
