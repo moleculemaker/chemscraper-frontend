@@ -135,6 +135,13 @@ export class ConfigurationComponent {
       this.seqNum += 1;
       let aminoHeader: string = seq.split('\n')[0];
       let aminoSeq: string = seq.split('\n').slice(1).join('');
+      
+      if (aminoHeader.length == 0) {
+        this.validationText = 'Header cannot be empty!';
+        this.isValid = false;
+        shouldSkip = true;
+        return
+      }
 
       headers.push(aminoHeader);
       singleSeq.header = aminoHeader;

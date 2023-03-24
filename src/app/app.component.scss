@@ -182,3 +182,23 @@ footer {
         gap: $padding * .5;
     }
 }
+
+cite {
+    border: {
+        top: 1px solid #C6C6C6;
+    }
+
+    font: {
+        size: .75rem;
+    }
+    text: {
+        transform: normal;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: $padding * .5;
+    }
+}
