@@ -53,7 +53,7 @@
         <ng-container *ngIf="selectedInputMethod == 'copy_and_paste'">
             <h3>Enter your email if you want to get a notification after the result is finished computing.</h3>
             <div class="spacer"></div>
-            <input type="email" name="email" pInputTextarea [(ngModel)]="userEmail" ngModel #email="ngModel" email="true">
+            <input type="email" name="email" pInputTextarea placeholder="Email" [(ngModel)]="userEmail" ngModel #email="ngModel" email="true">
         </ng-container>
         <!-- </div> -->
 
