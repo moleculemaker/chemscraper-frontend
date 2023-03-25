@@ -21,6 +21,7 @@ export class ConfigurationComponent {
   hasChanged: boolean = false;
   postRespond: PostResponse;
   sendData: string[] = [];
+  userEmail: string;
   private maxSeqNum: number = 10;
 
   inputMethods = [
@@ -112,7 +113,7 @@ export class ConfigurationComponent {
     this.hasChanged = true;
     this.seqNum = 0;
     this.realSendData.input_fasta = [];
-
+    // this.realSendData.userEmail = this.userEmail;
     if (splitString.length == 0) {
       this.validationText = 'Please input your sequence.';
       this.isValid = false;
