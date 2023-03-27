@@ -76,6 +76,7 @@ export class ConfigurationComponent {
   }
 
   submitData() {
+    console.log(this.realSendData);
     // if the user uses example file, return precompiled result
     // else send sequence to backend, jump to results page
     if (this.selectedInputMethod == 'use_example') {
@@ -137,6 +138,11 @@ export class ConfigurationComponent {
       let aminoHeader: string = seq.split('\n')[0];
       let aminoSeq: string = seq.split('\n').slice(1).join('');
       
+      if (aminoSeq.slice(-1) == '*') {
+        aminoSeq = aminoSeq.slice(0,-1);
+      }
+      aminoSeq = aminoSeq.toUpperCase();
+
       if (aminoHeader.length == 0) {
         this.validationText = 'Header cannot be empty!';
         this.isValid = false;
