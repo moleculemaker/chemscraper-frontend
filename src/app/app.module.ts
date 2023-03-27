@@ -24,6 +24,8 @@ import { ResultsComponent } from './components/clean/results/results.component';
 
 import { SequenceService } from './sequence.service';
 import { HttpClientModule } from '@angular/common/http';
+import { NgxMatomoTrackerModule } from '@ngx-matomo/tracker';
+import { NgxMatomoRouterModule } from '@ngx-matomo/router';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,12 @@ import { HttpClientModule } from '@angular/common/http';
     FileUploadModule,
     PanelModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxMatomoTrackerModule.forRoot({
+      siteId: 3,
+      trackerUrl: 'https://matomo.mmli1.ncsa.illinois.edu/'
+    }),
+    NgxMatomoRouterModule
   ],
   providers: [SequenceService],
   bootstrap: [AppComponent]
