@@ -5,7 +5,7 @@
  * ways to track activity directly from component templates, we're adding this
  * wrapper in case we later replace Matomo.
  *
- * Note automatic tracking of route changes are already enabled in AppModule.
+ * Note automatic tracking of route changes is already enabled in AppModule.
  */
 import { Injectable } from '@angular/core';
 import { MatomoTracker } from '@ngx-matomo/tracker';
