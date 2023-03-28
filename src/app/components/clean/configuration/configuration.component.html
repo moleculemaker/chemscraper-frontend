@@ -1,12 +1,12 @@
 <div class="page_container">
     <div class="container">
-        <a pButton label="User Guide" target="_blank" href="https://docs.google.com/document/d/1zFk1Lb7EAhMdcRp2KN9eyWVQSTBnT2HRYm3UKfZt6CE/edit?usp=sharing"></a>
         <h3>Enter your enzyme sequence here</h3>
         <h5>Choose an input method below</h5>
 
         <p-panel styleClass="padded">
             <ng-template pTemplate="header">
-                <p-selectButton [options]="inputMethods" [(ngModel)]="selectedInputMethod" optionValue="value" (onOptionClick)="makeExampleValid()">
+                <p-selectButton [options]="inputMethods" [(ngModel)]="selectedInputMethod" optionValue="value"
+                    (onOptionClick)="makeExampleValid()">
                     <ng-template let-item>
                         <i [class]="item.icon"></i>{{item.label}}
                     </ng-template>
@@ -20,11 +20,13 @@
 
                         <div class="spacer"></div>
 
-                        <button pButton label="Clear all" (click)="clearAll()" class="p-button-text p-button-plain p-button-xs"></button>
-                        <!-- <button pButton label="Validate" (click)="submitValidate()" class="p-button-text p-button-plain p-button-xs"></button> -->
+                        <button pButton label="Clear all" (click)="clearAll()"
+                            class="p-button-text p-button-plain p-button-xs"></button>
                     </div>
 
-                    <textarea pInputTextarea [rows]="8" placeholder="Please enter enzyme amino acid sequence in FASTA format." [(ngModel)]="sequenceData" #sequenceDataHtml="ngModel" (change)="submitValidate()"></textarea>
+                    <textarea pInputTextarea [rows]="8"
+                        placeholder="Please enter enzyme amino acid sequence in FASTA format."
+                        [(ngModel)]="sequenceData" #sequenceDataHtml="ngModel" (change)="submitValidate()"></textarea>
 
                 </ng-container>
 
@@ -32,7 +34,8 @@
                     <div class="panel_bar">
                         <h3>Example</h3>
 
-                        <p-selectButton [options]="exampleData" [(ngModel)]="selectedExample" (onOptionClick)="selectExample()">
+                        <p-selectButton [options]="exampleData" [(ngModel)]="selectedExample"
+                            (onOptionClick)="selectExample()">
                             <ng-template let-item>
                                 {{item.label}}
                             </ng-template>
@@ -52,8 +55,10 @@
         <!-- <div class="review" > -->
         <ng-container *ngIf="selectedInputMethod == 'copy_and_paste'">
             <h3>Enter your email if you want to get a notification after the result is finished computing.</h3>
+            <br>
             <div class="spacer"></div>
-            <input type="email" name="email" pInputTextarea placeholder="Email" [(ngModel)]="userEmail" ngModel #email="ngModel" email="true">
+            <input type="email" name="email" pInputTextarea placeholder="Email" [(ngModel)]="userEmail" ngModel
+                #email="ngModel" email="true">
         </ng-container>
         <!-- </div> -->
 
@@ -61,7 +66,7 @@
             <div class="review">
                 <ng-container *ngIf="selectedInputMethod == 'copy_and_paste'">
                     <h3>Review</h3>
-
+                    <br>
                     <div class="validation">
                         <div *ngIf="!isValid && hasChanged" class="status warning">
                             <div class="status_label">Warning:</div>
@@ -70,10 +75,15 @@
 
                         <div class="info">
                             <div class="icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M0 12C0 5.37258 5.37258 0 12 0C18.6274 0 24 5.37258 24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12ZM12 0.971098C5.90891 0.971098 0.971098 5.90891 0.971098 12C0.971098 18.0911 5.90891 23.0289 12 23.0289C18.0911 23.0289 23.0289 18.0911 23.0289 12C23.0289 5.90891 18.0911 0.971098 12 0.971098Z" fill="#224063"/>
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M15.4167 6.3338C15.6538 5.80489 16.2749 5.5684 16.8038 5.80558C17.3327 6.04275 17.5692 6.66378 17.332 7.19269C17.0948 7.7216 16.4738 7.95809 15.9449 7.72091C15.416 7.48374 15.1795 6.86271 15.4167 6.3338ZM17.1444 5.04607C16.196 4.6208 15.0824 5.04485 14.6572 5.99322C14.353 6.67158 14.4833 7.43445 14.9293 7.9695L14.0986 11.6608C14.0813 11.6701 14.0641 11.6796 14.0471 11.6895L10.5369 9.6284C10.356 9.21542 10.027 8.86571 9.58324 8.66671C8.63487 8.24143 7.52132 8.66549 7.09604 9.61385C6.79183 10.2922 6.92221 11.0552 7.36822 11.5902L6.53757 15.2814C6.41443 15.3473 6.29769 15.4274 6.19001 15.5215L3.99229 15.0537L3.81901 15.8678L5.67085 16.262C5.57964 16.4975 5.53858 16.7454 5.54531 16.9908L3.66093 16.5676L3.47852 17.3797L5.80898 17.9031C5.93609 18.117 6.10793 18.309 6.32215 18.4643C7.16366 19.0743 8.34036 18.8866 8.95036 18.0451C9.4579 17.3449 9.41324 16.4127 8.89922 15.768L9.74253 12.0205C9.76253 12.0092 9.78232 11.9974 9.80192 11.9854L13.2363 14.0089C13.3632 14.3324 13.581 14.6246 13.8833 14.8436C14.7248 15.4536 15.9015 15.266 16.5115 14.4244C17.019 13.7243 16.9744 12.792 16.4603 12.1473L17.3036 8.39989C17.4221 8.33272 17.5337 8.25251 17.6361 8.16018L19.7864 9.00605L20.0911 8.23146L18.1236 7.45748C18.2203 7.21413 18.2627 6.96154 18.256 6.71379L20.3652 7.53751L20.668 6.76217L17.9198 5.68886C17.7311 5.41696 17.4683 5.19135 17.1444 5.04607ZM15.7323 11.5911L16.3951 8.6455C16.1504 8.64836 15.9015 8.60328 15.6619 8.50514L15.002 11.4379C15.2492 11.4396 15.4977 11.4898 15.7323 11.5911ZM13.1357 12.9836C13.1797 12.7403 13.2725 12.5023 13.4163 12.2844L10.6732 10.6737C10.6478 10.8357 10.6007 10.9971 10.5304 11.1539C10.4952 11.2323 10.4553 11.3072 10.4112 11.3783L13.1357 12.9836ZM14.1359 12.7069C13.7982 13.176 13.9035 13.8302 14.3718 14.1697C14.8411 14.5099 15.4974 14.4052 15.8376 13.9359C16.1778 13.4666 16.0731 12.8104 15.6038 12.4702C15.1451 12.1377 14.5079 12.2301 14.1616 12.6726L14.1401 12.7093L14.1359 12.7069ZM9.24266 9.42621C8.71375 9.18904 8.09272 9.42553 7.85554 9.95444C7.61837 10.4833 7.85486 11.1044 8.38377 11.3416C8.91267 11.5787 9.53371 11.3422 9.77088 10.8133C10.0081 10.2844 9.77157 9.66339 9.24266 9.42621ZM8.83407 12.2661L8.17121 15.2118C7.93665 15.1105 7.68817 15.0602 7.44091 15.0586L8.10088 12.1258C8.34045 12.2239 8.58934 12.269 8.83407 12.2661ZM8.27643 17.5566C8.61663 17.0872 8.51196 16.431 8.04265 16.0908C7.57333 15.7506 6.91709 15.8553 6.57689 16.3246C6.23669 16.7939 6.34135 17.4501 6.81067 17.7903C7.27999 18.1305 7.93623 18.0259 8.27643 17.5566Z" fill="#224063"/>
-                                </svg>                                    
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M0 12C0 5.37258 5.37258 0 12 0C18.6274 0 24 5.37258 24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12ZM12 0.971098C5.90891 0.971098 0.971098 5.90891 0.971098 12C0.971098 18.0911 5.90891 23.0289 12 23.0289C18.0911 23.0289 23.0289 18.0911 23.0289 12C23.0289 5.90891 18.0911 0.971098 12 0.971098Z"
+                                        fill="#224063" />
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M15.4167 6.3338C15.6538 5.80489 16.2749 5.5684 16.8038 5.80558C17.3327 6.04275 17.5692 6.66378 17.332 7.19269C17.0948 7.7216 16.4738 7.95809 15.9449 7.72091C15.416 7.48374 15.1795 6.86271 15.4167 6.3338ZM17.1444 5.04607C16.196 4.6208 15.0824 5.04485 14.6572 5.99322C14.353 6.67158 14.4833 7.43445 14.9293 7.9695L14.0986 11.6608C14.0813 11.6701 14.0641 11.6796 14.0471 11.6895L10.5369 9.6284C10.356 9.21542 10.027 8.86571 9.58324 8.66671C8.63487 8.24143 7.52132 8.66549 7.09604 9.61385C6.79183 10.2922 6.92221 11.0552 7.36822 11.5902L6.53757 15.2814C6.41443 15.3473 6.29769 15.4274 6.19001 15.5215L3.99229 15.0537L3.81901 15.8678L5.67085 16.262C5.57964 16.4975 5.53858 16.7454 5.54531 16.9908L3.66093 16.5676L3.47852 17.3797L5.80898 17.9031C5.93609 18.117 6.10793 18.309 6.32215 18.4643C7.16366 19.0743 8.34036 18.8866 8.95036 18.0451C9.4579 17.3449 9.41324 16.4127 8.89922 15.768L9.74253 12.0205C9.76253 12.0092 9.78232 11.9974 9.80192 11.9854L13.2363 14.0089C13.3632 14.3324 13.581 14.6246 13.8833 14.8436C14.7248 15.4536 15.9015 15.266 16.5115 14.4244C17.019 13.7243 16.9744 12.792 16.4603 12.1473L17.3036 8.39989C17.4221 8.33272 17.5337 8.25251 17.6361 8.16018L19.7864 9.00605L20.0911 8.23146L18.1236 7.45748C18.2203 7.21413 18.2627 6.96154 18.256 6.71379L20.3652 7.53751L20.668 6.76217L17.9198 5.68886C17.7311 5.41696 17.4683 5.19135 17.1444 5.04607ZM15.7323 11.5911L16.3951 8.6455C16.1504 8.64836 15.9015 8.60328 15.6619 8.50514L15.002 11.4379C15.2492 11.4396 15.4977 11.4898 15.7323 11.5911ZM13.1357 12.9836C13.1797 12.7403 13.2725 12.5023 13.4163 12.2844L10.6732 10.6737C10.6478 10.8357 10.6007 10.9971 10.5304 11.1539C10.4952 11.2323 10.4553 11.3072 10.4112 11.3783L13.1357 12.9836ZM14.1359 12.7069C13.7982 13.176 13.9035 13.8302 14.3718 14.1697C14.8411 14.5099 15.4974 14.4052 15.8376 13.9359C16.1778 13.4666 16.0731 12.8104 15.6038 12.4702C15.1451 12.1377 14.5079 12.2301 14.1616 12.6726L14.1401 12.7093L14.1359 12.7069ZM9.24266 9.42621C8.71375 9.18904 8.09272 9.42553 7.85554 9.95444C7.61837 10.4833 7.85486 11.1044 8.38377 11.3416C8.91267 11.5787 9.53371 11.3422 9.77088 10.8133C10.0081 10.2844 9.77157 9.66339 9.24266 9.42621ZM8.83407 12.2661L8.17121 15.2118C7.93665 15.1105 7.68817 15.0602 7.44091 15.0586L8.10088 12.1258C8.34045 12.2239 8.58934 12.269 8.83407 12.2661ZM8.27643 17.5566C8.61663 17.0872 8.51196 16.431 8.04265 16.0908C7.57333 15.7506 6.91709 15.8553 6.57689 16.3246C6.23669 16.7939 6.34135 17.4501 6.81067 17.7903C7.27999 18.1305 7.93623 18.0259 8.27643 17.5566Z"
+                                        fill="#224063" />
+                                </svg>
                             </div>
 
                             <div class="message">Valid No. of Sequences: {{seqNum}} Sequences</div>
@@ -87,9 +97,10 @@
                     </div>
                 </ng-container>
             </div>
-
             <div class="buttons">
-                <button pButton type="button" label="Get the CLEAN Result" (click)="submitData()" icon="pi pi-arrow-right" iconPos="right" styleClass="p-button-xs" [disabled]="!isValid"></button>
+                <br>
+                <button pButton type="button" label="Get the CLEAN Result" (click)="submitData()"
+                    icon="pi pi-arrow-right" iconPos="right" styleClass="p-button-xs" [disabled]="!isValid"></button>
             </div>
         </div>
     </div>

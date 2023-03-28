@@ -34,11 +34,8 @@
             <p-skeleton height="18rem" styleClass="padded"></p-skeleton>
         </div>
 
-        <div *ngIf="useExample">
-            <h2>
-                This is a pre-computed result, if you want to see real time computation, please use the copy and paste
-                function.
-            </h2>
+        <div class="card" *ngIf="useExample">
+            <p-messages [(value)]="preComputedMessage" [enableService]="false" [closable]="false"></p-messages>
         </div>
 
         <ng-container *ngIf="contentLoaded">
@@ -74,7 +71,7 @@ turned this off, since only totalRecords appears to be accessible from the #tabl
                         <td>
                             <div *ngFor="let ecNum of row.ecNumbers">
                                 <a href="https://brenda-enzymes.org/enzyme.php?ecno={{ecNum.slice(3)}}"
-                                target="_blank">{{ecNum}}</a>
+                                target="_blank"><u>{{ecNum}}</u></a>
                             </div>
                         </td>
                         <!-- <td>{{row.ecNumbers.join(', ')}}</td> -->

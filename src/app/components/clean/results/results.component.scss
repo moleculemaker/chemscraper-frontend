@@ -84,6 +84,25 @@
 .loader {
 }
 
+a:link, a:visited, a:active {
+    color: #495057;
+}
+
+.card {
+    margin: auto;
+    width: 70%;
+}   
+
+:host ::ng-deep .p-message.p-message-info {
+    background: #F2F5FC;
+    border-width: 0 0 0 0;
+    color: #224063;
+    text-align: center;
+}
+:host ::ng-deep .p-message-icon { 
+    display: none;
+}
+
 .table_caption {
     display: flex;
     justify-content: space-between;

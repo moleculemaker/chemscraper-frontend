@@ -5,6 +5,7 @@ import { interval } from "rxjs/internal/observable/interval";
 import { Subscription } from 'rxjs';
 import { startWith, switchMap } from "rxjs/operators";
 import { Router } from '@angular/router';
+import { Message } from 'primeng/api';
 
 import { PredictionRow, PollingResponseResult, PollingResponseStatus, SingleSeqResult, SeqResult } from '../../../models';
 
@@ -29,12 +30,17 @@ export class ResultsComponent {
   statusResponse: PollingResponseStatus;
   numOfSeq: number;
   useExample: boolean = false;
+  preComputedMessage: Message[];
   
   constructor(private router: Router, private _resultService: ResultService, private httpClient: HttpClient) {
     
   }
 
   ngOnInit(): void {
+    this.preComputedMessage = [
+      { severity: 'info', detail: 'This is a pre-computed result for the example data. To see real-time computation, click the "Run a new Request" button and use the "Copy and Paste" input method.' },
+    ];
+
     this.sendJobID = window.location.href.split('/').at(-2);
     this.numOfSeq = Number(window.location.href.split('/').at(-1));
     if (this.sendJobID != 'price149'){
