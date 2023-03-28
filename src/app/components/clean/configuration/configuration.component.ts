@@ -21,6 +21,7 @@ export class ConfigurationComponent {
   hasChanged: boolean = false;
   postRespond: PostResponse;
   sendData: string[] = [];
+  userEmail: string;
   private maxSeqNum: number = 10;
 
   inputMethods = [
@@ -61,7 +62,6 @@ export class ConfigurationComponent {
         data => {
           tempExampleData.data = data;
           this.exampleData.push(tempExampleData);
-          console.log(this.exampleData[0]);
         }
       );
   }
@@ -82,19 +82,20 @@ export class ConfigurationComponent {
   }
 
   submitData() {
+    console.log(this.realSendData);
     // if the user uses example file, return precompiled result
     // else send sequence to backend, jump to results page
     if (this.selectedInputMethod == 'use_example') {
       this._sequenceService.getExampleResponse(this.selectedExample.label)
         .subscribe( data => {
-          this.router.navigate(['/results', data.jobId]);
+          this.router.navigate(['/results', data.jobId, '149']);
         });
     }
     else {
       this._sequenceService.getResponse(this.realSendData)
       .subscribe(
         data => {
-          this.router.navigate(['/results', data.jobId]);
+          this.router.navigate(['/results', data.jobId, String(this.seqNum)]);
         },
         error => {
           console.error('Error getting contacts via subscribe() method:', error);
@@ -119,7 +120,7 @@ export class ConfigurationComponent {
     this.hasChanged = true;
     this.seqNum = 0;
     this.realSendData.input_fasta = [];
-
+    // this.realSendData.userEmail = this.userEmail;
     if (splitString.length == 0) {
       this.validationText = 'Please input your sequence.';
       this.isValid = false;
@@ -142,6 +143,18 @@ export class ConfigurationComponent {
       this.seqNum += 1;
       let aminoHeader: string = seq.split('\n')[0];
       let aminoSeq: string = seq.split('\n').slice(1).join('');
+      
+      if (aminoSeq.slice(-1) == '*') {
+        aminoSeq = aminoSeq.slice(0,-1);
+      }
+      aminoSeq = aminoSeq.toUpperCase();
+
+      if (aminoHeader.length == 0) {
+        this.validationText = 'Header cannot be empty!';
+        this.isValid = false;
+        shouldSkip = true;
+        return
+      }
 
       headers.push(aminoHeader);
       singleSeq.header = aminoHeader;
@@ -149,7 +162,7 @@ export class ConfigurationComponent {
       this.realSendData.input_fasta.push(singleSeq);
 
       if (this.isInvalidFasta(aminoSeq)) {
-        console.log(seq.split('\n')[0])
+        // console.log(seq.split('\n')[0])
         this.validationText = 'Invalid sequence: ' + aminoHeader + ', This is not a valid fasta file format!';
         this.isValid = false;
         shouldSkip = true;

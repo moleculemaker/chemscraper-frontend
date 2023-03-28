@@ -9,7 +9,7 @@ import { LandingPageComponent } from './components/landing-page/landing-page.com
 const routes: Routes = [
   { path: 'configuration', component: ConfigurationComponent },
   { path: 'results', component: ResultsComponent },
-  { path: 'results/:id', component: ResultsComponent },
+  { path: 'results/:id/:numSeq', component: ResultsComponent },
   { path: '', redirectTo: 'configuration', pathMatch: 'full' }
   // { path: '', component: LandingPageComponent },
 ];
