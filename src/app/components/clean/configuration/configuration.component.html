@@ -1,5 +1,6 @@
 <div class="page_container">
     <div class="container">
+        <a pButton label="User Guide" target="_blank" href="https://docs.google.com/document/d/1zFk1Lb7EAhMdcRp2KN9eyWVQSTBnT2HRYm3UKfZt6CE/edit?usp=sharing"></a>
         <h3>Enter your enzyme sequence here</h3>
         <h5>Choose an input method below</h5>
 
@@ -23,7 +24,7 @@
                         <!-- <button pButton label="Validate" (click)="submitValidate()" class="p-button-text p-button-plain p-button-xs"></button> -->
                     </div>
 
-                    <textarea pInputTextarea [rows]="8" [(ngModel)]="sequenceData" #sequenceDataHtml="ngModel" (input)="submitValidate()"></textarea>
+                    <textarea pInputTextarea [rows]="8" placeholder="Please enter enzyme amino acid sequence in FASTA format." [(ngModel)]="sequenceData" #sequenceDataHtml="ngModel" (input)="submitValidate()"></textarea>
 
                 </ng-container>
 
@@ -46,12 +47,15 @@
                 </ng-container>
             </div>
 
-<!--
-            <ng-template pTemplate="footer">
-                Footer content here
-            </ng-template>
--->
         </p-panel>
+
+        <!-- <div class="review" > -->
+        <ng-container *ngIf="selectedInputMethod == 'copy_and_paste'">
+            <h3>Enter your email if you want to get a notification after the result is finished computing.</h3>
+            <div class="spacer"></div>
+            <input type="email" name="email" pInputTextarea placeholder="Email" [(ngModel)]="userEmail" ngModel #email="ngModel" email="true">
+        </ng-container>
+        <!-- </div> -->
 
         <div class="controls">
             <div class="review">

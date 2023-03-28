@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SequenceService } from 'src/app/sequence.service';
-
+import { TrackingService } from 'src/app/tracking.service';
 
 import { PostResponse, PostSeqData, SingleSeqData, ExampleData } from '../../../models';
 import { ResultsComponent } from '../results/results.component';
@@ -21,6 +21,7 @@ export class ConfigurationComponent {
   hasChanged: boolean = false;
   postRespond: PostResponse;
   sendData: string[] = [];
+  userEmail: string;
   private maxSeqNum: number = 10;
 
   inputMethods = [
@@ -42,7 +43,12 @@ export class ConfigurationComponent {
     input_fasta: []
   };
 
-  constructor(private router: Router, private _sequenceService: SequenceService, private httpClient: HttpClient) { }
+  constructor(
+    private router: Router,
+    private _sequenceService: SequenceService,
+    private httpClient: HttpClient,
+    private trackingService: TrackingService
+  ) { }
 
   ngOnInit() {
     this.getExampleData();
@@ -62,6 +68,7 @@ export class ConfigurationComponent {
 
   selectExample() {
     this.isValid = true;
+    this.trackingService.trackSelectExampleData(this.selectedExample.label);
   }
 
   makeExampleValid() {
@@ -75,6 +82,7 @@ export class ConfigurationComponent {
   }
 
   submitData() {
+    console.log(this.realSendData);
     // if the user uses example file, return precompiled result
     // else send sequence to backend, jump to results page
     if (this.selectedInputMethod == 'use_example') {
@@ -112,7 +120,7 @@ export class ConfigurationComponent {
     this.hasChanged = true;
     this.seqNum = 0;
     this.realSendData.input_fasta = [];
-
+    // this.realSendData.userEmail = this.userEmail;
     if (splitString.length == 0) {
       this.validationText = 'Please input your sequence.';
       this.isValid = false;
@@ -135,6 +143,18 @@ export class ConfigurationComponent {
       this.seqNum += 1;
       let aminoHeader: string = seq.split('\n')[0];
       let aminoSeq: string = seq.split('\n').slice(1).join('');
+      
+      if (aminoSeq.slice(-1) == '*') {
+        aminoSeq = aminoSeq.slice(0,-1);
+      }
+      aminoSeq = aminoSeq.toUpperCase();
+
+      if (aminoHeader.length == 0) {
+        this.validationText = 'Header cannot be empty!';
+        this.isValid = false;
+        shouldSkip = true;
+        return
+      }
 
       headers.push(aminoHeader);
       singleSeq.header = aminoHeader;
