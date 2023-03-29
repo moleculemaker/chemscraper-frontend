@@ -10,6 +10,10 @@
 
 //**************** css ******************
 
+:host ::ng-deep .p-panel-header {
+    background-color: #F2F5FC;
+}
+
 .panel_content {
     //fill the space with the textarea
 //    margin: -($padding * .75) (-($padding * .5));

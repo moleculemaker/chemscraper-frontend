@@ -84,6 +84,30 @@
 .loader {
 }
 
+a:link, a:visited, a:active {
+    color: #495057;
+}
+
+.card {
+    margin: auto;
+    width: 70%;
+}   
+
+:host ::ng-deep .p-message.p-message-info {
+    background: #F2F5FC;
+    border-width: 0 0 0 0;
+    color: #224063;
+    text-align: center;
+    .p-message-icon { 
+        display: none;
+    }
+}
+
+:host ::ng-deep .p-message.p-message-error {
+    border-width: 0 0 0 0;
+    text-align: left;
+}
+
 .table_caption {
     display: flex;
     justify-content: space-between;
@@ -93,4 +117,10 @@
     h3 {
         margin: 0px;
     }
+}
+
+.failJob {
+    margin: auto;
+    text-align: center;
+    width: 100%;
 }

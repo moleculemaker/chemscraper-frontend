@@ -181,6 +181,10 @@ footer {
         align-items: center;
         gap: $padding * .5;
     }
+
+    a:link, a:visited, a:active {
+        color: #495057;
+    }
 }
 
 cite {
@@ -195,10 +199,24 @@ cite {
         transform: normal;
     }
 
+    background-color: #F2F5FC;
+
     .container {
         display: flex;
         justify-content: center;
         align-items: center;
         gap: $padding * .5;
+        line-height: 1.5;
+        a:link, a:visited, a:active {
+            color: #224063;
+        }
+
+        .bolded {
+            font-weight: bold;
+            color: #224063;
+            
+        }
     }
+
+    
 }

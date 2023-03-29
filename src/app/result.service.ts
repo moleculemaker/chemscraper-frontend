@@ -26,7 +26,7 @@ export class ResultService {
   private dummyFailedResult: PollingResponseResult = {
     jobId: "2",
     url: "mmli.clean.com/jobId/b01f8a6b-2f3e-4160-8f5d-c9a2c5eead78",
-    status: "error",
+    status: "failed",
     created_at: "2020-01-01 10:10:10",
     results: []
   };

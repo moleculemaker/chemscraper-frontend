@@ -31,10 +31,6 @@ export class ConfigurationComponent {
   selectedInputMethod: any | null = 'copy_and_paste'; //this.inputMethods[0];
 
   exampleData: ExampleData[] = [];
-  // exampleData = [
-  //   { label: 'H. sapiens amylase', data: '>sp|P69905|HBA_HUMAN Hemoglobin subunit alpha OS=Homo sapiens OX=9606 GN=HBA1 PE=1 SV=2 MVLSPADKTNVKAAWGKVGALVTLAAHLPAEFTPYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP AVHASLDKFLASVSTVLTSKYR MVLSPADKTNVKALVTLAAHLPAEFTPHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP' },
-  //   { label: 'E. coli TrpCF', data: '>sp|P69905|HBA_HUMAN Hemoglobin subunit alpha OS=Homo sapiens OX=9606 GN=HBA1 PE=1 SV=2 MVLAVHASLDKFLASVSTVLTSKYRPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP ' },
-  // ];
   selectedExample: any | null = this.exampleData[0];
 
   seqNum: number = 0;
@@ -113,7 +109,6 @@ export class ConfigurationComponent {
   }
 
   submitValidate() {
-    this.isValidating = true;
     let splitString: string[] = this.sequenceData.split('>').slice(1);
     let headers: string[] = [];
     let shouldSkip: boolean = false;
@@ -143,6 +138,14 @@ export class ConfigurationComponent {
       this.seqNum += 1;
       let aminoHeader: string = seq.split('\n')[0];
       let aminoSeq: string = seq.split('\n').slice(1).join('');
+
+      let warningMessageHeader: string;
+      if (aminoHeader.length > 30) {
+        warningMessageHeader = aminoHeader.slice(0,30) + '...';
+      }
+      else {
+        warningMessageHeader = aminoHeader;
+      }
       
       if (aminoSeq.slice(-1) == '*') {
         aminoSeq = aminoSeq.slice(0,-1);
@@ -162,22 +165,21 @@ export class ConfigurationComponent {
       this.realSendData.input_fasta.push(singleSeq);
 
       if (this.isInvalidFasta(aminoSeq)) {
-        // console.log(seq.split('\n')[0])
-        this.validationText = 'Invalid sequence: ' + aminoHeader + ', This is not a valid fasta file format!';
+        this.validationText = 'Invalid sequence: ' + warningMessageHeader + ', This is not a valid fasta file format!';
         this.isValid = false;
         shouldSkip = true;
         return
       }
 
       if (aminoSeq.length > 1022) {
-        this.validationText = 'Invalid sequence: ' + aminoHeader + ', sequence Length is greater than 1022!';
+        this.validationText = 'Invalid sequence: ' + warningMessageHeader + ', sequence Length is greater than 1022!';
         this.isValid = false;
         shouldSkip = true;
         return
       }
 
       if (aminoSeq.length == 0) {
-        this.validationText = 'Invalid sequence: ' + aminoHeader + ', sequence Length is 0.';
+        this.validationText = 'Invalid sequence: ' + warningMessageHeader + ', sequence Length is 0.';
         this.isValid = false;
         shouldSkip = true;
         return
@@ -194,7 +196,6 @@ export class ConfigurationComponent {
       this.validationText = 'Valid No. of Sequences: ' + this.seqNum + ' Sequences';
       this.isValid = true;
     }
-    this.isValidating = false;
   }
 
   // log(seq: any) {

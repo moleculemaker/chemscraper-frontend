@@ -15,6 +15,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
+import { MessagesModule } from 'primeng/messages';
 
 
 import { LandingPageComponent} from './components/landing-page/landing-page.component';
@@ -41,7 +42,7 @@ import { NgxMatomoRouterModule } from '@ngx-matomo/router';
     BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
-
+    MessagesModule,
     ButtonModule,
     InputTextareaModule,
     PanelModule,
