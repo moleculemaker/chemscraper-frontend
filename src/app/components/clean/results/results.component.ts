@@ -31,9 +31,9 @@ export class ResultsComponent {
   numOfSeq: number;
   useExample: boolean = false;
   preComputedMessage: Message[];
-  
+
   constructor(private router: Router, private _resultService: ResultService, private httpClient: HttpClient) {
-    
+
   }
 
   ngOnInit(): void {
@@ -43,7 +43,7 @@ export class ResultsComponent {
 
     this.sendJobID = window.location.href.split('/').at(-2);
     this.numOfSeq = Number(window.location.href.split('/').at(-1));
-    if (this.sendJobID != 'price149'){
+    if (this.sendJobID != 'price149') {
       this.getResult();
     }
     else {
@@ -56,15 +56,11 @@ export class ResultsComponent {
       this.useExample = true;
       this.getExampleResult();
     }
-    
+
   }
-    
-  // goToConfiture(): void {
-  //   window.open('http://localhost:4200/configuration', '_blank')?.focus();
-  // }
 
   parseResult(): void {
-    this.jobID = this.getResponse.jobId;
+    // this.jobID = this.getResponse.jobId;
     this.getResponse.results.forEach((seq: SeqResult) => {
       let temp: PredictionRow = {
         sequence: '',
@@ -98,58 +94,53 @@ export class ResultsComponent {
 
   getResult(): void {
     this.timeInterval = this._resultService.getResult(this.sendJobID)
-    .subscribe(
-      data => {
-        console.log(data);
-        this.statusResponse = data;
-        if (this.statusResponse.status == 'completed' || this.statusResponse.status == 'error') {
-          this._resultService.gotEndResult();
-        }
-        if (this.statusResponse.status == 'error') {
-          this.failedJob = true;
-        } 
-      },
-      error => {
-        console.error('Error getting contacts via subscribe() method:', error);
-      },
-      () => {
-        this.getResponseResult();
-        // console.log(this.contentLoaded);
-        // this.parseResult();
-        // this.contentLoaded = true;
-    });
+      .subscribe(
+        data => {
+          console.log(data);
+          this.statusResponse = data;
+          if (this.statusResponse.status == 'completed' || this.statusResponse.status == 'failed') {
+            this._resultService.gotEndResult();
+          }
+        },
+        error => {
+          console.error('Error getting contacts via subscribe() method:', error);
+        },
+        () => {
+          if (this.statusResponse.status == 'failed') {
+            this.failedJob = true;
+          }
+          this.getResponseResult();
+        });
   }
 
   getResponseResult(): void {
-    this._resultService.getResponse(this.sendJobID)
-    .subscribe(
-      data => {
-        // console.log(data);
-        this.getResponse = data;
-        this.parseResult();
-        this.contentLoaded = true;
-        // if (this.getResponse.status == 'completed' || this.getResponse.status == 'error') {
-        //   this._resultService.gotEndResult();
-        // }
-        // if (this.getResponse.status == 'error') {
-        //   this.failedJob = true;
-        // } 
-      },
-      error => {
-        console.error('Error getting contacts via subscribe() method:', error);
-      });
+    if (this.failedJob) {
+      this.contentLoaded = true;
+    }
+    else {
+      this._resultService.getResponse(this.sendJobID)
+        .subscribe(
+          data => {
+            this.getResponse = data;
+            this.parseResult();
+            this.contentLoaded = true;
+          },
+          error => {
+            console.error('Error getting contacts via POST resut method:', error);
+          });
+    }
   }
 
   getExampleResult(): void {
     if (this.sendJobID == 'price149') {
       this.httpClient.get('assets/price_maxsep.csv', { responseType: 'text' })
-      .subscribe(
-        data => {
-          this.exampleResponse = data;
-          this.parseExampleResult();
-          this.contentLoaded = true;
-        }
-      );
+        .subscribe(
+          data => {
+            this.exampleResponse = data;
+            this.parseExampleResult();
+            this.contentLoaded = true;
+          }
+        );
     }
   }
 
@@ -165,7 +156,7 @@ export class ResultsComponent {
     let csvContent = this.downloadRows.map(e => e.join(",")).join("\n");
     // console.log(csvContent);
     const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url= window.URL.createObjectURL(blob);
+    const url = window.URL.createObjectURL(blob);
     var anchor = document.createElement("a");
     anchor.download = 'CLEAN_Result_' + this.sendJobID + '.csv';
     // window.open(url);
