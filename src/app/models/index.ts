@@ -26,6 +26,7 @@ export interface SingleSeqData {
 
 export interface PostSeqData {
   input_fasta: SingleSeqData[];
+  user_email: string;
 }
 
 export interface PostResponse {

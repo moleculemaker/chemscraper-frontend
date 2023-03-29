@@ -51,14 +51,14 @@
 
         </p-panel>
 
-        <!-- <ng-container *ngIf="selectedInputMethod == 'copy_and_paste'">
+        <ng-container *ngIf="selectedInputMethod == 'copy_and_paste'">
             <h3>Email</h3>
             <h5>Leave an email to get a notification when your result is ready.</h5>
             <br>
             <div class="spacer"></div>
             <input type="email" name="email" pInputTextarea placeholder="Email" [(ngModel)]="userEmail" ngModel
-                #email="ngModel" email="true">
-        </ng-container> -->
+                #email="ngModel" email="true" (input)="enterEmail()">
+        </ng-container>
 
         <div class="controls">
             <div class="review">
