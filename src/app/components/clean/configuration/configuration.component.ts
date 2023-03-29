@@ -36,7 +36,8 @@ export class ConfigurationComponent {
   seqNum: number = 0;
   private validAminoAcid = new RegExp("[^GPAVLIMCFYWHKRQNEDST]", "i");
   realSendData: PostSeqData = {
-    input_fasta: []
+    input_fasta: [],
+    user_email: ''
   };
 
   constructor(
@@ -108,6 +109,10 @@ export class ConfigurationComponent {
     return this.validAminoAcid.test(seq);
   }
 
+  enterEmail() {
+    this.realSendData.user_email = this.userEmail;
+  }
+
   submitValidate() {
     let splitString: string[] = this.sequenceData.split('>').slice(1);
     let headers: string[] = [];
@@ -115,7 +120,7 @@ export class ConfigurationComponent {
     this.hasChanged = true;
     this.seqNum = 0;
     this.realSendData.input_fasta = [];
-    // this.realSendData.userEmail = this.userEmail;
+    
     if (splitString.length == 0) {
       this.validationText = 'Please input your sequence.';
       this.isValid = false;
