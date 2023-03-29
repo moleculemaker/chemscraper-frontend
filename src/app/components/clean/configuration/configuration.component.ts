@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SequenceService } from 'src/app/sequence.service';
-
+import { TrackingService } from 'src/app/tracking.service';
 
 import { PostResponse, PostSeqData, SingleSeqData, ExampleData } from '../../../models';
 import { ResultsComponent } from '../results/results.component';
@@ -39,7 +39,12 @@ export class ConfigurationComponent {
     input_fasta: []
   };
 
-  constructor(private router: Router, private _sequenceService: SequenceService, private httpClient: HttpClient) { }
+  constructor(
+    private router: Router,
+    private _sequenceService: SequenceService,
+    private httpClient: HttpClient,
+    private trackingService: TrackingService
+  ) { }
 
   ngOnInit() {
     this.getExampleData();
@@ -59,6 +64,7 @@ export class ConfigurationComponent {
 
   selectExample() {
     this.isValid = true;
+    this.trackingService.trackSelectExampleData(this.selectedExample.label);
   }
 
   makeExampleValid() {

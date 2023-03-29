@@ -24,9 +24,8 @@
                             class="p-button-text p-button-plain p-button-xs"></button>
                     </div>
 
-                    <textarea pInputTextarea [rows]="8"
-                        placeholder="Please enter enzyme amino acid sequence in FASTA format."
-                        [(ngModel)]="sequenceData" #sequenceDataHtml="ngModel" (change)="submitValidate()"></textarea>
+
+                    <textarea pInputTextarea [rows]="8" placeholder="Please enter enzyme amino acid sequence in FASTA format." [(ngModel)]="sequenceData" #sequenceDataHtml="ngModel" (input)="submitValidate()"></textarea>
 
                 </ng-container>
 
