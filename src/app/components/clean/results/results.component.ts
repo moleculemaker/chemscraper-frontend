@@ -31,6 +31,7 @@ export class ResultsComponent {
   numOfSeq: number;
   useExample: boolean = false;
   preComputedMessage: Message[];
+  jobFailedMessage: Message[];
 
   constructor(private router: Router, private _resultService: ResultService, private httpClient: HttpClient) {
 
@@ -40,6 +41,9 @@ export class ResultsComponent {
     this.preComputedMessage = [
       { severity: 'info', detail: 'This is a pre-computed result for the example data. To see real-time computation, click the "Run a new Request" button and use the "Copy and Paste" input method.' },
     ];
+    this.jobFailedMessage = [
+      { severity: 'error', detail: 'Job failed possibly due to incorrect input or intermittent issues. Please use the “Run a new Request” button above to try again, or click the feedback link at the bottom of the page to report a problem.'}
+    ]
 
     this.sendJobID = window.location.href.split('/').at(-2);
     this.numOfSeq = Number(window.location.href.split('/').at(-1));

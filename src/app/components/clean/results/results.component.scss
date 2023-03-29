@@ -98,9 +98,14 @@ a:link, a:visited, a:active {
     border-width: 0 0 0 0;
     color: #224063;
     text-align: center;
+    .p-message-icon { 
+        display: none;
+    }
 }
-:host ::ng-deep .p-message-icon { 
-    display: none;
+
+:host ::ng-deep .p-message.p-message-error {
+    border-width: 0 0 0 0;
+    text-align: left;
 }
 
 .table_caption {
@@ -116,5 +121,6 @@ a:link, a:visited, a:active {
 
 .failJob {
     margin: auto;
-    text-align: center;    
+    text-align: center;
+    width: 100%;
 }

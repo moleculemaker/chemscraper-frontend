@@ -81,8 +81,7 @@ turned this off, since only totalRecords appears to be accessible from the #tabl
             </p-table>
 
             <div class="failJob" *ngIf="failedJob">
-                <h2>Job Failed possibly due to incorrect input or intermittent issues.</h2>
-                <!-- <h2>JobID: {{sendJobID}} has failed.</h2>  -->
+                <p-messages [(value)]="jobFailedMessage" [enableService]="false" [closable]="false"></p-messages>
             </div>
         </ng-container>
     </div>
