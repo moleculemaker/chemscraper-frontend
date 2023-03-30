@@ -59,6 +59,8 @@ export class ConfigurationComponent {
         data => {
           tempExampleData.data = data;
           this.exampleData.push(tempExampleData);
+          this.selectedExample = this.exampleData[0];
+          this.selectExample();
         }
       );
   }
