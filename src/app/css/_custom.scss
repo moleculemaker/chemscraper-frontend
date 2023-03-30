@@ -24,14 +24,17 @@ $colors: map.merge($colors, (
 	button_disabled_label: #6c757d,
 
 	clean_logo: #5689F5,
-	clean_logo_gradient: linear-gradient(to right, #D5618C, #5689F5),
-	clean_logo_gradient_reverse: linear-gradient(to right, #5689F5, #D5618C),
+	clean_logo_gradient: linear-gradient(to right, #d5618c, #5689F5),
+	clean_logo_gradient_reverse: linear-gradient(to right, #5689F5, #d5618c),
 
 	divider: #eee,
 
 	header_background: #224064,
 	header_background_gradient: linear-gradient(to right, #152438, #224064),
 	header_label: #9ca5ad,
+	header_link: lighten(#d5618c, 50%),
+	header_link_hover: lighten(#d5618c, 30%),
+	header_popup_background: #d5618c,
 
 	status_error: #f88,
 	status_error_text: #a33,

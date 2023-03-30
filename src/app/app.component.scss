@@ -56,8 +56,121 @@ header {
         }
     }
 
-    .separator {
+    .spacer {
         flex-grow: 1;
+    }
+
+    .coming_soon {
+        position: relative;
+
+        &.show_popup {
+            .coming_soon_popup {
+                @include translate(0%, 0%);
+            }
+        }
+
+        .coming_soon_button {
+            cursor: pointer;
+
+            color: css_var('button_secondary');
+
+            padding: ($padding * .25) ($padding * .5);
+
+            font: {
+                size: .75rem;
+            }
+            text: {
+                transform: uppercase;
+            }
+
+            @include border-radius($border_radius);
+
+            &:hover {
+                color: css_var('background');
+                background: {
+                    color: css_var('button_secondary');
+                }
+            }
+        }
+
+        .coming_soon_popup {
+            cursor: pointer;
+
+            position: absolute;
+            right: 0px;
+            top: -($padding);
+            z-index: get_index(modal);
+
+            width: 30rem;
+
+            padding: $padding ($padding * 1.5);
+
+            color: css_var('background');
+            background: {
+//                color: css_var('background');
+                color: css_var('header_popup_background');
+            }
+
+            @include border-bottom-radius($border_radius);
+            @include transition(#{transform .2s easing($ease-in-out)});
+            @include translate(0%, -100%);
+
+            &:hover {
+                .close_btn {
+                    @include opacity(80);
+                }
+            }
+
+            .close_btn {
+                cursor: pointer;
+
+                position: absolute;
+                right: $padding * .75;
+                top: $padding * .75;
+                z-index: 100;
+
+                @include opacity(50);
+
+                &:hover {
+                    @include opacity(80);
+                }
+            }
+
+            h2,
+            h3 {
+                margin: {
+                    top: $padding * .5;
+                }
+
+                text: {
+                    transform: uppercase;
+                }
+            }
+
+            p {
+                margin: {
+                    top: $padding * .5;
+                }
+
+                font: {
+                    size: .85rem;
+                }
+            }
+
+            a,
+            a:link,
+            a:visited {
+                color: css_var('header_link');
+
+                font: {
+                    weight: bold;
+                }
+            }
+
+            a:hover {
+                color: css_var('header_link_hover');
+            }
+        }
     }
 }
 
