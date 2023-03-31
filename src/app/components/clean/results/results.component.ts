@@ -40,7 +40,7 @@ export class ResultsComponent {
   ngOnInit(): void {
     this.preComputedMessage = [
       // { severity: 'info', detail: 'This is a pre-computed result for the example data. To see real-time computation, click the "Run a new Request" button and use the "Copy and Paste" input method.' },
-      { severity: 'info', detail: 'Real-time computation is currently disabled due to high demand, but please visit us again soon.' },
+      { severity: 'info', detail: 'This is a pre-computed result for the example data. Real-time computation is currently disabled due to high demand, but please visit us again soon!' },
     ];
     this.jobFailedMessage = [
       { severity: 'error', detail: 'Job failed possibly due to incorrect input or intermittent issues. Please use the “Run a new Request” button above to try again, or click the feedback link at the bottom of the page to report a problem.'}
