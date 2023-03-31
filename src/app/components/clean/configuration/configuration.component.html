@@ -1,5 +1,9 @@
 <div class="page_container">
+    
     <div class="container">
+        <div class="card" *ngIf="disableCopyPaste">
+            <p-messages [(value)]="highTrafficMessage" [enableService]="false" [closable]="false"></p-messages>
+        </div>
         <h3>Enter your enzyme sequence here</h3>
         <h5>Choose an input method below</h5>
 
@@ -98,7 +102,7 @@
             <div class="buttons">
                 <br>
                 <button pButton type="button" label="Get the CLEAN Result" (click)="submitData()"
-                    icon="pi pi-arrow-right" iconPos="right" styleClass="p-button-xs" [disabled]="!isValid"></button>
+                    icon="pi pi-arrow-right" iconPos="right" styleClass="p-button-xs" [disabled]="!isValid || (disableCopyPaste && selectedInputMethod == 'copy_and_paste')"></button>
             </div>
         </div>
     </div>

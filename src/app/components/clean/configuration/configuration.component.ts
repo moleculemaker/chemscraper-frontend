@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SequenceService } from 'src/app/sequence.service';
 import { TrackingService } from 'src/app/tracking.service';
+import { Message } from 'primeng/api';
 
 import { PostResponse, PostSeqData, SingleSeqData, ExampleData } from '../../../models';
 import { ResultsComponent } from '../results/results.component';
@@ -23,6 +24,8 @@ export class ConfigurationComponent {
   sendData: string[] = [];
   userEmail: string;
   private maxSeqNum: number = 10;
+  disableCopyPaste: boolean = true;
+  highTrafficMessage: Message[];
 
   inputMethods = [
     { label: 'Copy and Paste', icon: 'pi pi-copy', value: 'copy_and_paste' },
@@ -49,6 +52,9 @@ export class ConfigurationComponent {
 
   ngOnInit() {
     this.getExampleData();
+    this.highTrafficMessage = [
+      { severity: 'info', detail: 'Due to the overwhelming popularity of the CLEAN tool, we are temporarily unable to predict EC numbers for new sequences. As we increase our capacity, please feel free to explore the tool with the example data we have provided, and visit us again soon!' },
+    ];
     // console.log(this.exampleData);
   }
 
