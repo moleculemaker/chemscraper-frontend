@@ -48,6 +48,16 @@
     }
 }
 
+:host ::ng-deep .p-message.p-message-info {
+    background: #F2F5FC;
+    border-width: 0 0 0 0;
+    color: #224063;
+    text-align: center;
+    .p-message-icon { 
+        display: none;
+    }
+}
+
 .panel_bar {
     display: flex;
     align-items: center;
