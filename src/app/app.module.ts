@@ -27,6 +27,7 @@ import { SequenceService } from './sequence.service';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxMatomoTrackerModule } from '@ngx-matomo/tracker';
 import { NgxMatomoRouterModule } from '@ngx-matomo/router';
+import { NgHcaptchaModule } from 'ng-hcaptcha';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,11 @@ import { NgxMatomoRouterModule } from '@ngx-matomo/router';
       siteId: 3,
       trackerUrl: 'https://matomo.mmli1.ncsa.illinois.edu/'
     }),
-    NgxMatomoRouterModule
+    NgxMatomoRouterModule,
+    NgHcaptchaModule.forRoot({
+      siteKey: '0b1663cb-26b9-4e6f-bfa9-352bdd3aeb9f',
+      languageCode: 'en' // optional, will default to browser language
+  })
   ],
   providers: [SequenceService],
   bootstrap: [AppComponent]

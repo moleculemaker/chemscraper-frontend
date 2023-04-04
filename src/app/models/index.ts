@@ -27,6 +27,7 @@ export interface SingleSeqData {
 export interface PostSeqData {
   input_fasta: SingleSeqData[];
   user_email: string;
+  captcha_token: string;
 }
 
 export interface PostResponse {

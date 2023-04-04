@@ -24,11 +24,11 @@ export class ConfigurationComponent {
   sendData: string[] = [];
   userEmail: string;
   private maxSeqNum: number = 10;
-  disableCopyPaste: boolean = true;
+  disableCopyPaste: boolean = false;
   highTrafficMessage: Message[];
 
   inputMethods = [
-    // { label: 'Copy and Paste', icon: 'pi pi-copy', value: 'copy_and_paste' },
+    { label: 'Copy and Paste', icon: 'pi pi-copy', value: 'copy_and_paste' },
     { label: 'Use Example Sequences', icon: 'pi pi-table', value: 'use_example' },
   ];
   selectedInputMethod: any | null = 'use_example'; //this.inputMethods[0];
@@ -40,7 +40,8 @@ export class ConfigurationComponent {
   private validAminoAcid = new RegExp("[^GPAVLIMCFYWHKRQNEDST]", "i");
   realSendData: PostSeqData = {
     input_fasta: [],
-    user_email: ''
+    user_email: '',
+    captcha_token: ''
   };
 
   constructor(
@@ -106,7 +107,7 @@ export class ConfigurationComponent {
           console.error('Error getting contacts via subscribe() method:', error);
         });
     }
-    
+
   }
 
   hasDuplicateHeaders(array: string[]) {
@@ -128,7 +129,7 @@ export class ConfigurationComponent {
     this.hasChanged = true;
     this.seqNum = 0;
     this.realSendData.input_fasta = [];
-    
+
     if (splitString.length == 0) {
       this.validationText = 'Please input your sequence.';
       this.isValid = false;
@@ -159,7 +160,7 @@ export class ConfigurationComponent {
       else {
         warningMessageHeader = aminoHeader;
       }
-      
+
       if (aminoSeq.slice(-1) == '*') {
         aminoSeq = aminoSeq.slice(0,-1);
       }
@@ -214,4 +215,16 @@ export class ConfigurationComponent {
   // log(seq: any) {
   //   console.log(seq);
   // }
+  onCaptchaVerify(event: string){
+    this.realSendData.captcha_token = event;
+    console.log(this.realSendData.captcha_token);
+
+  }
+  onCaptchaExpired(event: string){
+    console.log("Captcha expired");
+
+  }
+  onCaptchaError(event: string){
+    console.log("Captcha error: " + event);
+  }
 }
