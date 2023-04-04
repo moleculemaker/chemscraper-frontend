@@ -4,9 +4,11 @@ import { Router } from '@angular/router';
 import { SequenceService } from 'src/app/sequence.service';
 import { TrackingService } from 'src/app/tracking.service';
 import { Message } from 'primeng/api';
+import { switchMap } from 'rxjs/operators';
 
 import { PostResponse, PostSeqData, SingleSeqData, ExampleData } from '../../../models';
 import { ResultsComponent } from '../results/results.component';
+import {NgHcaptchaService} from "ng-hcaptcha";
 
 @Component({
   selector: 'app-configuration',
@@ -48,7 +50,8 @@ export class ConfigurationComponent {
     private router: Router,
     private _sequenceService: SequenceService,
     private httpClient: HttpClient,
-    private trackingService: TrackingService
+    private trackingService: TrackingService,
+    private hcaptchaService: NgHcaptchaService
   ) { }
 
   ngOnInit() {
@@ -96,18 +99,19 @@ export class ConfigurationComponent {
         .subscribe( data => {
           this.router.navigate(['/results', data.jobId, '149']);
         });
-    }
-    else {
-      this._sequenceService.getResponse(this.realSendData)
-      .subscribe(
-        data => {
-          this.router.navigate(['/results', data.jobId, String(this.seqNum)]);
+    } else {
+      this.hcaptchaService.verify().pipe(
+        switchMap(() => this._sequenceService.getResponse(this.realSendData))
+      ).subscribe(
+      (data) => {
+        this.router.navigate(['/results', data.jobId, String(this.seqNum)]);
         },
-        error => {
+      (error) => {
+        // TODO replace this with a call to the message service
           console.error('Error getting contacts via subscribe() method:', error);
-        });
+        }
+      );
     }
-
   }
 
   hasDuplicateHeaders(array: string[]) {
