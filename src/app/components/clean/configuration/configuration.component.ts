@@ -31,7 +31,7 @@ export class ConfigurationComponent {
     { label: 'Copy and Paste', icon: 'pi pi-copy', value: 'copy_and_paste' },
     { label: 'Use Example Sequences', icon: 'pi pi-table', value: 'use_example' },
   ];
-  selectedInputMethod: any | null = 'use_example'; //this.inputMethods[0];
+  selectedInputMethod: any | null = 'copy_and_paste'; //this.inputMethods[0];
 
   exampleData: ExampleData[] = [];
   selectedExample: any | null = this.exampleData[0];
