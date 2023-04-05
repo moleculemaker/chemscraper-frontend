@@ -63,12 +63,6 @@
             <input type="email" name="email" pInputTextarea placeholder="Email" [(ngModel)]="userEmail" ngModel
                 #email="ngModel" email="true" (input)="enterEmail()">
         </ng-container>
-        <div *ngIf="selectedInputMethod == 'copy_and_paste'">
-          <ng-hcaptcha (verify)="onCaptchaVerify($event)"
-              (expired)="onCaptchaExpired($event)"
-              (error)="onCaptchaError($event)">
-          </ng-hcaptcha>
-        </div>
         <div class="controls">
             <div class="review">
                 <ng-container *ngIf="selectedInputMethod == 'copy_and_paste'">

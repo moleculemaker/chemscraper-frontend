@@ -4,9 +4,11 @@ import { Router } from '@angular/router';
 import { SequenceService } from 'src/app/sequence.service';
 import { TrackingService } from 'src/app/tracking.service';
 import { Message } from 'primeng/api';
+import { switchMap } from 'rxjs/operators';
 
 import { PostResponse, PostSeqData, SingleSeqData, ExampleData } from '../../../models';
 import { ResultsComponent } from '../results/results.component';
+import {NgHcaptchaService} from "ng-hcaptcha";
 
 @Component({
   selector: 'app-configuration',
@@ -48,7 +50,8 @@ export class ConfigurationComponent {
     private router: Router,
     private _sequenceService: SequenceService,
     private httpClient: HttpClient,
-    private trackingService: TrackingService
+    private trackingService: TrackingService,
+    private hcaptchaService: NgHcaptchaService
   ) { }
 
   ngOnInit() {
@@ -96,18 +99,22 @@ export class ConfigurationComponent {
         .subscribe( data => {
           this.router.navigate(['/results', data.jobId, '149']);
         });
-    }
-    else {
-      this._sequenceService.getResponse(this.realSendData)
-      .subscribe(
-        data => {
+    } else {
+      this.hcaptchaService.verify().pipe(
+        switchMap((data) => {
+          this.realSendData.captcha_token = data;
+          return this._sequenceService.getResponse(this.realSendData);
+        })
+      ).subscribe(
+        (data) => {
           this.router.navigate(['/results', data.jobId, String(this.seqNum)]);
         },
-        error => {
+        (error) => {
+          // TODO replace this with a call to the message service, and display the correct error message
           console.error('Error getting contacts via subscribe() method:', error);
-        });
+        }
+      );
     }
-
   }
 
   hasDuplicateHeaders(array: string[]) {
@@ -210,21 +217,5 @@ export class ConfigurationComponent {
       this.validationText = 'Valid No. of Sequences: ' + this.seqNum + ' Sequences';
       this.isValid = true;
     }
-  }
-
-  // log(seq: any) {
-  //   console.log(seq);
-  // }
-  onCaptchaVerify(event: string){
-    this.realSendData.captcha_token = event;
-    console.log(this.realSendData.captcha_token);
-
-  }
-  onCaptchaExpired(event: string){
-    console.log("Captcha expired");
-
-  }
-  onCaptchaError(event: string){
-    console.log("Captcha error: " + event);
   }
 }
