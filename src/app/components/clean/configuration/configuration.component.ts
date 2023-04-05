@@ -101,13 +101,16 @@ export class ConfigurationComponent {
         });
     } else {
       this.hcaptchaService.verify().pipe(
-        switchMap(() => this._sequenceService.getResponse(this.realSendData))
+        switchMap((data) => {
+          this.realSendData.captcha_token = data;
+          return this._sequenceService.getResponse(this.realSendData);
+        })
       ).subscribe(
-      (data) => {
-        this.router.navigate(['/results', data.jobId, String(this.seqNum)]);
+        (data) => {
+          this.router.navigate(['/results', data.jobId, String(this.seqNum)]);
         },
-      (error) => {
-        // TODO replace this with a call to the message service
+        (error) => {
+          // TODO replace this with a call to the message service, and display the correct error message
           console.error('Error getting contacts via subscribe() method:', error);
         }
       );
@@ -214,21 +217,5 @@ export class ConfigurationComponent {
       this.validationText = 'Valid No. of Sequences: ' + this.seqNum + ' Sequences';
       this.isValid = true;
     }
-  }
-
-  // log(seq: any) {
-  //   console.log(seq);
-  // }
-  onCaptchaVerify(event: string){
-    this.realSendData.captcha_token = event;
-    console.log(this.realSendData.captcha_token);
-
-  }
-  onCaptchaExpired(event: string){
-    console.log("Captcha expired");
-
-  }
-  onCaptchaError(event: string){
-    console.log("Captcha error: " + event);
   }
 }
