@@ -25,7 +25,7 @@ export class ConfigurationComponent {
   postRespond: PostResponse;
   sendData: string[] = [];
   userEmail: string;
-  private maxSeqNum: number = 10;
+  private maxSeqNum: number = 20;
   disableCopyPaste: boolean = false;
   highTrafficMessage: Message[];
 
