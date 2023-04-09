@@ -61,7 +61,7 @@ import { NgHcaptchaModule } from 'ng-hcaptcha';
     }),
     NgxMatomoRouterModule,
     NgHcaptchaModule.forRoot({
-      siteKey: '0b1663cb-26b9-4e6f-bfa9-352bdd3aeb9f',
+      siteKey: '10000000-ffff-ffff-ffff-000000000001',
       languageCode: 'en' // optional, will default to browser language
   })
   ],

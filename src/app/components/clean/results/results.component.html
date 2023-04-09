@@ -61,7 +61,7 @@ turned this off, since only totalRecords appears to be accessible from the #tabl
                         <th pSortableColumn="sequence">Identifier <p-sortIcon field="sequence"></p-sortIcon></th>
                         <th pSortableColumn="ecNumbers">Predicted EC Number <p-sortIcon field="ecNumbers"></p-sortIcon>
                         </th>
-                        <!-- <th pSortableColumn="score">Confidence Score <p-sortIcon field="score"></p-sortIcon></th> -->
+                        <th pSortableColumn="score">Confidence Score <p-sortIcon field="score"></p-sortIcon></th>
                     </tr>
                 </ng-template>
 
@@ -75,6 +75,11 @@ turned this off, since only totalRecords appears to be accessible from the #tabl
                             </div>
                         </td>
                         <!-- <td>{{row.ecNumbers.join(', ')}}</td> -->
+                        <td>
+                            <div *ngFor="let score of row.score">
+                                {{score}}
+                            </div>
+                        </td>
                         <!-- <td>{{row.score.join(', ')}}</td> -->
                     </tr>
                 </ng-template>
