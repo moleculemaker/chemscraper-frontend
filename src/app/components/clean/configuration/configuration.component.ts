@@ -70,19 +70,21 @@ export class ConfigurationComponent {
           tempExampleData.data = data;
           this.exampleData.push(tempExampleData);
           this.selectedExample = this.exampleData[0];
-          this.selectExample();
+          // this.selectExample();
         }
       );
   }
 
   selectExample() {
-    this.isValid = true;
     this.trackingService.trackSelectExampleData(this.selectedExample.label);
   }
 
   makeExampleValid() {
     if (this.selectedInputMethod == 'copy_and_paste') {
       this.isValid = false;
+    }
+    else if (this.selectedInputMethod == 'use_example') {
+      this.isValid = true;
     }
   }
 
@@ -146,6 +148,13 @@ export class ConfigurationComponent {
 
     if (splitString.length > this.maxSeqNum) {
       this.validationText = 'Please enter no more than ' + this.maxSeqNum + ' sequences.';
+      this.isValid = false;
+      shouldSkip = true;
+      return
+    }
+
+    if (splitString[0].charAt(0) == ' ') {
+      this.validationText = 'There should be no whitespace after >';
       this.isValid = false;
       shouldSkip = true;
       return
