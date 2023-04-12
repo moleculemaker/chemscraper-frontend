@@ -79,14 +79,14 @@ export class ConfigurationComponent {
     this.trackingService.trackSelectExampleData(this.selectedExample.label);
   }
 
-  makeExampleValid() {
-    if (this.selectedInputMethod == 'copy_and_paste') {
-      this.isValid = false;
-    }
-    else if (this.selectedInputMethod == 'use_example') {
-      this.isValid = true;
-    }
-  }
+  // makeExampleValid() {
+  //   // if (this.selectedInputMethod == 'copy_and_paste') {
+  //   //   this.isValid = false;
+  //   // }
+  //   // else if (this.selectedInputMethod == 'use_example') {
+  //   //   this.isValid = true;
+  //   // }
+  // }
 
   clearAll() {
     this.sequenceData = '';

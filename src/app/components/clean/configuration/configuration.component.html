@@ -9,8 +9,7 @@
 
         <p-panel styleClass="padded">
             <ng-template pTemplate="header">
-                <p-selectButton [options]="inputMethods" [(ngModel)]="selectedInputMethod" optionValue="value"
-                    (onOptionClick)="makeExampleValid()">
+                <p-selectButton [options]="inputMethods" [(ngModel)]="selectedInputMethod" optionValue="value">
                     <ng-template let-item>
                         <i [class]="item.icon"></i>{{item.label}}
                     </ng-template>
@@ -101,7 +100,7 @@
             <div class="buttons">
                 <br>
                 <button pButton type="button" label="Get the CLEAN Result" (click)="submitData()"
-                    icon="pi pi-arrow-right" iconPos="right" styleClass="p-button-xs" [disabled]="!isValid || disableCopyPaste"></button>
+                    icon="pi pi-arrow-right" iconPos="right" styleClass="p-button-xs" [disabled]="(!isValid && selectedInputMethod=='copy_and_paste') || disableCopyPaste"></button>
             </div>
         </div>
     </div>
