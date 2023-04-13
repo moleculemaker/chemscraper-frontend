@@ -70,12 +70,24 @@ export class ResultsComponent {
       let temp: PredictionRow = {
         sequence: '',
         ecNumbers: [],
-        score: []
+        score: [],
+        level: []
       };
       temp.sequence = seq.sequence;
       seq.result.forEach((ecNum: SingleSeqResult) => {
         temp.ecNumbers.push(ecNum.ecNumber);
         temp.score.push(ecNum.score);
+        let confidenceLevel: string = '';
+        if (Number(ecNum.score) >= 0.8) {
+          confidenceLevel = 'High';
+        }
+        else if (Number(ecNum.score) < 0.8 && Number(ecNum.score) >= 0.2) {
+          confidenceLevel = 'Medium';
+        }
+        else {
+          confidenceLevel = 'Low';
+        }
+        temp.level.push(confidenceLevel);
       });
       this.rows.push(temp);
     })
@@ -86,12 +98,25 @@ export class ResultsComponent {
       let temp: PredictionRow = {
         sequence: '',
         ecNumbers: [],
-        score: []
+        score: [],
+        level: []
       };
       temp.sequence = seq.split(',')[0];
       seq.split(',').slice(1).forEach((ecNumAndScore: string) => {
         temp.ecNumbers.push(ecNumAndScore.split('/')[0]);
-        temp.score.push(Number(ecNumAndScore.split('/')[1]));
+        let ecScore: number = Number(ecNumAndScore.split('/')[1]);
+        temp.score.push(ecScore);
+        let confidenceLevel: string = '';
+        if (ecScore >= 0.8) {
+          confidenceLevel = 'High';
+        }
+        else if (ecScore < 0.8 && ecScore >= 0.2) {
+          confidenceLevel = 'Medium';
+        }
+        else {
+          confidenceLevel = 'Low';
+        }
+        temp.level.push(confidenceLevel);
       });
       this.rows.push(temp);
     });
