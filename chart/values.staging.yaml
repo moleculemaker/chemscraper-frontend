@@ -1,3 +1,4 @@
+ingress:
   hostname: clean.frontend.staging.mmli1.ncsa.illinois.edu
   tls: true
   annotations:
