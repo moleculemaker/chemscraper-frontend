@@ -1,0 +1,14 @@
+ingress:
+  hostname: clean.frontend.staging.mmli1.ncsa.illinois.edu
+  tls: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    kubernetes.io/tls-acme: "true"
+    traefik.ingress.kubernetes.io/router.tls: "true"
+
+config:
+  hostname: "https://jobmgr.staging.mmli1.ncsa.illinois.edu"
+  basePath: "api/v1"
+  signInUrl: "https://mmli1.ncsa.illinois.edu/oauth2/start?rd=https%3A%2F%2Fclean.frontend.staging.mmli1.ncsa.illinois.edu%2Fconfiguration"
+  signOutUrl: "https://mmli1.ncsa.illinois.edu/oauth2/sign_out?rd=https%3A%2F%2Fclean.frontend.staging.mmli1.ncsa.illinois.edu%2Fconfiguration"
+  userInfoUrl: "https://mmli1.ncsa.illinois.edu/oauth2/userinfo"
