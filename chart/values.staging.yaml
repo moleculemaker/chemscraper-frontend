@@ -6,6 +6,9 @@ ingress:
     kubernetes.io/tls-acme: "true"
     traefik.ingress.kubernetes.io/router.tls: "true"
 
+controller:
+  image: moleculemaker/clean-frontend:staging
+
 config:
   hostname: "https://jobmgr.staging.mmli1.ncsa.illinois.edu"
   basePath: "api/v1"
