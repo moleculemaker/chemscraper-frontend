@@ -7,7 +7,7 @@ ingress:
     traefik.ingress.kubernetes.io/router.tls: "true"
 
 config:
-  hostname: "https://jobmgr.proxy.localhost"
+  hostname: "https://jobmgr.staging.mmli1.ncsa.illinois.edu"
   basePath: "api/v1"
   signInUrl: "https://mmli1.ncsa.illinois.edu/oauth2/start?rd=https%3A%2F%2Fclean.frontend.staging.mmli1.ncsa.illinois.edu%2Fconfiguration"
   signOutUrl: "https://mmli1.ncsa.illinois.edu/oauth2/sign_out?rd=https%3A%2F%2Fclean.frontend.staging.mmli1.ncsa.illinois.edu%2Fconfiguration"
