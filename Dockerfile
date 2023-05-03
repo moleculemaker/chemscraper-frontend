@@ -1,5 +1,5 @@
 # Use official node image as the base image
-FROM node:16 as build
+FROM --platform=$BUILDPLATFORM node:16 as build
 
 # Set the working directory
 WORKDIR /usr/local/app
