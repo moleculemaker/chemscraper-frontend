@@ -1,8 +1,8 @@
 ingress:
-  hostname: clean.frontend.localhost
+  hostname: chemscraper.frontend.localhost
   tls: false
   annotations: {}
 
 controller:
-  image: moleculemaker/clean-frontend
+  image: moleculemaker/chemscraper-frontend
 

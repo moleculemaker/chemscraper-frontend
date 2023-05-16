@@ -1,5 +1,5 @@
 ingress:
-  hostname: clean.frontend.staging.mmli1.ncsa.illinois.edu
+  hostname: chemscraper.frontend.staging.mmli1.ncsa.illinois.edu
   tls: true
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
@@ -7,7 +7,7 @@ ingress:
     traefik.ingress.kubernetes.io/router.tls: "true"
 
 controller:
-  image: moleculemaker/clean-frontend:staging
+  image: moleculemaker/chemscraper-frontend:latest
 
 config:
   hostname: "https://jobmgr.staging.mmli1.ncsa.illinois.edu"
