@@ -57,7 +57,7 @@ export class ConfigurationComponent {
   ngOnInit() {
     this.getExampleData();
     this.highTrafficMessage = [
-      { severity: 'info', detail: 'Due to the overwhelming popularity of the CLEAN tool, we are temporarily unable to predict EC numbers for new sequences. As we increase our capacity, please feel free to explore the tool with the example data we have provided, and visit us again soon!' },
+      { severity: 'info', detail: 'Due to the overwhelming popularity of the ChemScraper tool, we are temporarily unable to predict EC numbers for new sequences. As we increase our capacity, please feel free to explore the tool with the example data we have provided, and visit us again soon!' },
     ];
     // console.log(this.exampleData);
   }
