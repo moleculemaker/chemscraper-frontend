@@ -1,5 +1,5 @@
 ingress:
-  hostname: clean.frontend.mmli1.ncsa.illinois.edu
+  hostname: chemscraper.frontend.mmli1.ncsa.illinois.edu
   tls: true
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
