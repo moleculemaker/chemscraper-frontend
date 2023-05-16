@@ -1,4 +1,4 @@
 apiVersion: v2
-description: "CLEAN Frontend"
-name: clean-frontend
+description: "ChemScraper Frontend"
+name: ChemScraper-frontend
 version: 1.0.0
