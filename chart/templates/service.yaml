@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}
 spec:
   selector:
-    app: clean-frontend
+    app: chemscraper-frontend
   type: ClusterIP
   ports:
     - protocol: "TCP"
