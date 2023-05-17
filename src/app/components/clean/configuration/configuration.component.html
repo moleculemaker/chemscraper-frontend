@@ -4,7 +4,7 @@
         <div class="card" *ngIf="disableCopyPaste">
             <p-messages [(value)]="highTrafficMessage" [enableService]="false" [closable]="false"></p-messages>
         </div>
-        <h3>Enter your enzyme sequence here</h3>
+        <h3>Select document for analysis</h3>
         <h5>Choose an input method below</h5>
 
         <p-panel styleClass="padded">
@@ -17,19 +17,28 @@
             </ng-template>
 
             <div class="panel_content">
-                <ng-container *ngIf="selectedInputMethod == 'copy_and_paste'">
+                <ng-container *ngIf="selectedInputMethod == 'upload_file'">
                     <div class="panel_bar">
-                        <h3>Sequences input</h3>
+                        <div>Document Center</div>
 
                         <div class="spacer"></div>
 
-                        <button pButton label="Clear all" (click)="clearAll()"
+                        <button pButton label="Clear all files" (click)="clearAll()"
                             class="p-button-text p-button-plain p-button-xs"></button>
                     </div>
 
 
-                    <textarea pInputTextarea [rows]="8" placeholder="Please enter enzyme amino acid sequence in FASTA format." [(ngModel)]="sequenceData" #sequenceDataHtml="ngModel" (input)="submitValidate()"></textarea>
+                    <!-- <textarea pInputTextarea [rows]="8" placeholder="Please enter enzyme amino acid sequence in FASTA format." [(ngModel)]="sequenceData" #sequenceDataHtml="ngModel" (input)="submitValidate()"></textarea> -->
 
+                  <div class="dropzone" fileDragDrop>
+                    <div class="text-wrapper">
+                      <div class="centered">
+                        <input type="file" #file_upload (change)="onFileSelected($event)" multiple>
+                        <p-button (click)="file_upload.click()"> + Add file(s) </p-button>
+                        <div>Drag and drop PDF or choose from computer to upload</div>
+                      </div>
+                    </div>
+                  </div>
                 </ng-container>
 
                 <ng-container *ngIf="selectedInputMethod == 'use_example'">
@@ -54,7 +63,7 @@
 
         </p-panel>
 
-        <ng-container *ngIf="selectedInputMethod == 'copy_and_paste'">
+        <ng-container *ngIf="selectedInputMethod == 'upload_file'">
             <h3>Email</h3>
             <h5>Leave an email to get a notification when your result is ready.</h5>
             <br>
@@ -64,7 +73,7 @@
         </ng-container>
         <div class="controls">
             <div class="review">
-                <ng-container *ngIf="selectedInputMethod == 'copy_and_paste'">
+                <ng-container *ngIf="selectedInputMethod == 'upload_file'">
                     <h3>Review</h3>
                     <br>
                     <div class="validation">
@@ -99,8 +108,8 @@
             </div>
             <div class="buttons">
                 <br>
-                <button pButton type="button" label="Get the ChemScraper Result" (click)="submitData()"
-                    icon="pi pi-arrow-right" iconPos="right" styleClass="p-button-xs" [disabled]="(!isValid && selectedInputMethod=='copy_and_paste') || disableCopyPaste"></button>
+                <button pButton type="button" label="Analyze using ChemScraper" (click)="submitData()"
+                    icon="pi pi-arrow-right" iconPos="right" styleClass="p-button-xs" [disabled]="(!isValid && selectedInputMethod=='upload_file') || disableCopyPaste"></button>
             </div>
         </div>
     </div>

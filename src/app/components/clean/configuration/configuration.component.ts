@@ -30,10 +30,10 @@ export class ConfigurationComponent {
   highTrafficMessage: Message[];
 
   inputMethods = [
-    { label: 'Copy and Paste', icon: 'pi pi-copy', value: 'copy_and_paste' },
-    { label: 'Use Example Sequences', icon: 'pi pi-table', value: 'use_example' },
+    { label: 'Upload File', icon: 'pi pi-upload', value: 'upload_file' },
+    { label: 'Use Example PDF', icon: 'pi pi-file-pdf', value: 'use_example' },
   ];
-  selectedInputMethod: any | null = 'copy_and_paste'; //this.inputMethods[0];
+  selectedInputMethod: any | null = 'upload_file'; //this.inputMethods[0];
 
   exampleData: ExampleData[] = [];
   selectedExample: any | null = this.exampleData[0];
@@ -80,7 +80,7 @@ export class ConfigurationComponent {
   }
 
   // makeExampleValid() {
-  //   // if (this.selectedInputMethod == 'copy_and_paste') {
+  //   // if (this.selectedInputMethod == 'upload_file') {
   //   //   this.isValid = false;
   //   // }
   //   // else if (this.selectedInputMethod == 'use_example') {
@@ -226,5 +226,10 @@ export class ConfigurationComponent {
       this.validationText = 'Valid No. of Sequences: ' + this.seqNum + ' Sequences';
       this.isValid = true;
     }
+  }
+
+  onFileSelected(e: Event){
+    console.log(e.target);
+
   }
 }
