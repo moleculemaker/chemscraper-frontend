@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: clean-frontend
+  name: chemscraper-frontend
 {{- with .Values.ingress.annotations }}
   annotations:
   {{ toYaml . | nindent 4 }}
@@ -18,7 +18,7 @@ spec:
   ingressClassName: {{ .Values.ingress.ingressClassName }}
 {{- end }}
   rules:
-  - host: {{ .Values.ingress.hostname | required "required: ingress.hostname (e.g. clean.frontend.localhost)" }}
+  - host: {{ .Values.ingress.hostname | required "required: ingress.hostname (e.g. chemscraper.frontend.localhost)" }}
     http:
       paths:
       - backend:
