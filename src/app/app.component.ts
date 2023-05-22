@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  emailstring: string = "mailto:clean-feedback@moleculemaker.org?Subject=User feedback for ChemScraper";
+  emailstring: string = "mailto:chemscraper-feedback@moleculemaker.org?Subject=User feedback for ChemScraper";
   showCite: boolean = false;
 
   showComingSoonPopup: boolean = false;

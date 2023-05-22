@@ -82,6 +82,19 @@
     }
 }
 
+.dropzone ::ng-deep{
+   .p-button{
+    gap: $padding;
+    font-size: 0.75em;
+   }
+   .drag-comment{
+    margin-top: 15px;
+    font-size: 0.75em;
+    color: #6C757D;
+    font-weight: 200;
+   }
+}
+
 .validation {
     border: 1px solid #eee;
 
@@ -219,26 +232,14 @@
 .dropzone {
     height: 200px;
     display: table;
-    width: 100%;
-    background-color: #eee;
+    width: 97%;
+    background-color: #F8F9FA;
     border: dotted 1px #aaa;
+    margin: 14px;
+    border-radius: 6px;
+
 }
 
 input[type="file"]{
   display:none;
-}
-
-.textLink{
-  background-color: #f45e61;
-  color:#fff;
-  padding:10px;
-  border-radius:5px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-.textLink::before{
-  content: "\f093";
-    font-weight: 900;
-    color: #fff;
-    font-size: large;
-    margin-right: 10px;
 }

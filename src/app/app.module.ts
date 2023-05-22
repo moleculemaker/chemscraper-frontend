@@ -28,13 +28,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxMatomoTrackerModule } from '@ngx-matomo/tracker';
 import { NgxMatomoRouterModule } from '@ngx-matomo/router';
 import { NgHcaptchaModule } from 'ng-hcaptcha';
+import { FileDragNDropDirective } from './components/clean/configuration/file-drag-n-drop.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
 
     LandingPageComponent,
-
+    FileDragNDropDirective,
     ConfigurationComponent,
     ResultsComponent
   ],

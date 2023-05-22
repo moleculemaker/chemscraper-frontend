@@ -27,18 +27,43 @@
                             class="p-button-text p-button-plain p-button-xs"></button>
                     </div>
 
-
                     <!-- <textarea pInputTextarea [rows]="8" placeholder="Please enter enzyme amino acid sequence in FASTA format." [(ngModel)]="sequenceData" #sequenceDataHtml="ngModel" (input)="submitValidate()"></textarea> -->
 
-                  <div class="dropzone" fileDragDrop>
+                  <div *ngIf="uploaded_files.length == 0" class="dropzone" fileDragDrop (filesChangeEmiter)="onFileDropped($event)">
                     <div class="text-wrapper">
                       <div class="centered">
                         <input type="file" #file_upload (change)="onFileSelected($event)" multiple>
-                        <p-button (click)="file_upload.click()"> + Add file(s) </p-button>
-                        <div>Drag and drop PDF or choose from computer to upload</div>
+                        <p-button (click)="file_upload.click()"><i class="pi pi-plus"></i>Add file(s) </p-button>
+                        <p class="drag-comment">Drag and drop PDF or choose from computer to upload</p>
                       </div>
                     </div>
                   </div>
+
+                  <p-table *ngIf="uploaded_files.length > 0" [value]="uploaded_files" [tableStyle]="{ 'min-width': '50rem' }">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="file_name">File Name <p-sortIcon field="file_name"></p-sortIcon></th>
+                            <th pSortableColumn="size">Size <p-sortIcon field="size"></p-sortIcon></th>
+                            <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
+                            <th>Status Detail</th>
+                            <th> </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-file>
+                        <tr>
+                            <td>{{file.name}}</td>
+                            <td>{{file.size}}</td>
+                            <td>qwe</td>
+                            <td>qwe</td>
+                            <td>qwe</td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="summary">
+                      <div class="flex align-items-center justify-content-between">
+                        <i class="pi pi-file"></i> {{uploaded_files ? uploaded_files.length : 0 }} file(s) uploaded
+                      </div>
+                  </ng-template>
+                  </p-table>
                 </ng-container>
 
                 <ng-container *ngIf="selectedInputMethod == 'use_example'">
@@ -108,7 +133,7 @@
             </div>
             <div class="buttons">
                 <br>
-                <button pButton type="button" label="Analyze using ChemScraper" (click)="submitData()"
+                <button pButton type="button" [disabled]="uploaded_files.length == 0" label="Analyze using ChemScraper" (click)="submitData()"
                     icon="pi pi-arrow-right" iconPos="right" styleClass="p-button-xs" [disabled]="(!isValid && selectedInputMethod=='upload_file') || disableCopyPaste"></button>
             </div>
         </div>

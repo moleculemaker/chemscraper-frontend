@@ -28,6 +28,7 @@ export class ConfigurationComponent {
   private maxSeqNum: number = 20;
   disableCopyPaste: boolean = false;
   highTrafficMessage: Message[];
+  uploaded_files: File[] = [];
 
   inputMethods = [
     { label: 'Upload File', icon: 'pi pi-upload', value: 'upload_file' },
@@ -229,7 +230,17 @@ export class ConfigurationComponent {
   }
 
   onFileSelected(e: Event){
-    console.log(e.target);
+    let upload_fileList = (e.target as HTMLInputElement).files;
+    if(upload_fileList){
 
+      this.uploaded_files.push(...Array.from(upload_fileList));
+    }
+    console.log(this.uploaded_files);
   }
+
+  onFileDropped(files: FileList){
+    this.uploaded_files.push(...Array.from(files));
+    console.log(this.uploaded_files);
+  }
+
 }
