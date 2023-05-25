@@ -25,7 +25,7 @@
 
                         <button pButton [disabled]="uploaded_files.length == 0"  label="Clear all files" (click)="clearAllFiles()"
                             class="p-button-text p-button-xs"></button>
-                        <input type="file" #file_upload (change)="onFileSelected($event)" multiple>
+                        <input type="file" #file_upload accept="application/pdf" (change)="onFileSelected($event)" multiple>
                         <button *ngIf="uploaded_files.length > 0" pButton class="p-button-outlined" (click)="file_upload.click()"><i class="pi pi-plus"></i> Add file(s) </button>
                     </div>
 
@@ -34,7 +34,7 @@
                   <div *ngIf="uploaded_files.length == 0" class="dropzone" fileDragDrop (filesChangeEmiter)="onFileDropped($event)">
                     <div class="text-wrapper">
                       <div class="centered">
-                        <input type="file" #file_upload (change)="onFileSelected($event)" multiple>
+                        <input type="file" #file_upload accept="application/pdf" (change)="onFileSelected($event)" multiple>
                         <p-button (click)="file_upload.click()"><i class="pi pi-plus"></i>Add file(s) </p-button>
                         <p class="drag-comment">Drag and drop PDF or choose from computer to upload</p>
                       </div>

@@ -225,16 +225,19 @@ export class ConfigurationComponent {
   onFileSelected(e: Event){
     let upload_fileList = (e.target as HTMLInputElement).files;
     if(upload_fileList){
-
-      this.uploaded_files.push(...Array.from(upload_fileList));
+      Array.from(upload_fileList).forEach((file) => {
+        if(file.type === 'application/pdf')
+        this.uploaded_files.push(file);
+      });
     }
     console.log(this.uploaded_files);
   }
 
   onFileDropped(files: FileList){
-    console.log(files);
-
-    this.uploaded_files.push(...Array.from(files));
+    Array.from(files).forEach((file) => {
+      if(file.type === 'application/pdf')
+      this.uploaded_files.push(file);
+    });
     console.log(this.uploaded_files);
   }
 
