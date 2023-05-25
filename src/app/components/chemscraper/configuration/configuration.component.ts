@@ -9,11 +9,14 @@ import { switchMap } from 'rxjs/operators';
 import { PostResponse, PostSeqData, SingleSeqData, ExampleData } from '../../../models';
 import { ResultsComponent } from '../results/results.component';
 import {NgHcaptchaService} from "ng-hcaptcha";
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 
 @Component({
   selector: 'app-configuration',
   templateUrl: './configuration.component.html',
-  styleUrls: ['./configuration.component.scss']
+  styleUrls: ['./configuration.component.scss'],
+  providers: [DialogService]
 })
 export class ConfigurationComponent {
   // sequenceData: string = '>seq1\nAVLIMCFYWH\n>seq2\nLIMCFYWHKRQNED\n>seq3\nMCFYPARQNEDVLWHKRQ';
@@ -29,6 +32,8 @@ export class ConfigurationComponent {
   disableCopyPaste: boolean = false;
   highTrafficMessage: Message[];
   uploaded_files: File[] = [];
+  ref: DynamicDialogRef;
+
 
   inputMethods = [
     { label: 'Upload File', icon: 'pi pi-upload', value: 'upload_file' },
@@ -52,7 +57,8 @@ export class ConfigurationComponent {
     private _sequenceService: SequenceService,
     private httpClient: HttpClient,
     private trackingService: TrackingService,
-    private hcaptchaService: NgHcaptchaService
+    private hcaptchaService: NgHcaptchaService,
+    private dialogService: DialogService
   ) { }
 
   ngOnInit() {
@@ -89,8 +95,9 @@ export class ConfigurationComponent {
   //   // }
   // }
 
-  clearAll() {
-    this.sequenceData = '';
+  clearAllFiles() {
+    // this.sequenceData = '';
+    this.uploaded_files = [];
   }
 
   submitData() {
@@ -239,8 +246,18 @@ export class ConfigurationComponent {
   }
 
   onFileDropped(files: FileList){
+    console.log(files);
+
     this.uploaded_files.push(...Array.from(files));
     console.log(this.uploaded_files);
+  }
+
+  deleteFile(index: number){
+    this.uploaded_files.splice(index, 1);
+  }
+
+  viewFile(index: number){
+    this.ref = this.dialogService.open(PdfViewerComponent, { height:'60%'});
   }
 
 }

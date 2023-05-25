@@ -23,8 +23,10 @@
 
                         <div class="spacer"></div>
 
-                        <button pButton label="Clear all files" (click)="clearAll()"
-                            class="p-button-text p-button-plain p-button-xs"></button>
+                        <button pButton [disabled]="uploaded_files.length == 0"  label="Clear all files" (click)="clearAllFiles()"
+                            class="p-button-text p-button-xs"></button>
+                        <input type="file" #file_upload (change)="onFileSelected($event)" multiple>
+                        <button *ngIf="uploaded_files.length > 0" pButton class="p-button-outlined" (click)="file_upload.click()"><i class="pi pi-plus"></i> Add file(s) </button>
                     </div>
 
                     <!-- <textarea pInputTextarea [rows]="8" placeholder="Please enter enzyme amino acid sequence in FASTA format." [(ngModel)]="sequenceData" #sequenceDataHtml="ngModel" (input)="submitValidate()"></textarea> -->
@@ -42,20 +44,23 @@
                   <p-table *ngIf="uploaded_files.length > 0" [value]="uploaded_files" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th pSortableColumn="file_name">File Name <p-sortIcon field="file_name"></p-sortIcon></th>
-                            <th pSortableColumn="size">Size <p-sortIcon field="size"></p-sortIcon></th>
-                            <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
-                            <th>Status Detail</th>
-                            <th> </th>
+                            <th pSortableColumn="file_name" style="width:20%">File Name <p-sortIcon field="file_name"></p-sortIcon></th>
+                            <th pSortableColumn="size" style="width:20%">Size <p-sortIcon field="size"></p-sortIcon></th>
+                            <!-- <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
+                            <th>Status Detail</th> -->
+                            <th style="width:60%; text-align: right;"> </th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-file>
+                    <ng-template pTemplate="body" let-file let-i="rowIndex">
                         <tr>
                             <td>{{file.name}}</td>
-                            <td>{{file.size}}</td>
-                            <td>qwe</td>
-                            <td>qwe</td>
-                            <td>qwe</td>
+                            <td>{{(file.size/1000).toPrecision(6)}} Kb</td>
+                            <!-- <td>qwe</td>
+                            <td>qwe</td> -->
+                            <td style="text-align: right;">
+                              <p-button (click)="deleteFile(i)" styleClass="p-button-text p-button-xs">Delete</p-button>
+                              <p-button (click)="viewFile(i)" styleClass="p-button-text p-button-xs">View</p-button>
+                            </td>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="summary">
