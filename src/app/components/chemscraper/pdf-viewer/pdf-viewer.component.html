@@ -1,8 +1,11 @@
-<div>
-  <button id="prev" (click)="onPrevPage()">Previous</button>
-  <button id="next" (click)="onNextPage()">Next</button>
-  &nbsp; &nbsp;
-  <span>Page: <span id="page_num">{{pageNumber}}</span> / <span id="page_count">{{totalPages}}</span></span>
+<div class="pdf-viewer-container">
+  <div class="fixed-header">
+    <button id="prev" (click)="onPrevPage()">Previous</button>
+    <button id="next" (click)="onNextPage()">Next</button>
+    &nbsp; &nbsp;
+    <span>Page: <span id="page_num">{{pageNumber}}</span> / <span id="page_count">{{totalPages}}</span></span>
+  </div>
+  <div>
+    <canvas id="pdf-canvas" class="scrollable-canvas"></canvas>
+  </div>
 </div>
-
-<canvas id="pdf-canvas"></canvas>
