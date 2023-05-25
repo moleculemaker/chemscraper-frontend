@@ -42,7 +42,6 @@ export class ConfigurationComponent {
   selectedInputMethod: any | null = 'upload_file'; //this.inputMethods[0];
 
   exampleData: ExampleData[] = [];
-  selectedExample: any | null = this.exampleData[0];
 
   seqNum: number = 0;
   private validAminoAcid = new RegExp("[^GPAVLIMCFYWHKRQNEDST]", "i");
@@ -76,24 +75,11 @@ export class ConfigurationComponent {
         data => {
           tempExampleData.data = data;
           this.exampleData.push(tempExampleData);
-          this.selectedExample = this.exampleData[0];
           // this.selectExample();
         }
       );
   }
 
-  selectExample() {
-    this.trackingService.trackSelectExampleData(this.selectedExample.label);
-  }
-
-  // makeExampleValid() {
-  //   // if (this.selectedInputMethod == 'upload_file') {
-  //   //   this.isValid = false;
-  //   // }
-  //   // else if (this.selectedInputMethod == 'use_example') {
-  //   //   this.isValid = true;
-  //   // }
-  // }
 
   clearAllFiles() {
     // this.sequenceData = '';
@@ -101,30 +87,30 @@ export class ConfigurationComponent {
   }
 
   submitData() {
-    // console.log(this.realSendData);
-    // if the user uses example file, return precompiled result
-    // else send sequence to backend, jump to results page
-    if (this.selectedInputMethod == 'use_example') {
-      this._sequenceService.getExampleResponse(this.selectedExample.label)
-        .subscribe( data => {
-          this.router.navigate(['/results', data.jobId, '149']);
-        });
-    } else {
-      this.hcaptchaService.verify().pipe(
-        switchMap((data) => {
-          this.realSendData.captcha_token = data;
-          return this._sequenceService.getResponse(this.realSendData);
-        })
-      ).subscribe(
-        (data) => {
-          this.router.navigate(['/results', data.jobId, String(this.seqNum)]);
-        },
-        (error) => {
-          // TODO replace this with a call to the message service, and display the correct error message
-          console.error('Error getting contacts via subscribe() method:', error);
-        }
-      );
-    }
+    // // console.log(this.realSendData);
+    // // if the user uses example file, return precompiled result
+    // // else send sequence to backend, jump to results page
+    // if (this.selectedInputMethod == 'use_example') {
+    //   this._sequenceService.getExampleResponse(this.selectedExample.label)
+    //     .subscribe( data => {
+    //       this.router.navigate(['/results', data.jobId, '149']);
+    //     });
+    // } else {
+    //   this.hcaptchaService.verify().pipe(
+    //     switchMap((data) => {
+    //       this.realSendData.captcha_token = data;
+    //       return this._sequenceService.getResponse(this.realSendData);
+    //     })
+    //   ).subscribe(
+    //     (data) => {
+    //       this.router.navigate(['/results', data.jobId, String(this.seqNum)]);
+    //     },
+    //     (error) => {
+    //       // TODO replace this with a call to the message service, and display the correct error message
+    //       console.error('Error getting contacts via subscribe() method:', error);
+    //     }
+    //   );
+    // }
   }
 
   hasDuplicateHeaders(array: string[]) {

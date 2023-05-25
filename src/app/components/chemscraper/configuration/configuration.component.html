@@ -73,20 +73,11 @@
 
                 <ng-container *ngIf="selectedInputMethod == 'use_example'">
                     <div class="panel_bar">
-                        <h3>Example</h3>
-
-                        <p-selectButton [options]="exampleData" [(ngModel)]="selectedExample"
-                            (onOptionClick)="selectExample()">
-                            <ng-template let-item>
-                                {{item.label}}
-                            </ng-template>
-                        </p-selectButton>
+                        <h3>Example PDF</h3>
                     </div>
 
                     <div class="example_data">
-                        <ng-container *ngIf="selectedExample">
-                            <div *ngFor="let line of selectedExample.data.split('\n')">{{line}}</div>
-                        </ng-container>
+                        <chemscraper-pdf-viewer></chemscraper-pdf-viewer>
                     </div>
                 </ng-container>
             </div>
