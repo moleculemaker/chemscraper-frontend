@@ -8,9 +8,10 @@ import { switchMap } from 'rxjs/operators';
 
 import { PostResponse, PostSeqData, SingleSeqData, ExampleData } from '../../../models';
 import { ResultsComponent } from '../results/results.component';
-import {NgHcaptchaService} from "ng-hcaptcha";
+import { NgHcaptchaService } from "ng-hcaptcha";
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
+import { PdfViewerDialogServiceComponent } from '../pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
 
 @Component({
   selector: 'app-configuration',
@@ -246,7 +247,23 @@ export class ConfigurationComponent {
   }
 
   viewFile(index: number){
-    this.ref = this.dialogService.open(PdfViewerComponent, { height:'60%'});
+    console.log(this.uploaded_files[index]);
+
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      // console.log(fileReader.result);
+      if(fileReader.result instanceof ArrayBuffer){
+        this.ref = this.dialogService.open(PdfViewerDialogServiceComponent, {
+          height:'60%',
+          data:{
+            pdfData: new Uint8Array(fileReader.result)
+          }
+        });
+      }
+
+    };
+    fileReader.readAsArrayBuffer(this.uploaded_files[index]);
+
   }
 
 }

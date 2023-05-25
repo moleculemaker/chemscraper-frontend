@@ -5,16 +5,15 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { HighlightBox } from 'src/app/models';
 
 @Component({
-  selector: 'chemscraper-pdf-viewer',
-  templateUrl: './pdf-viewer.component.html',
-  styleUrls: ['./pdf-viewer.component.scss']
+  selector: 'chemscraper-pdf-viewer-dialog-service',
+  templateUrl: './pdf-viewer-dialog-service.component.html',
+  styleUrls: ['./pdf-viewer-dialog-service.component.scss']
 })
-export class PdfViewerComponent {
-  @Input()
-  pdfUrl: String = "";
+export class PdfViewerDialogServiceComponent {
 
+  // **Inputs cannot be used with PrimeNG DialogService for overlays**
   @Input()
-  highlightBoxes: HighlightBox[][];
+  highlightBoxes: HighlightBox[][] = [];
 
   pdf: PDFDocumentProxy;
   totalPages: number = 0;
@@ -23,10 +22,12 @@ export class PdfViewerComponent {
   pageNumPending: number = -1;
   pdfData: Uint8Array;
 
-  constructor(){}
+  constructor(public ref: DynamicDialogRef, public config: DynamicDialogConfig){
+    this.pdfData = config.data.pdfData;
+  }
 
   ngOnInit(){
-    let loadingTask = pdfjsLib.getDocument(this.pdfUrl);
+    let loadingTask = pdfjsLib.getDocument({data: this.pdfData});
 
     loadingTask.promise.then((pdf) =>{
       this.pdf = pdf;
@@ -38,9 +39,6 @@ export class PdfViewerComponent {
       // PDF loading error
       console.error(reason);
     });
-
-    // Comment out later.
-    this.highlightBoxes = [[{ x: 200, y: 700, width: 200, height: 50 },],[{ x: 200, y: 200, width: 200, height: 50 },]]
   }
 
   renderPage(pageNumber: number) {
