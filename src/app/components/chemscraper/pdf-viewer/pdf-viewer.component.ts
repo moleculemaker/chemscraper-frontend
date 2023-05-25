@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import * as pdfjsLib from 'pdfjs-dist';
 import { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api';
+import { HighlightBox } from 'src/app/models';
 
 @Component({
   selector: 'chemscraper-pdf-viewer',
@@ -8,12 +9,12 @@ import { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api';
   styleUrls: ['./pdf-viewer.component.scss']
 })
 export class PdfViewerComponent {
+  @Input()
+  pdfUrl: String;
 
-  pdfUrl: String = '../../../assets/or100.09.tables.pdf';
-  boxCoordinates = [
-    { x: 200, y: 200, width: 200, height: 50 },
-    // Add more box coordinates as needed
-  ];
+  @Input()
+  highlightBoxes: HighlightBox[][];
+
   pdf: PDFDocumentProxy;
   totalPages: number = 0;
   pageNumber: number = 1;
@@ -34,6 +35,9 @@ export class PdfViewerComponent {
       // PDF loading error
       console.error(reason);
     });
+
+    // Comment out later.
+    this.highlightBoxes = [[{ x: 200, y: 700, width: 200, height: 50 },],[{ x: 200, y: 200, width: 200, height: 50 },]]
   }
 
   renderPage(pageNumber: number) {
@@ -60,27 +64,30 @@ export class PdfViewerComponent {
         console.log('Page rendered');
         this.pageRendering = false;
 
-        this.boxCoordinates.forEach(function (box) {
-          const cornerRadius = 5;
-          if(context){
-            context.beginPath();
-            context.moveTo(box.x + cornerRadius, box.y);
-            context.lineTo(box.x + box.width - cornerRadius, box.y);
-            context.arcTo(box.x + box.width, box.y, box.x + box.width, box.y + cornerRadius, cornerRadius);
-            context.lineTo(box.x + box.width, box.y + box.height - cornerRadius);
-            context.arcTo(box.x + box.width, box.y + box.height, box.x + box.width - cornerRadius, box.y + box.height, cornerRadius);
-            context.lineTo(box.x + cornerRadius, box.y + box.height);
-            context.arcTo(box.x, box.y + box.height, box.x, box.y + box.height - cornerRadius, cornerRadius);
-            context.lineTo(box.x, box.y + cornerRadius);
-            context.arcTo(box.x, box.y, box.x + cornerRadius, box.y, cornerRadius);
-            context.closePath();
-            context.fillStyle = "rgba(228, 248, 240, 0.5)";
-            context.strokeStyle = 'rgba(30, 169, 124, 1)';
-            context.fill();
-            context.stroke();
+        if(pageNumber-1 < this.highlightBoxes.length){
+          this.highlightBoxes[pageNumber-1].forEach(function (box) {
+            const cornerRadius = 5;
+            if(context){
+              context.beginPath();
+              context.moveTo(box.x + cornerRadius, box.y);
+              context.lineTo(box.x + box.width - cornerRadius, box.y);
+              context.arcTo(box.x + box.width, box.y, box.x + box.width, box.y + cornerRadius, cornerRadius);
+              context.lineTo(box.x + box.width, box.y + box.height - cornerRadius);
+              context.arcTo(box.x + box.width, box.y + box.height, box.x + box.width - cornerRadius, box.y + box.height, cornerRadius);
+              context.lineTo(box.x + cornerRadius, box.y + box.height);
+              context.arcTo(box.x, box.y + box.height, box.x, box.y + box.height - cornerRadius, cornerRadius);
+              context.lineTo(box.x, box.y + cornerRadius);
+              context.arcTo(box.x, box.y, box.x + cornerRadius, box.y, cornerRadius);
+              context.closePath();
+              context.fillStyle = "rgba(228, 248, 240, 0.5)";
+              context.strokeStyle = 'rgba(30, 169, 124, 1)';
+              context.fill();
+              context.stroke();
 
-          }
-        });
+            }
+          });
+        }
+
         if (this.pageNumPending !== -1) {
           this.renderPage(this.pageNumPending);
           this.pageNumPending = -1;
@@ -111,6 +118,14 @@ export class PdfViewerComponent {
       return;
     }
     this.pageNumber++;
+    this.queueRenderPage(this.pageNumber);
+  }
+
+  goToPage(num: number){
+    if (this.pageNumber < 1 && this.pageNumber > this.totalPages) {
+      return;
+    }
+    this.pageNumber = num;
     this.queueRenderPage(this.pageNumber);
   }
 }
