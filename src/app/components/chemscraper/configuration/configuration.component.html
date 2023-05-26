@@ -41,14 +41,14 @@
                     </div>
                   </div>
 
-                  <p-table *ngIf="uploaded_files.length > 0" [value]="uploaded_files" [tableStyle]="{ 'min-width': '50rem' }">
+                  <p-table *ngIf="uploaded_files.length > 0" [value]="uploaded_files" [tableStyle]="{ 'min-width': '50rem' }" class="files_table">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th pSortableColumn="file_name" style="width:20%">File Name <p-sortIcon field="file_name"></p-sortIcon></th>
-                            <th pSortableColumn="size" style="width:20%">Size <p-sortIcon field="size"></p-sortIcon></th>
+                            <th pSortableColumn="file_name" class="files_table_data_col">File Name <p-sortIcon field="file_name"></p-sortIcon></th>
+                            <th pSortableColumn="size" class="files_table_data_col">Size <p-sortIcon field="size"></p-sortIcon></th>
                             <!-- <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
                             <th>Status Detail</th> -->
-                            <th style="width:60%; text-align: right;"> </th>
+                            <th class="files_table_button_col"> </th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-file let-i="rowIndex">
@@ -77,7 +77,7 @@
                     </div>
 
                     <div class="example_data">
-                        <chemscraper-pdf-viewer pdfUrl="../../../assets/or100.09.tables.pdf"></chemscraper-pdf-viewer>
+                        <chemscraper-pdf-viewer pdfUrl="assets/or100.09.tables.pdf"></chemscraper-pdf-viewer>
                     </div>
                 </ng-container>
             </div>

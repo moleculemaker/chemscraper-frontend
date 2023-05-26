@@ -243,3 +243,14 @@
 input[type="file"]{
   display:none;
 }
+
+.files_table{
+  &::deep .files_table_data_col{
+    width: 20%;
+  }
+
+  &::deep .files_table_button_col{
+    width: 60%;
+    text-align: right;
+  }
+}

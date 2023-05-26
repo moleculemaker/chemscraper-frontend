@@ -1,3 +1,4 @@
+// Based on https://burakcanekici.medium.com/uploading-file-with-drag-drop-on-angular-9a42202fe23f
 import { Directive, HostListener, HostBinding, Output, EventEmitter, Input } from '@angular/core';
 
 @Directive({
@@ -42,15 +43,8 @@ export class FileDragNDropDirective {
     this.background = '#eee';
     this.borderColor = '#696D7D';
     this.borderStyle = '2px dashed';
-    // debugger;
     if (event && event.dataTransfer) {
       let files = event.dataTransfer.files;
-      // const customEvent = new Event('customDrop', {
-      //   bubbles: true,
-      //   cancelable: true,
-      //   target: { files }
-      // })
-      // document.dispatchEvent(customEvent);
       this.filesChangeEmiter.emit(files);
 
     }
