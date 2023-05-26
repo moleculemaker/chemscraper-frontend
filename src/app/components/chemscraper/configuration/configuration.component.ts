@@ -8,12 +8,16 @@ import { switchMap } from 'rxjs/operators';
 
 import { PostResponse, PostSeqData, SingleSeqData, ExampleData } from '../../../models';
 import { ResultsComponent } from '../results/results.component';
-import {NgHcaptchaService} from "ng-hcaptcha";
+import { NgHcaptchaService } from "ng-hcaptcha";
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
+import { PdfViewerDialogServiceComponent } from '../pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
 
 @Component({
   selector: 'app-configuration',
   templateUrl: './configuration.component.html',
-  styleUrls: ['./configuration.component.scss']
+  styleUrls: ['./configuration.component.scss'],
+  providers: [DialogService]
 })
 export class ConfigurationComponent {
   // sequenceData: string = '>seq1\nAVLIMCFYWH\n>seq2\nLIMCFYWHKRQNED\n>seq3\nMCFYPARQNEDVLWHKRQ';
@@ -28,6 +32,9 @@ export class ConfigurationComponent {
   private maxSeqNum: number = 20;
   disableCopyPaste: boolean = false;
   highTrafficMessage: Message[];
+  uploaded_files: File[] = [];
+  ref: DynamicDialogRef;
+
 
   inputMethods = [
     { label: 'Upload File', icon: 'pi pi-upload', value: 'upload_file' },
@@ -36,7 +43,6 @@ export class ConfigurationComponent {
   selectedInputMethod: any | null = 'upload_file'; //this.inputMethods[0];
 
   exampleData: ExampleData[] = [];
-  selectedExample: any | null = this.exampleData[0];
 
   seqNum: number = 0;
   private validAminoAcid = new RegExp("[^GPAVLIMCFYWHKRQNEDST]", "i");
@@ -51,7 +57,8 @@ export class ConfigurationComponent {
     private _sequenceService: SequenceService,
     private httpClient: HttpClient,
     private trackingService: TrackingService,
-    private hcaptchaService: NgHcaptchaService
+    private hcaptchaService: NgHcaptchaService,
+    private dialogService: DialogService
   ) { }
 
   ngOnInit() {
@@ -69,54 +76,42 @@ export class ConfigurationComponent {
         data => {
           tempExampleData.data = data;
           this.exampleData.push(tempExampleData);
-          this.selectedExample = this.exampleData[0];
           // this.selectExample();
         }
       );
   }
 
-  selectExample() {
-    this.trackingService.trackSelectExampleData(this.selectedExample.label);
-  }
 
-  // makeExampleValid() {
-  //   // if (this.selectedInputMethod == 'upload_file') {
-  //   //   this.isValid = false;
-  //   // }
-  //   // else if (this.selectedInputMethod == 'use_example') {
-  //   //   this.isValid = true;
-  //   // }
-  // }
-
-  clearAll() {
-    this.sequenceData = '';
+  clearAllFiles() {
+    // this.sequenceData = '';
+    this.uploaded_files = [];
   }
 
   submitData() {
-    // console.log(this.realSendData);
-    // if the user uses example file, return precompiled result
-    // else send sequence to backend, jump to results page
-    if (this.selectedInputMethod == 'use_example') {
-      this._sequenceService.getExampleResponse(this.selectedExample.label)
-        .subscribe( data => {
-          this.router.navigate(['/results', data.jobId, '149']);
-        });
-    } else {
-      this.hcaptchaService.verify().pipe(
-        switchMap((data) => {
-          this.realSendData.captcha_token = data;
-          return this._sequenceService.getResponse(this.realSendData);
-        })
-      ).subscribe(
-        (data) => {
-          this.router.navigate(['/results', data.jobId, String(this.seqNum)]);
-        },
-        (error) => {
-          // TODO replace this with a call to the message service, and display the correct error message
-          console.error('Error getting contacts via subscribe() method:', error);
-        }
-      );
-    }
+    // // console.log(this.realSendData);
+    // // if the user uses example file, return precompiled result
+    // // else send sequence to backend, jump to results page
+    // if (this.selectedInputMethod == 'use_example') {
+    //   this._sequenceService.getExampleResponse(this.selectedExample.label)
+    //     .subscribe( data => {
+    //       this.router.navigate(['/results', data.jobId, '149']);
+    //     });
+    // } else {
+    //   this.hcaptchaService.verify().pipe(
+    //     switchMap((data) => {
+    //       this.realSendData.captcha_token = data;
+    //       return this._sequenceService.getResponse(this.realSendData);
+    //     })
+    //   ).subscribe(
+    //     (data) => {
+    //       this.router.navigate(['/results', data.jobId, String(this.seqNum)]);
+    //     },
+    //     (error) => {
+    //       // TODO replace this with a call to the message service, and display the correct error message
+    //       console.error('Error getting contacts via subscribe() method:', error);
+    //     }
+    //   );
+    // }
   }
 
   hasDuplicateHeaders(array: string[]) {
@@ -229,7 +224,46 @@ export class ConfigurationComponent {
   }
 
   onFileSelected(e: Event){
-    console.log(e.target);
+    let upload_fileList = (e.target as HTMLInputElement).files;
+    if(upload_fileList){
+      Array.from(upload_fileList).forEach((file) => {
+        if(file.type === 'application/pdf')
+        this.uploaded_files.push(file);
+      });
+    }
+    console.log(this.uploaded_files);
+  }
+
+  onFileDropped(files: FileList){
+    Array.from(files).forEach((file) => {
+      if(file.type === 'application/pdf')
+      this.uploaded_files.push(file);
+    });
+    console.log(this.uploaded_files);
+  }
+
+  deleteFile(index: number){
+    this.uploaded_files.splice(index, 1);
+  }
+
+  viewFile(index: number){
+    console.log(this.uploaded_files[index]);
+
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      // console.log(fileReader.result);
+      if(fileReader.result instanceof ArrayBuffer){
+        this.ref = this.dialogService.open(PdfViewerDialogServiceComponent, {
+          height:'60%',
+          data:{
+            pdfData: new Uint8Array(fileReader.result)
+          }
+        });
+      }
+
+    };
+    fileReader.readAsArrayBuffer(this.uploaded_files[index]);
 
   }
+
 }

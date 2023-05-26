@@ -52,3 +52,11 @@ export interface PollingResponseResult {
   created_at: string;
   results: SeqResult[];
 }
+
+export interface HighlightBox {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+

@@ -34,17 +34,21 @@
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/primeicons/primeicons.css",
               "src/styles.scss",
-              "src/app/css/styles.scss"
+              "src/app/css/styles.scss",
+              "node_modules/pdfjs-dist/web/pdf_viewer.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/pdfjs-dist/build/pdf.js",
+              "node_modules/pdfjs-dist/build/pdf.worker.js"
+            ]
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "1mb",
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",
