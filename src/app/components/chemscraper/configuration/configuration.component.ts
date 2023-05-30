@@ -62,40 +62,28 @@ export class ConfigurationComponent {
   ) { }
 
   ngOnInit() {
-    this.getExampleData();
     this.highTrafficMessage = [
       { severity: 'info', detail: 'Due to the overwhelming popularity of the ChemScraper tool, we are temporarily unable to predict EC numbers for new sequences. As we increase our capacity, please feel free to explore the tool with the example data we have provided, and visit us again soon!' },
     ];
-    // console.log(this.exampleData);
   }
-
-  getExampleData() {
-    let tempExampleData: ExampleData = {label: 'price149', data: ''}
-    this.httpClient.get('assets/price.fasta', { responseType: 'text' })
-      .subscribe(
-        data => {
-          tempExampleData.data = data;
-          this.exampleData.push(tempExampleData);
-          // this.selectExample();
-        }
-      );
-  }
-
 
   clearAllFiles() {
-    // this.sequenceData = '';
     this.uploaded_files = [];
   }
 
   submitData() {
-    // // console.log(this.realSendData);
-    // // if the user uses example file, return precompiled result
-    // // else send sequence to backend, jump to results page
-    // if (this.selectedInputMethod == 'use_example') {
-    //   this._sequenceService.getExampleResponse(this.selectedExample.label)
-    //     .subscribe( data => {
-    //       this.router.navigate(['/results', data.jobId, '149']);
-    //     });
+    // console.log(this.realSendData);
+    // if the user uses example file, return precompiled result
+    // else send sequence to backend, jump to results page
+    console.log(this.selectedInputMethod);
+
+    if (this.selectedInputMethod == 'use_example') {
+      let label = "Example_PDF"
+      this._sequenceService.getExampleResponse(label)
+        .subscribe( data => {
+          this.router.navigate(['/results', data.jobId]);
+        });
+    }
     // } else {
     //   this.hcaptchaService.verify().pipe(
     //     switchMap((data) => {
@@ -114,113 +102,8 @@ export class ConfigurationComponent {
     // }
   }
 
-  hasDuplicateHeaders(array: string[]) {
-    return (new Set(array)).size !== array.length;
-  }
-
-  isInvalidFasta(seq: string) {
-    return this.validAminoAcid.test(seq);
-  }
-
   enterEmail() {
     this.realSendData.user_email = this.userEmail;
-  }
-
-  submitValidate() {
-    let splitString: string[] = this.sequenceData.split('>').slice(1);
-    let headers: string[] = [];
-    let shouldSkip: boolean = false;
-    this.hasChanged = true;
-    this.seqNum = 0;
-    this.realSendData.input_fasta = [];
-
-    if (splitString.length == 0) {
-      this.validationText = 'Please input your sequence.';
-      this.isValid = false;
-      shouldSkip = true;
-      return
-    }
-
-    if (splitString.length > this.maxSeqNum) {
-      this.validationText = 'Please enter no more than ' + this.maxSeqNum + ' sequences.';
-      this.isValid = false;
-      shouldSkip = true;
-      return
-    }
-
-    if (splitString[0].charAt(0) == ' ') {
-      this.validationText = 'There should be no whitespace after >';
-      this.isValid = false;
-      shouldSkip = true;
-      return
-    }
-
-    splitString.forEach((seq: string) => {
-      let singleSeq: SingleSeqData = {
-        header: '',
-        sequence: ''
-      };
-      this.seqNum += 1;
-      let aminoHeader: string = seq.split('\n')[0];
-      let aminoSeq: string = seq.split('\n').slice(1).join('');
-
-      let warningMessageHeader: string;
-      if (aminoHeader.length > 30) {
-        warningMessageHeader = aminoHeader.slice(0,30) + '...';
-      }
-      else {
-        warningMessageHeader = aminoHeader;
-      }
-
-      if (aminoSeq.slice(-1) == '*') {
-        aminoSeq = aminoSeq.slice(0,-1);
-      }
-      aminoSeq = aminoSeq.toUpperCase();
-
-      if (aminoHeader.length == 0) {
-        this.validationText = 'Header cannot be empty!';
-        this.isValid = false;
-        shouldSkip = true;
-        return
-      }
-
-      headers.push(aminoHeader);
-      singleSeq.header = aminoHeader;
-      singleSeq.sequence = aminoSeq;
-      this.realSendData.input_fasta.push(singleSeq);
-
-      if (this.isInvalidFasta(aminoSeq)) {
-        this.validationText = 'Invalid sequence: ' + warningMessageHeader + ', This is not a valid fasta file format!';
-        this.isValid = false;
-        shouldSkip = true;
-        return
-      }
-
-      if (aminoSeq.length > 1022) {
-        this.validationText = 'Invalid sequence: ' + warningMessageHeader + ', sequence Length is greater than 1022!';
-        this.isValid = false;
-        shouldSkip = true;
-        return
-      }
-
-      if (aminoSeq.length == 0) {
-        this.validationText = 'Invalid sequence: ' + warningMessageHeader + ', sequence Length is 0.';
-        this.isValid = false;
-        shouldSkip = true;
-        return
-      }
-    });
-
-    if (this.hasDuplicateHeaders(headers)) {
-      this.validationText = 'The file contains duplicated sequence identifier.';
-      this.isValid = false;
-      shouldSkip = true;
-      return
-    }
-    if (!shouldSkip) {
-      this.validationText = 'Valid No. of Sequences: ' + this.seqNum + ' Sequences';
-      this.isValid = true;
-    }
   }
 
   onFileSelected(e: Event){

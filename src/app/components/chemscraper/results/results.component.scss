@@ -81,9 +81,6 @@
     }
 }
 
-.loader {
-}
-
 a:link, a:visited, a:active {
     color: #495057;
 }
@@ -91,14 +88,14 @@ a:link, a:visited, a:active {
 .card {
     margin: auto;
     width: 70%;
-}   
+}
 
 :host ::ng-deep .p-message.p-message-info {
     background: #F2F5FC;
     border-width: 0 0 0 0;
     color: #224063;
     text-align: center;
-    .p-message-icon { 
+    .p-message-icon {
         display: none;
     }
 }
@@ -124,3 +121,44 @@ a:link, a:visited, a:active {
     text-align: center;
     width: 100%;
 }
+
+.loadingDiv{
+  height: 20rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #F3F5FB;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+  &::ng-deep .p-progress-spinner-circle{
+    stroke: #224063 !important;
+  }
+  & > :first-child {
+    margin-bottom: 48px;
+  }
+}
+
+.loader{
+  .loadingTitle{
+    margin-bottom: 40px;
+  }
+
+  &::ng-deep .p-steps-title{
+    color: #FFFFFF !important;
+  }
+
+  &::ng-deep .completed-stage{
+    background: #224063 !important;
+    color: #FFFFFF !important;
+    border-color: #224063;
+  }
+  &::ng-deep .p-disabled{
+    opacity: 1;
+  }
+
+}
+
+
+

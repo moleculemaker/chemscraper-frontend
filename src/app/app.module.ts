@@ -13,6 +13,8 @@ import { PrimeIcons} from 'primeng/api';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SkeletonModule } from 'primeng/skeleton';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { StepsModule } from 'primeng/steps';
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
 import { MessagesModule } from 'primeng/messages';
@@ -55,6 +57,8 @@ import { PdfViewerDialogServiceComponent } from './components/chemscraper/pdf-vi
     ProgressBarModule,
     SelectButtonModule,
     SkeletonModule,
+    ProgressSpinnerModule,
+    StepsModule,
     TableModule,
     FileUploadModule,
     PanelModule,

@@ -3,12 +3,11 @@
         <div class="header">
             <div class="info">
                 <h3>
-                    Job ID: {{sendJobID}}
+                    Job ID: {{jobID}}
                     <i class="pi pi-copy copy_and_paste_button" (click)="copyAndPasteURL()"></i>
                 </h3>
 
                 <div class="details">
-                    <div class="sequence_count">Valid No. of Sequences: {{numOfSeq}} Sequence(s) </div>
                     <div class="sequence_time">Submission Time: {{statusResponse?.created_at | date:'short' }}</div>
                 </div>
             </div>
@@ -16,22 +15,26 @@
             <div class="spacer"></div>
 
             <div class="buttons">
-                <!-- <button pButton label="Cancel" class="p-button-outlined p-button-secondary p-button-xs"></button> -->
+                <button pButton label="Cancel" class="p-button-outlined p-button-secondary p-button-xs"></button>
                 <a pButton label="Run a new Request" icon="pi pi-plus" class="p-button-outlined p-button-sm"
                     target="_blank" [routerLink]="['/configuration']"></a>
             </div>
         </div>
 
         <div class="loader" *ngIf="!contentLoaded">
-            <div>
-                <h2>
-                    This may take a few minutes. The page will refresh automatically when results are available, or you
-                    can bookmark this page and return later.
-                </h2>
+            <div class="loadingTitle">
+                <h3>
+                    Working on your analysis
+                </h3>
+                <p>Estimated time remaining: 1 minute and 30 seconds
+                </p>
             </div>
-            <p-progressBar mode="indeterminate" color="#224063"></p-progressBar>
+            <p-steps id="LoadingStages" [model]="stages" [activeIndex]="activeStage" [readonly]="true"></p-steps>
 
-            <p-skeleton height="18rem" styleClass="padded"></p-skeleton>
+            <div class="loadingDiv">
+              <div><p-progressSpinner></p-progressSpinner></div>
+              <div><p>Analyzing molecules</p></div>
+            </div>
         </div>
 
         <div class="card" *ngIf="useExample">
@@ -51,8 +54,8 @@ turned this off, since only totalRecords appears to be accessible from the #tabl
 -->
                         </div>
 
-                        <button pButton label="Download Results" icon="pi pi-download" class="p-button-sm"
-                            (click)="downloadResult()"></button>
+                        <!-- <button pButton label="Download Results" icon="pi pi-download" class="p-button-sm"
+                            (click)="downloadResult()"></button> -->
                     </div>
                 </ng-template>
 

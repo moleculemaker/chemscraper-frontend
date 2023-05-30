@@ -29,8 +29,6 @@
                         <button *ngIf="uploaded_files.length > 0" pButton class="p-button-outlined" (click)="file_upload.click()"><i class="pi pi-plus"></i> Add file(s) </button>
                     </div>
 
-                    <!-- <textarea pInputTextarea [rows]="8" placeholder="Please enter enzyme amino acid sequence in FASTA format." [(ngModel)]="sequenceData" #sequenceDataHtml="ngModel" (input)="submitValidate()"></textarea> -->
-
                   <div *ngIf="uploaded_files.length == 0" class="dropzone" fileDragDrop (filesChangeEmiter)="onFileDropped($event)">
                     <div class="text-wrapper">
                       <div class="centered">
