@@ -18,7 +18,11 @@ import { StepsModule } from 'primeng/steps';
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
 import { MessagesModule } from 'primeng/messages';
-
+import { DropdownModule } from 'primeng/dropdown';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ListboxModule } from 'primeng/listbox';
+import { InputTextModule } from 'primeng/inputtext';
+import { SidebarModule } from 'primeng/sidebar';
 
 import { LandingPageComponent} from './components/landing-page/landing-page.component';
 
@@ -59,7 +63,12 @@ import { PdfViewerDialogServiceComponent } from './components/chemscraper/pdf-vi
     SkeletonModule,
     ProgressSpinnerModule,
     StepsModule,
+    DropdownModule,
     TableModule,
+    InputTextModule,
+    ListboxModule,
+    OverlayPanelModule,
+    SidebarModule,
     FileUploadModule,
     PanelModule,
     BrowserAnimationsModule,

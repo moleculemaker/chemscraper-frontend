@@ -22,6 +22,7 @@ export class PdfViewerComponent {
   pageRendering: boolean = false;
   pageNumPending: number = -1;
   pdfData: Uint8Array;
+  scale: number = 1.4;
 
   constructor(){}
 
@@ -40,14 +41,13 @@ export class PdfViewerComponent {
     });
 
     // Comment out later.
-    this.highlightBoxes = [[{ x: 200, y: 700, width: 200, height: 50 },],[{ x: 200, y: 200, width: 200, height: 50 },]]
   }
 
   renderPage(pageNumber: number) {
     this.pageRendering = true;
     this.pdf.getPage(pageNumber).then((page) => {
 
-      let scale = 1.5;
+      let scale = this.scale;
       let viewport = page.getViewport({scale: scale});
 
       // Prepare canvas using PDF page dimensions
@@ -67,18 +67,20 @@ export class PdfViewerComponent {
 
         if(pageNumber-1 < this.highlightBoxes.length){
           this.highlightBoxes[pageNumber-1].forEach(function (box) {
-            const cornerRadius = 5;
+            let scaledBox = {x: scale * box.x, y: scale * box.y, width: scale * box.width, height: scale * box.height}
+
+            const cornerRadius = scale * 5;
             if(context){
               context.beginPath();
-              context.moveTo(box.x + cornerRadius, box.y);
-              context.lineTo(box.x + box.width - cornerRadius, box.y);
-              context.arcTo(box.x + box.width, box.y, box.x + box.width, box.y + cornerRadius, cornerRadius);
-              context.lineTo(box.x + box.width, box.y + box.height - cornerRadius);
-              context.arcTo(box.x + box.width, box.y + box.height, box.x + box.width - cornerRadius, box.y + box.height, cornerRadius);
-              context.lineTo(box.x + cornerRadius, box.y + box.height);
-              context.arcTo(box.x, box.y + box.height, box.x, box.y + box.height - cornerRadius, cornerRadius);
-              context.lineTo(box.x, box.y + cornerRadius);
-              context.arcTo(box.x, box.y, box.x + cornerRadius, box.y, cornerRadius);
+              context.moveTo(scaledBox.x + cornerRadius, scaledBox.y);
+              context.lineTo(scaledBox.x + scaledBox.width - cornerRadius, scaledBox.y);
+              context.arcTo(scaledBox.x + scaledBox.width, scaledBox.y, scaledBox.x + scaledBox.width, scaledBox.y + cornerRadius, cornerRadius);
+              context.lineTo(scaledBox.x + scaledBox.width, scaledBox.y + scaledBox.height - cornerRadius);
+              context.arcTo(scaledBox.x + scaledBox.width, scaledBox.y + scaledBox.height, scaledBox.x + scaledBox.width - cornerRadius, scaledBox.y + scaledBox.height, cornerRadius);
+              context.lineTo(scaledBox.x + cornerRadius, scaledBox.y + scaledBox.height);
+              context.arcTo(scaledBox.x, scaledBox.y + scaledBox.height, scaledBox.x, scaledBox.y + scaledBox.height - cornerRadius, cornerRadius);
+              context.lineTo(scaledBox.x, scaledBox.y + cornerRadius);
+              context.arcTo(scaledBox.x, scaledBox.y, scaledBox.x + cornerRadius, scaledBox.y, cornerRadius);
               context.closePath();
               context.fillStyle = "rgba(228, 248, 240, 0.5)";
               context.strokeStyle = 'rgba(30, 169, 124, 1)';
@@ -128,5 +130,15 @@ export class PdfViewerComponent {
     }
     this.pageNumber = num;
     this.queueRenderPage(this.pageNumber);
+  }
+
+  zoomIn(){
+    this.scale += 0.1;
+    this.renderPage(this.pageNumber)
+  }
+
+  zoomOut(){
+    this.scale -= 0.1;
+    this.renderPage(this.pageNumber)
   }
 }

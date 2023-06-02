@@ -60,3 +60,9 @@ export interface HighlightBox {
   height: number;
 }
 
+export interface Molecule {
+  name: string;
+  structure: string;
+  SMILE: string;
+}
+

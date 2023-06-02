@@ -1,8 +1,5 @@
 @import '../../../css/core';
 
-.pdf-viewer-container{
-  // position: relative;
-}
 
 .fixed-header{
   position: sticky;
@@ -15,6 +12,8 @@
   /* Adjust padding or margin if needed */
   margin-top: 20px/* height of the fixed header */;
   overflow-y: auto;
-  width: 100%;
+  overflow-x: auto;
+
+  // width: 100%;
   /* Other styles for the scrollable canvas div */
 }

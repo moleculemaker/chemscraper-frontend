@@ -2,6 +2,8 @@
   <div class="fixed-header">
     <button id="prev" (click)="onPrevPage()">Previous</button>
     <button id="next" (click)="onNextPage()">Next</button>
+    <button id="zoomIn" (click)="zoomIn()">+</button>
+    <button id="zoomOut" (click)="zoomOut()">-</button>
     &nbsp; &nbsp;
     <span>Page: <span id="page_num">{{pageNumber}}</span> / <span id="page_count">{{totalPages}}</span></span>
   </div>

@@ -7,7 +7,7 @@ import { startWith, switchMap } from "rxjs/operators";
 import { Router } from '@angular/router';
 import { MenuItem, Message } from 'primeng/api';
 
-import { PredictionRow, PollingResponseResult, PollingResponseStatus, SingleSeqResult, SeqResult } from '../../../models';
+import { PredictionRow, PollingResponseResult, PollingResponseStatus, SingleSeqResult, SeqResult, HighlightBox, Molecule } from '../../../models';
 
 
 
@@ -34,6 +34,13 @@ export class ResultsComponent {
 
   tempIntervalSubscription: Subscription;
 
+  fileNames: string[];
+  selectedFile: string;
+  splitView: boolean = true;
+  highlightBoxes: HighlightBox[][];
+  searchText: string;
+  molecules: Molecule[];
+  filterPanelVisible: boolean = false;
 
   constructor(private router: Router, private _resultService: ResultService, private httpClient: HttpClient) {
 
@@ -69,10 +76,24 @@ export class ResultsComponent {
     ];
     this.activeStage = 0;
     let count = 0;
-    this.tempIntervalSubscription = interval(2000).subscribe(() => {
+    this.tempIntervalSubscription = interval(500).subscribe(() => {
       this.updateStatusStage(count);
       count += 1;
     });
+
+    // Temp files names
+    this.fileNames = Array.from({ length: 10 }).map((_, i) => `Item #${i}`);
+
+    // Temporary boxes
+    this.highlightBoxes = [[{ x: 200, y: 500, width: 200, height: 50 },],[{ x: 200, y: 200, width: 200, height: 50 },]]
+
+    // Temp Molecules:
+    this.molecules = Array.from({ length: 8 }).map((_, index) => ({
+      name: `Object ${index + 1}`,
+      structure: `Structure ${index + 1}`,
+      SMILE: `SMILE ${index + 1}`
+    }));
+
   }
 
   updateStatusStage(currentStage: number){
@@ -88,8 +109,8 @@ export class ResultsComponent {
     })
     if(currentStage == this.stages.length){
       this.tempIntervalSubscription.unsubscribe();
-      console.log("All stages complete");
-
+      this.contentLoaded = true;
+      this.useExample = true;
     }
 
   }
@@ -111,6 +132,22 @@ export class ResultsComponent {
 
   ngOnDestroy(): void {
     this.timeInterval.unsubscribe();
+  }
+
+  toggleSplitView() {
+    this.splitView = !this.splitView;
+  }
+
+  filterResults(){
+    this.filterPanelVisible = true;
+  }
+
+  sortResults(){
+
+  }
+
+  selectRow(event: Event){
+    // event.stopPropagation();
   }
 
 }

@@ -161,4 +161,73 @@ a:link, a:visited, a:active {
 }
 
 
+p-panel{
+  &::ng-deep .result-header-container{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
 
+.result-container {
+  display: flex;
+  .column1 {
+    flex: 1;
+    width: 50%;
+    transition: flex 0.3s ease;
+  }
+
+  .column2 {
+    flex: 1;
+  }
+
+  .collapsed {
+    flex: 0;
+    width: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .example_data {
+    overflow: {
+        y: auto;
+    }
+    min: {
+        height: 8rem;
+    }
+    max: {
+        height: 30rem;
+    }
+
+    // padding: $padding ($padding * 1.5);
+
+    overflow-wrap: break-word;
+  }
+}
+
+.search-row, .sort-row  {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-input, .sort-text {
+  flex: 8;
+  margin-right: 6px;
+  margin-left: 12px;
+}
+
+.filter-button, .sort-button {
+  flex: 2;
+  margin-left: 6px;
+}
+
+.table-container {
+  height: 100%;
+  overflow: hidden;
+}
+
+
+.container ::ng-deep .p-sidebar{
+  z-index: get-index(modal) !important;
+}
