@@ -3,13 +3,11 @@ import { Component } from '@angular/core';
 import { ResultService } from 'src/app/result.service';
 import { interval } from "rxjs/internal/observable/interval";
 import { Subscription } from 'rxjs';
-import { startWith, switchMap } from "rxjs/operators";
+import { finalize, startWith, switchMap } from "rxjs/operators";
 import { Router } from '@angular/router';
 import { MenuItem, Message } from 'primeng/api';
 
 import { PredictionRow, PollingResponseResult, PollingResponseStatus, SingleSeqResult, SeqResult, HighlightBox, Molecule } from '../../../models';
-
-
 
 @Component({
   selector: 'app-results',
@@ -39,7 +37,7 @@ export class ResultsComponent {
   splitView: boolean = true;
   highlightBoxes: HighlightBox[][];
   searchText: string;
-  molecules: Molecule[];
+  molecules: any[];
   filterPanelVisible: boolean = false;
 
   constructor(private router: Router, private _resultService: ResultService, private httpClient: HttpClient) {
@@ -88,15 +86,18 @@ export class ResultsComponent {
     this.highlightBoxes = [[{ x: 200, y: 500, width: 200, height: 50 },],[{ x: 200, y: 200, width: 200, height: 50 },]]
 
     // Temp Molecules:
-    this.molecules = Array.from({ length: 8 }).map((_, index) => ({
-      name: `Molecule ${index + 1}`,
-      structure: `Structure ${index + 1}`,
-      SMILE: `SMILE ${index + 1}`,
-      document: `Document ${index + 1}`,
-      page: `Page ${index + 1}`,
-      pubchemCID: `PubChem CID ${index + 1}`,
-      confidence: `Confidence ${index + 1}`,
-    }));
+    // this.molecules = Array.from({ length: 8 }).map((_, index) => ({
+    //   name: `Molecule ${index + 1}`,
+    //   structure: `Structure ${index + 1}`,
+    //   SMILE: `SMILE ${index + 1}`,
+    //   document: `Document ${index + 1}`,
+    //   page: `Page ${index + 1}`,
+    //   pubchemCID: `PubChem CID ${index + 1}`,
+    //   confidence: `Confidence ${index + 1}`,
+    // }));
+    this.molecules = [];
+    // Temp file read function
+    this.process_example_file();
 
   }
 
@@ -152,6 +153,44 @@ export class ResultsComponent {
 
   selectRow(event: Event){
     // event.stopPropagation();
+  }
+
+  process_example_file(){
+    this.httpClient.get('assets/example_response.tsv', { responseType: 'text' }).pipe(
+      finalize(() => {
+        console.log(this.molecules);
+
+      })
+    ).subscribe(data => {
+      const lines = data.split('\n');
+      let documentIndex = 0;
+      let documentString = '';
+      let page = 0;
+      for(const line of lines){
+        const columns = line.split('\t');
+        // console.log(columns);
+        if(columns[0] == 'D'){
+          documentIndex = parseInt(columns[1]);
+          documentString = columns[2];
+          page = 0;
+        } else if(columns[0] == 'P'){
+          page = parseInt(columns[1]);
+        } else if(columns[0] == 'SMI'){
+          if(documentIndex > 0 && page > 0){
+            this.molecules.push({
+              name: `Molecule name`,
+              structure: `Structure`,
+              SMILE: columns[2],
+              document: documentString,
+              page: String(page),
+              pubchemCID: `PubChem CID`,
+              confidence: `Confidence Score`,
+            });
+          }
+        }
+      }
+    });
+
   }
 
 }
