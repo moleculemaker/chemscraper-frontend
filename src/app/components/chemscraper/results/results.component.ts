@@ -89,9 +89,13 @@ export class ResultsComponent {
 
     // Temp Molecules:
     this.molecules = Array.from({ length: 8 }).map((_, index) => ({
-      name: `Object ${index + 1}`,
+      name: `Molecule ${index + 1}`,
       structure: `Structure ${index + 1}`,
-      SMILE: `SMILE ${index + 1}`
+      SMILE: `SMILE ${index + 1}`,
+      document: `Document ${index + 1}`,
+      page: `Page ${index + 1}`,
+      pubchemCID: `PubChem CID ${index + 1}`,
+      confidence: `Confidence ${index + 1}`,
     }));
 
   }
