@@ -83,7 +83,7 @@
                   <button pButton type="button" class="sort-button p-button-text" (click)="sortResults()"> Sort by <i class="p-button-icon-right pi pi-chevron-down"></i></button>
                 </div>
                 <div class="table-container">
-                  <p-table [value]="molecules" dataKey="name" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="300px">
+                  <p-table [value]="molecules" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="600px">
                     <ng-template pTemplate="header">
                       <tr>
                         <th style="width: 3em"><p-tableCheckbox></p-tableCheckbox></th>

@@ -179,6 +179,8 @@ p-panel{
 
   .column2 {
     flex: 1;
+    overflow-x: scroll;
+    overflow-y: hidden;
   }
 
   .collapsed {
@@ -196,7 +198,7 @@ p-panel{
         height: 8rem;
     }
     max: {
-        height: 30rem;
+        height: 600px;
     }
 
     // padding: $padding ($padding * 1.5);
@@ -223,7 +225,7 @@ p-panel{
 }
 
 .table-container {
-  height: 100%;
+  // height: 100%;
   overflow: hidden;
 }
 
@@ -297,4 +299,12 @@ p-panel{
   color: #495057;
   font-weight: 600;
   padding-bottom: 5px;
+}
+
+:host ::ng-deep .page-container .container{
+  max-width: 1180px;
+}
+
+:host ::ng-deep .p-panel-content{
+  padding: 0px !important;
 }

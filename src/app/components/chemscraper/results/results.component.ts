@@ -178,6 +178,7 @@ export class ResultsComponent {
         } else if(columns[0] == 'SMI'){
           if(documentIndex > 0 && page > 0){
             this.molecules.push({
+              id: String(documentIndex) + String(page) + columns[2],
               name: `Molecule name`,
               structure: `Structure`,
               SMILE: columns[2],
