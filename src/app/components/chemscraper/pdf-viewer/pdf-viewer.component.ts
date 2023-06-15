@@ -14,7 +14,7 @@ export class PdfViewerComponent {
   pdfUrl: String = "";
 
   @Input()
-  highlightBoxes: HighlightBox[][];
+  highlightBoxes: HighlightBox[][] = [];
 
   pdf: PDFDocumentProxy;
   totalPages: number = 0;

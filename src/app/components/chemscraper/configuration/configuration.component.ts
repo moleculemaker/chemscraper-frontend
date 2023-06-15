@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { SequenceService } from 'src/app/sequence.service';
+import { ChemScraperService } from 'src/app/chemscraper.service';
 import { TrackingService } from 'src/app/tracking.service';
 import { Message } from 'primeng/api';
 import { switchMap } from 'rxjs/operators';
 
-import { PostResponse, PostSeqData, SingleSeqData, ExampleData } from '../../../models';
+import { PostResponse, ChemScraperAnalyzeRequestBody, SingleSeqData, ExampleData } from '../../../models';
 import { ResultsComponent } from '../results/results.component';
 import { NgHcaptchaService } from "ng-hcaptcha";
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -23,18 +23,15 @@ export class ConfigurationComponent {
   // sequenceData: string = '>seq1\nAVLIMCFYWH\n>seq2\nLIMCFYWHKRQNED\n>seq3\nMCFYPARQNEDVLWHKRQ';
   sequenceData: string = '';
   validationText: string = '';
-  isValid: boolean = false;
-  isValidating: boolean = false;
   hasChanged: boolean = false;
   postRespond: PostResponse;
   sendData: string[] = [];
   userEmail: string;
-  private maxSeqNum: number = 20;
   disableCopyPaste: boolean = false;
   highTrafficMessage: Message[];
   uploaded_files: File[] = [];
   ref: DynamicDialogRef;
-
+  jobID: string = ''
 
   inputMethods = [
     { label: 'Upload File', icon: 'pi pi-upload', value: 'upload_file' },
@@ -44,17 +41,18 @@ export class ConfigurationComponent {
 
   exampleData: ExampleData[] = [];
 
-  seqNum: number = 0;
   private validAminoAcid = new RegExp("[^GPAVLIMCFYWHKRQNEDST]", "i");
-  realSendData: PostSeqData = {
-    input_fasta: [],
+
+  requestBody: ChemScraperAnalyzeRequestBody = {
+    jobId: '',
     user_email: '',
-    captcha_token: ''
+    captcha_token: '',
+    fileList: []
   };
 
   constructor(
     private router: Router,
-    private _sequenceService: SequenceService,
+    private _chemScraperService: ChemScraperService,
     private httpClient: HttpClient,
     private trackingService: TrackingService,
     private hcaptchaService: NgHcaptchaService,
@@ -72,57 +70,76 @@ export class ConfigurationComponent {
   }
 
   submitData() {
-    // console.log(this.realSendData);
-    // if the user uses example file, return precompiled result
-    // else send sequence to backend, jump to results page
-    console.log(this.selectedInputMethod);
-
     if (this.selectedInputMethod == 'use_example') {
-      let label = "Example_PDF"
-      this._sequenceService.getExampleResponse(label)
+      let label = "example_PDF"
+      this._chemScraperService.getExampleResponse(label)
         .subscribe( data => {
           this.router.navigate(['/results', data.jobId]);
         });
+    } else {
+      this.hcaptchaService.verify().pipe(
+        switchMap((data) => {
+          this.requestBody.captcha_token = data;
+          this.requestBody.jobId = this.jobID;
+          const fileNames: string[] = this.uploaded_files.map(file => file.name);
+          this.requestBody.fileList = fileNames;
+          return this._chemScraperService.analyzeDocument(this.requestBody);
+        })
+      ).subscribe(
+        (data) => {
+          this.router.navigate(['/results', data.jobId]);
+        },
+        (error) => {
+          // TODO replace this with a call to the message service, and display the correct error message
+          console.error('Error getting contacts via subscribe() method:', error);
+        }
+      );
     }
-    // } else {
-    //   this.hcaptchaService.verify().pipe(
-    //     switchMap((data) => {
-    //       this.realSendData.captcha_token = data;
-    //       return this._sequenceService.getResponse(this.realSendData);
-    //     })
-    //   ).subscribe(
-    //     (data) => {
-    //       this.router.navigate(['/results', data.jobId, String(this.seqNum)]);
-    //     },
-    //     (error) => {
-    //       // TODO replace this with a call to the message service, and display the correct error message
-    //       console.error('Error getting contacts via subscribe() method:', error);
-    //     }
-    //   );
-    // }
   }
 
   enterEmail() {
-    this.realSendData.user_email = this.userEmail;
+    this.requestBody.user_email = this.userEmail;
   }
 
   onFileSelected(e: Event){
     let upload_fileList = (e.target as HTMLInputElement).files;
     if(upload_fileList){
       Array.from(upload_fileList).forEach((file) => {
-        if(file.type === 'application/pdf')
-        this.uploaded_files.push(file);
+        if(file.type === 'application/pdf') {
+
+          // File Upload
+          const fd = new FormData();
+          fd.append('file', file, file.name);
+          console.log(this.jobID);
+
+          this._chemScraperService.fileUpload(fd, this.jobID).subscribe(
+            res => {
+              this.jobID = res.jobID;
+              this.uploaded_files.push(file);
+            }
+          );
+        }
       });
     }
-    console.log(this.uploaded_files);
   }
 
   onFileDropped(files: FileList){
     Array.from(files).forEach((file) => {
-      if(file.type === 'application/pdf')
-      this.uploaded_files.push(file);
+      if(file.type === 'application/pdf') {
+
+        // File Upload
+        const fd = new FormData();
+        fd.append('file', file, file.name);
+        this._chemScraperService.fileUpload(fd, this.jobID).subscribe(
+          res => {
+            this.jobID = res.jobID;
+            this.uploaded_files.push(file);
+          }
+        );
+      }
+
     });
-    console.log(this.uploaded_files);
+    // console.log(this.uploaded_files);
   }
 
   deleteFile(index: number){
@@ -130,7 +147,7 @@ export class ConfigurationComponent {
   }
 
   viewFile(index: number){
-    console.log(this.uploaded_files[index]);
+    // console.log(this.uploaded_files[index]);
 
     const fileReader = new FileReader();
     fileReader.onload = () => {
