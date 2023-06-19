@@ -198,7 +198,7 @@ p-panel{
         height: 8rem;
     }
     max: {
-        height: 600px;
+        height: 750px;
     }
 
     // padding: $padding ($padding * 1.5);
@@ -307,4 +307,12 @@ p-panel{
 
 :host ::ng-deep .p-panel-content{
   padding: 0px !important;
+}
+
+.table-container ::ng-deep td{
+  vertical-align: middle;
+}
+
+:host ::ng-deep .p-datatable-table .p-datatable-tbody > tr > td {
+  overflow-wrap: anywhere;
 }

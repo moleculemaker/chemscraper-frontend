@@ -46,16 +46,11 @@
             <ng-template pTemplate="header">
               <div class="result-header-container">
                 <div>
-                  <p-button (click)="DocsDropdown.toggle($event)" styleClass="ui-button-success">
-                    <i class="p-button-icon-left pi pi-file-pdf"></i> Documents <i class="p-button-icon-right pi pi-angle-down"></i>
-                  </p-button>
-                  <p-overlayPanel styleClass="files-overlay" #DocsDropdown>
-                    <p-listbox [options]="fileNames" [(ngModel)]="selectedFile" [style]="{'width':'15rem'}"></p-listbox>
-                  </p-overlayPanel>
+                  Results
                 </div>
                 <div>
                   <p-button (click)="DocsDropdown.toggle($event)" styleClass="ui-button-success">
-                    <i class="p-button-icon-left pi pi-download"></i> Export <i class="p-button-icon-right pi pi-angle-down"></i>
+                    <i class="p-button-icon-left pi pi-download"></i> Export
                   </p-button>
                   <p-overlayPanel styleClass="files-overlay" #DocsDropdown>
                     <p-listbox [options]="fileNames" [(ngModel)]="selectedFile" [style]="{'width':'15rem'}"></p-listbox>
@@ -67,7 +62,7 @@
               <div class="column1" [ngClass]="{'collapsed': !splitView}">
                 <!-- Content for column 1 goes here -->
                 <div class="example_data">
-                  <chemscraper-pdf-viewer pdfUrl="../assets/or100.09.tables.pdf" [highlightBoxes]="highlightBoxes"></chemscraper-pdf-viewer>
+                  <chemscraper-pdf-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [highlightBoxes]="highlightBoxes"></chemscraper-pdf-viewer>
                 </div>
               </div>
               <div class="column2">
@@ -78,7 +73,7 @@
                 </div>
                 <div class="sort-row">
                   <div class="sort-text">
-                    Showing 17 identified molecules
+                    Showing {{molecules.length}} identified molecules
                   </div>
                   <button pButton type="button" class="sort-button p-button-text" (click)="sortResults()"> Sort by <i class="p-button-icon-right pi pi-chevron-down"></i></button>
                 </div>
@@ -86,7 +81,7 @@
                   <p-table [value]="molecules" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="600px">
                     <ng-template pTemplate="header">
                       <tr>
-                        <th style="width: 3em"><p-tableCheckbox></p-tableCheckbox></th>
+                        <th><p-tableCheckbox></p-tableCheckbox></th>
                         <th pSortableColumn="name">Molecule<p-sortIcon field="name"></p-sortIcon></th>
                         <th>Structure</th>
                         <th>SMILES</th>
@@ -98,17 +93,17 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-molecule let-expanded="expanded">
                       <tr>
-                        <td><p-tableCheckbox [value]="molecule" (click)="selectRow($event)"></p-tableCheckbox></td>
+                        <td ><p-tableCheckbox [value]="molecule" (click)="selectRow($event)"></p-tableCheckbox></td>
                         <td> <i [pRowToggler]="molecule" [ngClass]="expanded ? 'pi pi-chevron-down p-button-icon-left' : 'pi pi-chevron-right p-button-icon-left'"></i> {{ molecule.name }}</td>
-                        <td>{{ molecule.structure }}</td>
+                        <td [innerHTML]="molecule.structure"></td>
                         <td>{{ molecule.SMILE }}</td>
-                        <td *ngIf="!splitView">{{ molecule.document }}</td>
-                        <td *ngIf="!splitView">{{ molecule.page }}</td>
-                        <td *ngIf="!splitView">{{ molecule.pubchemCID }}</td>
+                        <td *ngIf="!splitView">{{ molecule.doc_no }}</td>
+                        <td *ngIf="!splitView">{{ molecule.page_no }}</td>
+                        <td *ngIf="!splitView">{{ molecule.PubChemCID }}</td>
                         <td *ngIf="!splitView">{{ molecule.confidence }}</td>
                       </tr>
                     </ng-template>
-                    <ng-template pTemplate="rowexpansion">
+                    <ng-template pTemplate="rowexpansion" let-molecule>
                       <tr>
                         <td colspan="9">
                           <div class="result-molecules-details-container">
@@ -152,25 +147,22 @@
                                 <div class="molecule-details-col2">
                                   <div>
                                     <p class="molecule-details-header">Molecular Information</p>
-                                    <p>Formula: C8H11NO2
-                                      Weight: 153.18 g/mol</p>
+                                    <p>Formula: {{molecule.molecularFormula}}
+                                      Weight: {{molecule.molecularWeight}} g/mol</p>
                                   </div>
                                   <div>
                                     <p class="molecule-details-header">Chemical Safety</p>
-                                    <p>Irritant Health Hazard
-                                      Environmental Hazard</p>
+                                    <p><span *ngFor="let chemicalSafetyProperty of molecule.chemicalSafety">{{chemicalSafetyProperty}}</span></p>
                                   </div>
                                   <div>
                                     <p class="molecule-details-header">External References</p>
-                                    <p>PubChem ID: 681
+                                    <p>PubChem ID: {{molecule.PubChemCID}}
                                       SciFinder CAS RN: 62-31-7</p>
                                   </div>
                                 </div>
                                 <div [ngClass]="splitView ? 'molecule-details-row2' : 'molecule-details-col3'">
                                   <p class="molecule-details-header">Description</p>
-                                  <p>Dopamine is catechol in which the hydrogen at position 4 is substituted by a 2-aminoethyl group.
-                                    It has a role as a cardiotonic drug, a beta-adrenergic agonist, a dopaminergic agent, a sympathomimetic agent, a human metabolite, an Escherichia coli metabolite and a mouse metabolite.
-                                    It is a conjugate base of a dopaminium(1+).</p>
+                                  <p>{{molecule.Description}}</p>
                                 </div>
                               </div>
                             </p-panel>

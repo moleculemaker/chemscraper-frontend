@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
 import { environment } from '../environments/environment';
 
-import { PostResponse, ChemScraperAnalyzeRequestBody, ExampleData, FileUploadResponse } from './models';
+import { PostResponse, ChemScraperAnalyzeRequestBody, ExampleData, FileUploadResponse, Molecule } from './models';
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +39,13 @@ export class ChemScraperService {
       params = params.append('job_id', jobID);
       return this.http.post<FileUploadResponse>(this.SERVER_URL + 'upload', formData, { params: params }); //should return a jobID
     }
+  }
+
+  getResult(jobID: string): Observable<Molecule[]>{
+    return this.http.get<Molecule[]>(this.SERVER_URL + 'results/' + jobID);
+  }
+
+  getInputPDf(jobID: string): Observable<string[]>{
+    return this.http.get<string[]>(this.SERVER_URL + 'inputs/' + jobID);
   }
 }

@@ -40,7 +40,6 @@ export class PdfViewerComponent {
       console.error(reason);
     });
 
-    // Comment out later.
   }
 
   renderPage(pageNumber: number) {
@@ -49,6 +48,9 @@ export class PdfViewerComponent {
 
       let scale = this.scale;
       let viewport = page.getViewport({scale: scale});
+
+      const originX = page.view[0];
+      const originY = page.view[1];
 
       // Prepare canvas using PDF page dimensions
       let canvas = document.getElementById('pdf-canvas') as HTMLCanvasElement;
@@ -65,9 +67,13 @@ export class PdfViewerComponent {
       renderTask.promise.then( () => {
         this.pageRendering = false;
 
-        if(pageNumber-1 < this.highlightBoxes.length){
-          this.highlightBoxes[pageNumber-1].forEach(function (box) {
-            let scaledBox = {x: scale * box.x, y: scale * box.y, width: scale * box.width, height: scale * box.height}
+        if(this.highlightBoxes && pageNumber < this.highlightBoxes.length){
+          this.highlightBoxes[pageNumber].forEach(function (box) {
+            let boxX = (box.x * 72.0) / 300 - originX
+            let boxY = (box.y * 72.0) / 300 - originY
+            let boxWidth = (box.width * 72.0) / 300
+            let boxHeight = (box.height * 72.0) / 300
+            let scaledBox = {x: scale * boxX, y: scale * boxY, width: scale * boxWidth, height: scale * boxHeight}
 
             const cornerRadius = scale * 5;
             if(context){

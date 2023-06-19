@@ -93,6 +93,7 @@
                 <br>
                 <button pButton type="button" [disabled]="uploaded_files.length == 0" label="Analyze using ChemScraper" (click)="submitData()"
                     icon="pi pi-arrow-right" iconPos="right" styleClass="p-button-xs" [disabled]="(selectedInputMethod=='upload_file') || disableCopyPaste"></button>
+                <p-progressSpinner *ngIf="analyzeSpinnerVisible"></p-progressSpinner>
             </div>
         </div>
     </div>

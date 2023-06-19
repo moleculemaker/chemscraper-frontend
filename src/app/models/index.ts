@@ -1,3 +1,5 @@
+import { SafeHtml } from "@angular/platform-browser";
+
 export interface PredictionRow {
   sequence: string;
   ecNumbers: string[];
@@ -39,12 +41,13 @@ export interface PostResponse {
 }
 
 export interface Molecule {
+  id: number;
   doc_no: string;
   file_path: string;
   page_no: string;
   name: string;
   SMILE: string;
-  structure: string;
+  structure: SafeHtml;
   minX: string;
   minY: string;
   width: string;
@@ -81,11 +84,5 @@ export interface HighlightBox {
   y: number;
   width: number;
   height: number;
-}
-
-export interface Molecule {
-  name: string;
-  structure: string;
-  SMILE: string;
 }
 
