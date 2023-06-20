@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ResultService } from 'src/app/result.service';
 import { interval } from "rxjs/internal/observable/interval";
-import { Subscription } from 'rxjs';
-import { finalize, startWith, switchMap } from "rxjs/operators";
+import { Subscription, timer } from 'rxjs';
+import { finalize, startWith, switchMap, takeWhile } from "rxjs/operators";
 import { Router } from '@angular/router';
 import { MenuItem, Message } from 'primeng/api';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -35,8 +35,6 @@ export class ResultsComponent {
   stages: MenuItem[];
   activeStage: number;
 
-  tempIntervalSubscription: Subscription;
-
   fileNames: string[];
   selectedFile: string;
   splitView: boolean = true;
@@ -48,6 +46,7 @@ export class ResultsComponent {
   tableFilterStateOptions: any[] = [{label: 'Off', value: 'off'}, {label: 'On', value: 'on'}];
   tableFilterValue: string = 'off';
 
+  pollForResult: boolean = true;
 
   constructor(
     private router: Router,
@@ -70,30 +69,27 @@ export class ResultsComponent {
 
     this.stages = [
       {
-          label: 'Stage1_label'
+          label: 'Running ChemScraper Job'
       },
       {
-          label: 'Stage2_label'
-      }
+          label: 'Fetching External Data'
+      },
+      {
+        label: 'Execution Complete, Showing Results'
+    }
     ];
     this.activeStage = 0;
-    let count = 0;
-    this.tempIntervalSubscription = interval(500).subscribe(() => {
-      this.updateStatusStage(count);
-      count += 1;
-    });
 
     // Temp files names
     this.fileNames = Array.from({ length: 10 }).map((_, i) => `Item #${i}`);
 
-    // Temporary boxes
-    // this.highlightBoxes = [[{ x: 200, y: 500, width: 200, height: 50 },],[{ x: 200, y: 200, width: 200, height: 50 },]]
-
     this.molecules = [];
+
     // Temp file read function
     // this.process_example_file();
 
     this.getResult();
+
   }
 
   updateStatusStage(currentStage: number){
@@ -108,8 +104,6 @@ export class ResultsComponent {
       }
     })
     if(currentStage == this.stages.length){
-      this.tempIntervalSubscription.unsubscribe();
-
       // this.useExample = true;
     }
 
@@ -279,27 +273,52 @@ export class ResultsComponent {
   getResult(){
     let jobID = window.location.href.split('/').at(-1);
     if(jobID){
-      this._chemScraperService.getInputPDf(jobID).subscribe(
-        (urls) => {
-          this.pdfURLs = urls;
-          if(this.pdfURLs.length > 0) {
-            this.currentPDF = this.pdfURLs[0];
-            const pdfName = this.currentPDF.split("/").pop();
-            if(pdfName){
-              this.currentPDFName = pdfName;
-            }
-          }
-        }
-      );
+      timer(0, 10000).pipe(
+        switchMap(() => this._chemScraperService.getResultStatus(jobID ? jobID : "example_PDF")),
+        takeWhile(() => this.pollForResult)
+      ).subscribe(
+        (response) => {
+          if (response == "Ready") {
+            this.updateStatusStage(1);
+            this.pollForResult = false;
+            if(jobID)
+            this._chemScraperService.getResult(jobID).subscribe(
+              (data) => {
+                data.forEach(molecule => {
+                  molecule.structure = this.sanitizer.bypassSecurityTrustHtml(molecule.structure.toString());
+                })
+                this.molecules = data;
+                this.updateStatusStage(2);
 
-      this._chemScraperService.getResult(jobID).subscribe(
-        (data) => {
-          data.forEach(molecule => {
-            molecule.structure = this.sanitizer.bypassSecurityTrustHtml(molecule.structure.toString());
-          })
-          this.molecules = data;
-          this.contentLoaded = true;
-          this.getHighlightBoxes(1);
+                this.getHighlightBoxes(1);
+
+                if(jobID)
+                this._chemScraperService.getInputPDf(jobID).subscribe(
+                  (urls) => {
+                    this.pdfURLs = urls;
+                    if(this.pdfURLs.length > 0) {
+                      this.currentPDF = this.pdfURLs[0];
+                      const pdfName = this.currentPDF.split("/").pop();
+                      if(pdfName){
+                        this.currentPDFName = pdfName;
+                      }
+                      this.contentLoaded = true;
+                    }
+                  }
+                );
+              }
+            );
+          } else if (response == "Error") {
+            if(jobID)
+            this._chemScraperService.getError(jobID).subscribe(
+              (response) => {
+                console.log(response);
+                this.pollForResult = false;
+              }
+            );
+          } else {
+            console.log("Job execution underway");
+          }
         }
       );
     }

@@ -12,8 +12,7 @@ export class ChemScraperService {
 
   responseFromExample: PostResponse = {
     jobId: "example_PDF",
-    molecules: [],
-    created_at: "2020-01-01 10:10:10"
+    submitted_at: "2020-01-01 10:10:10"
   };
 
   private SERVER_URL: string = environment.apiBaseUrl + '/chemscraper/';
@@ -41,8 +40,16 @@ export class ChemScraperService {
     }
   }
 
+  getResultStatus(jobID: string): Observable<string>{
+    return this.http.get<string>(this.SERVER_URL + 'result-status/' + jobID)
+  }
+
   getResult(jobID: string): Observable<Molecule[]>{
     return this.http.get<Molecule[]>(this.SERVER_URL + 'results/' + jobID);
+  }
+
+  getError(jobID: string): Observable<string>{
+    return this.http.get<string>(this.SERVER_URL + 'errors/' + jobID);
   }
 
   getInputPDf(jobID: string): Observable<string[]>{

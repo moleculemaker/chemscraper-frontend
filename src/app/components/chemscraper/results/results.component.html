@@ -26,14 +26,14 @@
                 <h3>
                     Working on your analysis
                 </h3>
-                <p>Estimated time remaining: 1 minute and 30 seconds
-                </p>
+                <!-- <p>Estimated time remaining: 1 minute and 30 seconds
+                </p> -->
             </div>
             <p-steps id="LoadingStages" [model]="stages" [activeIndex]="activeStage" [readonly]="true"></p-steps>
 
             <div class="loadingDiv">
               <div><p-progressSpinner></p-progressSpinner></div>
-              <div><p>Analyzing molecules</p></div>
+              <div><p>{{stages[activeStage].label}}</p></div>
             </div>
         </div>
 

@@ -36,8 +36,7 @@ export interface ChemScraperAnalyzeRequestBody {
 
 export interface PostResponse {
   jobId: string;
-  molecules: Molecule[];
-  created_at: string;
+  submitted_at: string;
 }
 
 export interface Molecule {

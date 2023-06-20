@@ -32,7 +32,6 @@ export class ConfigurationComponent {
   uploaded_files: File[] = [];
   ref: DynamicDialogRef;
   jobID: string = ''
-  analyzeSpinnerVisible: boolean = false;
 
   inputMethods = [
     { label: 'Upload File', icon: 'pi pi-upload', value: 'upload_file' },
@@ -71,7 +70,6 @@ export class ConfigurationComponent {
   }
 
   submitData() {
-    this.analyzeSpinnerVisible = true;
     if (this.selectedInputMethod == 'use_example') {
       let label = "example_PDF"
       this._chemScraperService.getExampleResponse(label)
