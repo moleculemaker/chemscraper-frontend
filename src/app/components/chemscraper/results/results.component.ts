@@ -21,6 +21,8 @@ export class ResultsComponent {
   contentLoaded: boolean = false;
   pdfURLs: string[] = [];
   currentPDF: string = "";
+  currentPDFName: string = "";
+
   rows: PredictionRow[] = [];
   getResponse: PollingResponseResult;
   failedJob: boolean = false;
@@ -42,6 +44,10 @@ export class ResultsComponent {
   searchText: string;
   molecules: any[];
   filterPanelVisible: boolean = false;
+
+  tableFilterStateOptions: any[] = [{label: 'Off', value: 'off'}, {label: 'On', value: 'on'}];
+  tableFilterValue: string = 'off';
+
 
   constructor(
     private router: Router,
@@ -85,9 +91,9 @@ export class ResultsComponent {
 
     this.molecules = [];
     // Temp file read function
-    this.process_example_file();
+    // this.process_example_file();
 
-    // this.getResult();
+    this.getResult();
   }
 
   updateStatusStage(currentStage: number){
@@ -146,7 +152,7 @@ export class ResultsComponent {
   process_example_file(){
     this.httpClient.get('assets/example_PDF.tsv', { responseType: 'text' }).pipe(
       finalize(() => {
-        console.log(this.molecules);
+        // console.log(this.molecules);
 
       })
     ).subscribe(data => {
@@ -278,6 +284,10 @@ export class ResultsComponent {
           this.pdfURLs = urls;
           if(this.pdfURLs.length > 0) {
             this.currentPDF = this.pdfURLs[0];
+            const pdfName = this.currentPDF.split("/").pop();
+            if(pdfName){
+              this.currentPDFName = pdfName;
+            }
           }
         }
       );

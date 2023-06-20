@@ -167,6 +167,11 @@ p-panel{
     justify-content: space-between;
     width: 100%;
   }
+  &::ng-deep .document-path-bar{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
 }
 
 .result-container {

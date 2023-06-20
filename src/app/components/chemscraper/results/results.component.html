@@ -46,6 +46,12 @@
             <ng-template pTemplate="header">
               <div class="result-header-container">
                 <div>
+                  <!-- <p-button (click)="DocsDropdown.toggle($event)" styleClass="ui-button-success">
+                    <i class="p-button-icon-left pi pi-file-pdf"></i> Documents <i class="p-button-icon-right pi pi-angle-down"></i>
+                  </p-button>
+                  <p-overlayPanel styleClass="files-overlay" #DocsDropdown>
+                    <p-listbox [options]="fileNames" [(ngModel)]="selectedFile" [style]="{'width':'15rem'}"></p-listbox>
+                  </p-overlayPanel> -->
                   Results
                 </div>
                 <div>
@@ -58,9 +64,26 @@
                 </div>
               </div>
             </ng-template>
+            <div class="result-header-container">
+              <div>
+                <p-button (click)="DocsDropdown.toggle($event)" styleClass="ui-button-success">
+                  <i class="p-button-icon-left pi pi-file-pdf"></i> Documents <i class="p-button-icon-right pi pi-angle-down"></i>
+                </p-button>
+                <p-overlayPanel styleClass="files-overlay" #DocsDropdown>
+                  <p-listbox [options]="fileNames" [(ngModel)]="selectedFile" [style]="{'width':'15rem'}"></p-listbox>
+                </p-overlayPanel>
+              </div>
+              <div>
+                <p-selectButton [options]="tableFilterStateOptions" [(ngModel)]="tableFilterValue" optionLabel="label" optionValue="value"></p-selectButton>
+              </div>
+            </div>
             <div class="result-container">
               <div class="column1" [ngClass]="{'collapsed': !splitView}">
                 <!-- Content for column 1 goes here -->
+                <div class="document-path-bar">
+                  <p>Document Center > {{currentPDFName}}</p>
+                  <button (click)="toggleSplitView()">Collapse/Expand Column 1</button>
+                </div>
                 <div class="example_data">
                   <chemscraper-pdf-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [highlightBoxes]="highlightBoxes"></chemscraper-pdf-viewer>
                 </div>
@@ -174,8 +197,6 @@
                 </div>
               </div>
             </div>
-            <button (click)="toggleSplitView()">Collapse/Expand Column 1</button>
-
           </p-panel>
 
           <p-sidebar [(visible)]="filterPanelVisible" position="right">
