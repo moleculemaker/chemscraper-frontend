@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'http://localhost:8000' // Base URL for local environment
+  apiBaseUrl: 'https://mmli.fastapi.staging.mmli1.ncsa.illinois.edu' // Base URL for local environment
 };
