@@ -352,6 +352,13 @@ export class ResultsComponent {
   onRowSelected(event: any) {
     if(event.data){
       this.pdfViewerComponent.highlightMolecule(event.data.id, parseInt(event.data.page_no));
+      const input_pdf_container = document.getElementById("input_pdf_container");
+      if(input_pdf_container){
+        input_pdf_container.scrollBy(-10000, -10000)
+        input_pdf_container.scrollBy((parseInt(event.data.minX) * 72.0) / 300, (parseInt(event.data.minY) * 72.0) / 300)
+        // console.log(event.data);
+
+      }
     }
   }
 

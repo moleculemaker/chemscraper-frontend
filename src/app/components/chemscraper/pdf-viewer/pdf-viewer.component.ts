@@ -106,12 +106,10 @@ export class PdfViewerComponent {
             }
           });
         }
-
         if (this.pageNumPending !== -1) {
           this.renderPage(this.pageNumPending);
           this.pageNumPending = -1;
         }
-
       });
     });
   }
@@ -150,12 +148,12 @@ export class PdfViewerComponent {
 
   zoomIn(){
     this.scale += 0.1;
-    this.renderPage(this.pageNumber)
+    this.renderPage(this.pageNumber);
   }
 
   zoomOut(){
     this.scale -= 0.1;
-    this.renderPage(this.pageNumber)
+    this.renderPage(this.pageNumber);
   }
 
   highlightMolecule(moleculeIndex: number, page_num: number = -1) {
