@@ -101,10 +101,10 @@
                   <button pButton type="button" class="sort-button p-button-text" (click)="sortResults()"> Sort by <i class="p-button-icon-right pi pi-chevron-down"></i></button>
                 </div>
                 <div class="table-container">
-                  <p-table [value]="molecules" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="600px">
+                  <p-table [value]="molecules" dataKey="id" selectionMode="single" [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)" (onRowUnselect)="onRowUnselected($event)" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="600px">
                     <ng-template pTemplate="header">
                       <tr>
-                        <th><p-tableCheckbox></p-tableCheckbox></th>
+                        <!-- <th><p-tableCheckbox></p-tableCheckbox></th> -->
                         <th pSortableColumn="name">Molecule<p-sortIcon field="name"></p-sortIcon></th>
                         <th>Structure</th>
                         <th>SMILES</th>
@@ -115,8 +115,8 @@
                       </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-molecule let-expanded="expanded">
-                      <tr>
-                        <td ><p-tableCheckbox [value]="molecule" (click)="selectRow($event)"></p-tableCheckbox></td>
+                      <tr [pSelectableRow]="molecule">
+                        <!-- <td ><p-tableCheckbox [value]="molecule" (click)="selectRow($event)"></p-tableCheckbox></td> -->
                         <td> <i [pRowToggler]="molecule" [ngClass]="expanded ? 'pi pi-chevron-down p-button-icon-left' : 'pi pi-chevron-right p-button-icon-left'"></i> {{ molecule.name }}</td>
                         <td [innerHTML]="molecule.structure"></td>
                         <td>{{ molecule.SMILE }}</td>

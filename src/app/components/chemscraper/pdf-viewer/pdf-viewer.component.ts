@@ -23,6 +23,8 @@ export class PdfViewerComponent {
   pageNumPending: number = -1;
   pdfData: Uint8Array;
   scale: number = 1.4;
+  boxPadding: number = 5;
+  highlightedMoleculeId: number = -1;
 
   constructor(){}
 
@@ -68,11 +70,15 @@ export class PdfViewerComponent {
         this.pageRendering = false;
 
         if(this.highlightBoxes && pageNumber < this.highlightBoxes.length){
-          this.highlightBoxes[pageNumber].forEach(function (box) {
-            let boxX = (box.x * 72.0) / 300 - originX
-            let boxY = (box.y * 72.0) / 300 - originY
-            let boxWidth = (box.width * 72.0) / 300
-            let boxHeight = (box.height * 72.0) / 300
+          this.highlightBoxes[pageNumber].forEach( (box) => {
+            // const padding = this.boxPadding * scale;
+            let boxX = (box.x * 72.0) / 300 - originX - this.boxPadding;
+            let boxY = (box.y * 72.0) / 300 - originY - this.boxPadding;
+            boxX = boxX ? boxX : 0;
+            boxY = boxY ? boxY : 0;
+            let boxWidth = (box.width * 72.0) / 300 + ( 2 * this.boxPadding );
+            let boxHeight = (box.height * 72.0) / 300 + ( 2 * this.boxPadding );
+
             let scaledBox = {x: scale * boxX, y: scale * boxY, width: scale * boxWidth, height: scale * boxHeight}
 
             const cornerRadius = scale * 5;
@@ -88,8 +94,12 @@ export class PdfViewerComponent {
               context.lineTo(scaledBox.x, scaledBox.y + cornerRadius);
               context.arcTo(scaledBox.x, scaledBox.y, scaledBox.x + cornerRadius, scaledBox.y, cornerRadius);
               context.closePath();
-              context.fillStyle = "rgba(228, 248, 240, 0.5)";
-              context.strokeStyle = 'rgba(30, 169, 124, 1)';
+              context.fillStyle = "rgba(34, 64, 99, 0.1)";
+              context.strokeStyle = 'rgba(34, 64, 99, 1)';
+              if(this.highlightedMoleculeId >= 0 && box.moleculeId == this.highlightedMoleculeId){
+                context.fillStyle = "rgba(5, 0, 255, 0.1)";
+                context.strokeStyle = 'rgba(5, 0, 255, 1)';
+              }
               context.fill();
               context.stroke();
 
@@ -146,5 +156,15 @@ export class PdfViewerComponent {
   zoomOut(){
     this.scale -= 0.1;
     this.renderPage(this.pageNumber)
+  }
+
+  highlightMolecule(moleculeIndex: number, page_num: number = -1) {
+    this.highlightedMoleculeId = moleculeIndex;
+    if(page_num == -1){
+      this.queueRenderPage(this.pageNumber);
+    } else {
+      this.goToPage(page_num);
+    }
+
   }
 }

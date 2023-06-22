@@ -79,6 +79,7 @@ export interface PollingResponseResult {
 }
 
 export interface HighlightBox {
+  moleculeId: number
   x: number;
   y: number;
   width: number;

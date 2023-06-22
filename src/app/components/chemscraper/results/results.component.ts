@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ResultService } from 'src/app/result.service';
 import { interval } from "rxjs/internal/observable/interval";
 import { Subscription, timer } from 'rxjs';
@@ -9,6 +9,7 @@ import { MenuItem, Message } from 'primeng/api';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { PredictionRow, PollingResponseResult, PollingResponseStatus, SingleSeqResult, SeqResult, HighlightBox, Molecule } from '../../../models';
 import { ChemScraperService } from 'src/app/chemscraper.service';
+import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 
 @Component({
   selector: 'app-results',
@@ -47,6 +48,7 @@ export class ResultsComponent {
   tableFilterValue: string = 'off';
 
   pollForResult: boolean = true;
+  selectedMolecule!: Molecule;
 
   constructor(
     private router: Router,
@@ -55,6 +57,8 @@ export class ResultsComponent {
     private _chemScraperService: ChemScraperService,
     private sanitizer: DomSanitizer
   ) { }
+
+  @ViewChild(PdfViewerComponent) pdfViewerComponent: PdfViewerComponent;
 
   ngOnInit(): void {
     this.preComputedMessage = [
@@ -336,11 +340,24 @@ export class ResultsComponent {
         this.highlightBoxes[parseInt(molecule.page_no)] = [];
       }
       this.highlightBoxes[parseInt(molecule.page_no)].push({
+        moleculeId: molecule.id,
         x: parseInt(molecule.minX),
         y: parseInt(molecule.minY),
         width: parseInt(molecule.width),
         height: parseInt(molecule.height)
       });
+    }
+  }
+
+  onRowSelected(event: any) {
+    if(event.data){
+      this.pdfViewerComponent.highlightMolecule(event.data.id, parseInt(event.data.page_no));
+    }
+  }
+
+  onRowUnselected(event: any){
+    if(event.data){
+      this.pdfViewerComponent.highlightMolecule(-1);
     }
   }
 
