@@ -22,7 +22,7 @@ export class PdfViewerComponent {
   pageRendering: boolean = false;
   pageNumPending: number = -1;
   pdfData: Uint8Array;
-  scale: number = 1.4;
+  scale: number = 1;
   boxPadding: number = 5;
   highlightedMoleculeId: number = -1;
 

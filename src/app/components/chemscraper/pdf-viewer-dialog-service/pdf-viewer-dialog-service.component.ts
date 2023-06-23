@@ -45,7 +45,7 @@ export class PdfViewerDialogServiceComponent {
     this.pageRendering = true;
     this.pdf.getPage(pageNumber).then((page) => {
 
-      let scale = 1.5;
+      let scale = 1;
       let viewport = page.getViewport({scale: scale});
 
       // Prepare canvas using PDF page dimensions

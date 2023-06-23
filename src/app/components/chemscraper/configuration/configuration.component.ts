@@ -35,7 +35,7 @@ export class ConfigurationComponent {
 
   inputMethods = [
     { label: 'Upload File', icon: 'pi pi-upload', value: 'upload_file' },
-    { label: 'Use Example PDF', icon: 'pi pi-file-pdf', value: 'use_example' },
+    { label: 'Example PDF', icon: 'pi pi-file-pdf', value: 'use_example' },
   ];
   selectedInputMethod: any | null = 'upload_file'; //this.inputMethods[0];
 

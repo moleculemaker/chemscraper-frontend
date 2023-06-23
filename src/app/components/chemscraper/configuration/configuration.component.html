@@ -21,8 +21,8 @@
                     <div class="panel_bar">
                         <div>Document Center</div>
                         <div class="spacer"></div>
-                        <button pButton [disabled]="uploaded_files.length == 0"  label="Clear all files" (click)="clearAllFiles()"
-                            class="p-button-text p-button-xs"></button>
+                        <!-- <button pButton [disabled]="uploaded_files.length == 0"  label="Clear all files" (click)="clearAllFiles()"
+                            class="p-button-text p-button-xs"></button> -->
                         <input type="file" name="file" #file_upload accept="application/pdf" (change)="onFileSelected($event)" multiple>
                         <button *ngIf="uploaded_files.length > 0 && false" pButton class="p-button-outlined" (click)="file_upload.click()"><i class="pi pi-plus"></i> Add file(s) </button>
                     </div>
@@ -73,21 +73,21 @@
                     </div>
 
                     <div class="example_data">
-                        <chemscraper-pdf-viewer pdfUrl="assets/or100.09.tables.pdf"></chemscraper-pdf-viewer>
+                        <chemscraper-pdf-viewer pdfUrl="assets/chemscraper_example.pdf"></chemscraper-pdf-viewer>
                     </div>
                 </ng-container>
             </div>
 
         </p-panel>
 
-        <ng-container *ngIf="selectedInputMethod == 'upload_file'">
+        <!-- <ng-container *ngIf="selectedInputMethod == 'upload_file'">
             <h3>Email</h3>
             <h5>Leave an email to get a notification when your result is ready.</h5>
             <br>
             <div class="spacer"></div>
             <input type="email" name="email" pInputTextarea placeholder="Email" [(ngModel)]="userEmail" ngModel
                 #email="ngModel" email="true" (input)="enterEmail()">
-        </ng-container>
+        </ng-container> -->
         <div class="controls">
             <div class="buttons">
                 <br>
