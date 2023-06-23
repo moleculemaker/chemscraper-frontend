@@ -254,3 +254,18 @@ input[type="file"]{
     text-align: right;
   }
 }
+
+::ng-deep .p-datatable {
+    td {
+        vertical-align: middle;
+
+        &.column_controls {
+            ::ng-deep .p-button {
+                margin: {
+                    right: $padding * .35;
+                }
+                padding: ($padding * .25) ($padding);
+            }
+        }
+    }
+}
