@@ -11,7 +11,7 @@
 //**************** css ******************
 
 :host ::ng-deep .p-panel-header {
-    background-color: #F2F5FC;
+    background-color: css_var('interface_background_tint');
 }
 
 .panel_content {
@@ -49,7 +49,7 @@
 }
 
 :host ::ng-deep .p-message.p-message-info {
-    background: #F2F5FC;
+    background: css_var('interface_background_tint');
     border-width: 0 0 0 0;
     color: #224063;
     text-align: center;
@@ -66,7 +66,7 @@
     padding: ($padding * .5) ($padding * 1.5);
 
     border: {
-        bottom: 1px solid #dee2e6;
+        bottom: 1px solid css_var('interface_border');
     }
 
     h1,
@@ -233,7 +233,7 @@
     height: 200px;
     display: table;
     width: 97%;
-    background-color: #F8F9FA;
+    background-color: css_var('interface_background');
     border: dotted 1px #aaa;
     margin: 14px;
     border-radius: 6px;

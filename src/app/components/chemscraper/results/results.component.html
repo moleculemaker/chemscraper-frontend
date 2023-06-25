@@ -44,48 +44,60 @@
         <ng-container *ngIf="contentLoaded">
           <p-panel styleClass="padded">
             <ng-template pTemplate="header">
-              <div class="result-header-container">
-                <div>
-                  <!-- <p-button (click)="DocsDropdown.toggle($event)" styleClass="ui-button-success">
-                    <i class="p-button-icon-left pi pi-file-pdf"></i> Documents <i class="p-button-icon-right pi pi-angle-down"></i>
-                  </p-button>
-                  <p-overlayPanel styleClass="files-overlay" #DocsDropdown>
-                    <p-listbox [options]="fileNames" [(ngModel)]="selectedFile" [style]="{'width':'15rem'}"></p-listbox>
-                  </p-overlayPanel> -->
-                  Results
-                </div>
-                <div>
-                  <p-button (click)="DocsDropdown.toggle($event)" styleClass="ui-button-success">
-                    <i class="p-button-icon-left pi pi-download"></i> Export
-                  </p-button>
-                  <p-overlayPanel styleClass="files-overlay" #DocsDropdown>
-                    <p-listbox [options]="fileNames" [(ngModel)]="selectedFile" [style]="{'width':'15rem'}"></p-listbox>
-                  </p-overlayPanel>
-                </div>
+              <div class="title">
+                <!-- <p-button (click)="DocsDropdown.toggle($event)" styleClass="ui-button-success">
+                  <i class="p-button-icon-left pi pi-file-pdf"></i> Documents <i class="p-button-icon-right pi pi-angle-down"></i>
+                </p-button>
+                <p-overlayPanel styleClass="files-overlay" #DocsDropdown>
+                  <p-listbox [options]="fileNames" [(ngModel)]="selectedFile" [style]="{'width':'15rem'}"></p-listbox>
+                </p-overlayPanel> -->
+                Results
               </div>
-            </ng-template>
-            <div class="result-header-container">
+
+              <div class="spacer"></div>
+
               <div>
                 <p-button (click)="DocsDropdown.toggle($event)" styleClass="ui-button-success">
-                  <i class="p-button-icon-left pi pi-file-pdf"></i> Documents <i class="p-button-icon-right pi pi-angle-down"></i>
+                  <i class="p-button-icon-left pi pi-download"></i> Export
                 </p-button>
                 <p-overlayPanel styleClass="files-overlay" #DocsDropdown>
                   <p-listbox [options]="fileNames" [(ngModel)]="selectedFile" [style]="{'width':'15rem'}"></p-listbox>
                 </p-overlayPanel>
               </div>
-              <div>
+            </ng-template>
+
+            <div class="result-header-container">
+              <p-button (click)="DocsDropdown.toggle($event)" styleClass="p-button-outlined ui-button-success">
+                <i class="p-button-icon-left pi pi-file-pdf"></i> Documents <i class="p-button-icon-right pi pi-angle-down"></i>
+              </p-button>
+
+              <p-overlayPanel styleClass="files-overlay" #DocsDropdown>
+                <p-listbox [options]="fileNames" [(ngModel)]="selectedFile" [style]="{'width':'15rem'}"></p-listbox>
+              </p-overlayPanel>
+
+              <div class="spacer"></div>
+
+              <div class="header_group">
+                <div class="label">Apply document as table filter</div>
                 <p-selectButton [options]="tableFilterStateOptions" [(ngModel)]="tableFilterValue" optionLabel="label" optionValue="value"></p-selectButton>
               </div>
             </div>
             <div class="result-container">
               <div class="column1" [ngClass]="{'collapsed': !splitView}">
-                <!-- Content for column 1 goes here -->
-                <div class="document-path-bar">
-                  <p>Document Center > {{currentPDFName}}</p>
-                  <button (click)="toggleSplitView()">Collapse/Expand Column 1</button>
-                </div>
-                <div id="input_pdf_container" class="input_pdf_container">
-                  <chemscraper-pdf-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [highlightBoxes]="highlightBoxes"></chemscraper-pdf-viewer>
+                <p-button class="toggle_splitview_button" styleClass="p-button-outlined p-button-xs"
+                  [icon]="(splitView) ? 'pi pi-chevron-left' : 'pi pi-chevron-right'"
+                  (click)="toggleSplitView()"
+                ></p-button>
+
+                <div class="content">
+                  <!-- Content for column 1 goes here -->
+                  <div class="document-path-bar">
+                    Document Center > <span class="pdf_name">{{currentPDFName}}</span>
+                  </div>
+
+                  <div id="input_pdf_container" class="input_pdf_container">
+                    <chemscraper-pdf-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [highlightBoxes]="highlightBoxes"></chemscraper-pdf-viewer>
+                  </div>
                 </div>
               </div>
               <div class="column2">
