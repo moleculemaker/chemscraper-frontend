@@ -350,6 +350,13 @@ p-panel {
   overflow: hidden;
 }
 
+::ng-deep .molecule_table {
+  .p-paginator {
+    border: {
+      top: 1px solid css_var('interface_border');
+    }
+  }
+}
 
 .container ::ng-deep .p-sidebar{
   z-index: get-index(modal) !important;

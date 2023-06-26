@@ -113,7 +113,7 @@
                   <!-- <button pButton type="button" class="sort-button p-button-text" (click)="sortResults()"> Sort by <i class="p-button-icon-right pi pi-chevron-down"></i></button> -->
                 </div>
                 <div class="table-container">
-                  <p-table [value]="molecules" dataKey="id" selectionMode="single" [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)" (onRowUnselect)="onRowUnselected($event)" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="600px">
+                  <p-table [value]="molecules" dataKey="id" selectionMode="single" [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)" (onRowUnselect)="onRowUnselected($event)" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="600px" styleClass="molecule_table">
                     <ng-template pTemplate="header">
                       <tr>
                         <!-- <th><p-tableCheckbox></p-tableCheckbox></th> -->
