@@ -56,6 +56,8 @@ export interface Molecule {
   molecularWeight: string;
   chemicalSafety: string[];
   Description: string;
+  Location: string;
+  OtherInstances: string[];
 }
 
 export interface FileUploadResponse {

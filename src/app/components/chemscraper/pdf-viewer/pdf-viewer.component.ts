@@ -169,4 +169,8 @@ export class PdfViewerComponent {
     }
 
   }
+
+  onCanvasClick(event: MouseEvent): void {
+
+  }
 }
