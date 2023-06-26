@@ -337,8 +337,7 @@ p-panel {
 
 .search-input, .sort-text {
   flex: 8;
-  margin-right: 6px;
-  margin-left: 12px;
+  padding: ($padding * .5) $padding;
 }
 
 .filter-button, .sort-button {
@@ -390,6 +389,12 @@ p-panel {
 
       div:not(:first-child) {
         margin-top: 24px;
+      }
+
+      > div {
+        padding: {
+          left: $padding;
+        }
       }
     }
 
