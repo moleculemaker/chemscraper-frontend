@@ -57,9 +57,9 @@
               <div class="spacer"></div>
 
               <div>
-                <p-button (click)="DocsDropdown.toggle($event)" styleClass="ui-button-success">
+                <!-- <p-button (click)="DocsDropdown.toggle($event)" styleClass="ui-button-success">
                   <i class="p-button-icon-left pi pi-download"></i> Export
-                </p-button>
+                </p-button> -->
                 <p-overlayPanel styleClass="files-overlay" #DocsDropdown>
                   <p-listbox [options]="fileNames" [(ngModel)]="selectedFile" [style]="{'width':'15rem'}"></p-listbox>
                 </p-overlayPanel>
@@ -113,7 +113,7 @@
                   <!-- <button pButton type="button" class="sort-button p-button-text" (click)="sortResults()"> Sort by <i class="p-button-icon-right pi pi-chevron-down"></i></button> -->
                 </div>
                 <div class="table-container">
-                  <p-table [value]="molecules" dataKey="id" selectionMode="single" [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)" (onRowUnselect)="onRowUnselected($event)" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="600px" styleClass="molecule_table">
+                  <p-table [value]="molecules" dataKey="id" selectionMode="single" [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)" (onRowUnselect)="onRowUnselected($event)" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="700px" styleClass="molecule_table">
                     <ng-template pTemplate="header">
                       <tr>
                         <!-- <th><p-tableCheckbox></p-tableCheckbox></th> -->
@@ -177,7 +177,7 @@
                                 <div class="molecule-details-col2">
                                   <div>
                                     <p class="molecule-details-header">Molecular Information</p>
-                                    <p>Formula: {{molecule.molecularFormula}}
+                                    <p>Formula: {{molecule.molecularFormula}} <br>
                                       Weight: {{molecule.molecularWeight}} g/mol</p>
                                   </div>
                                   <div>
