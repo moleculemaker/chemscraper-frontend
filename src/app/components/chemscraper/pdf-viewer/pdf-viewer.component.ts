@@ -156,6 +156,10 @@ export class PdfViewerComponent {
     this.renderPage(this.pageNumber);
   }
 
+  getCurrentZoom() {
+    return Math.floor(this.scale * 100);
+  }
+
   highlightMolecule(moleculeIndex: number, page_num: number = -1) {
     this.highlightedMoleculeId = moleculeIndex;
     if(page_num == -1){
