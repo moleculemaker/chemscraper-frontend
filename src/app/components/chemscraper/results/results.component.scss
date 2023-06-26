@@ -91,7 +91,7 @@ a:link, a:visited, a:active {
 }
 
 :host ::ng-deep .p-message.p-message-info {
-    background: #F2F5FC;
+    background: css_var('interface_background_tint');
     border-width: 0 0 0 0;
     color: #224063;
     text-align: center;
@@ -160,39 +160,143 @@ a:link, a:visited, a:active {
 
 }
 
+p-panel {
+  ::ng-deep .p-panel-header {
+    gap: $padding * .5;
 
-p-panel{
-  &::ng-deep .result-header-container{
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
+    background: {
+      color: css_var('interface_background_tint');
+    }
+
+    padding: ($padding);
+
+    .title {
+      font: {
+        weight: bold;
+      }
+    }
+
+    .spacer {
+      flex-grow: 1;
+    }
   }
-  &::ng-deep .document-path-bar{
+
+  &::ng-deep .result-header-container {
     display: flex;
-    justify-content: space-between;
-    width: 100%;
+    align-items: center;
+    gap: $padding * .5;
+
+    background: {
+      color: css_var('interface_background');
+    }
+
+    padding: ($padding);
+
+    border: {
+      bottom: 1px solid css_var('interface_border');
+    }
+
+    .header_group {
+      display: flex;
+      align-items: center;
+      gap: $padding * .5;
+    }
+
+    .spacer {
+      flex-grow: 1;
+    }
   }
 }
 
 .result-container {
   display: flex;
+  gap: $padding;
+
   .column1 {
-    flex: 1;
+    position: relative;
+
     width: 50%;
-    transition: flex 0.3s ease;
+    transition: width 0.3s ease;
+
+    border: {
+      right: 1px solid css_var('interface_border');
+    }
+
+    &.collapsed {
+      width: 2rem;
+
+      .content {
+        width: 0;
+      }
+    }
+
+    ::ng-deep .toggle_splitview_button {
+      position: absolute;
+      right: 0px;
+      top: 0px;
+      z-index: 100;
+
+      button {
+        width: 2rem;
+        height: 2rem;
+
+        border: {
+          color: css_var('interface_border');
+          top: 0px;
+          right: 0px;
+        }
+
+        @include border-radius(0px);
+
+        &:not(:hover) {
+          color: css_var('interface_border');
+        }
+
+        .p-button-icon {
+          font: {
+            size: .65rem;
+          }
+        }
+      }
+    }
+
+    .content {
+      overflow: hidden;
+      flex-grow: 1;
+    }
+
+    .document-path-bar {
+      display: flex;
+      align-items: center;
+      gap: $padding * .25;
+
+      height: 2rem; //to match the splitview_button
+
+      padding: {
+        right: 2rem + ($padding * .5); //leave room for splitview_button
+        left: $padding;
+      }
+
+      border: {
+        bottom: 1px solid css_var('interface_border');
+      }
+
+      .pdf_name {
+        font: {
+          weight: bold;
+        }
+      }
+    }
   }
 
   .column2 {
     flex: 1;
     overflow-x: scroll;
     overflow-y: hidden;
-  }
 
-  .collapsed {
-    flex: 0;
-    width: 0;
-    padding: 0;
-    overflow: hidden;
+    border: {
+      left: 1px solid css_var('interface_border');
+    }
   }
 
   .input_pdf_container {
@@ -216,6 +320,19 @@ p-panel{
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.search-row {
+  padding: {
+    top: $padding;
+    right: $padding;
+    bottom: $padding * .25;
+    left: $padding * .25;
+  }
+}
+
+.sort-row {
+  padding: ($padding * 0) ($padding * .25);
 }
 
 .search-input, .sort-text {

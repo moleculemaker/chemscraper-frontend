@@ -36,6 +36,10 @@ $colors: map.merge($colors, (
 	header_link_hover: lighten(#d5618c, 30%),
 	header_popup_background: #d5618c,
 
+	interface_background: #f8f9fa,
+	interface_background_tint: #f2f5fc,
+	interface_border: #dee2e6,
+
 	status_error: #f88,
 	status_error_text: #a33,
 	status_warning: #fef2e8,
