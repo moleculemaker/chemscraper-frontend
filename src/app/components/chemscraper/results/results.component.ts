@@ -10,6 +10,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { PredictionRow, PollingResponseResult, PollingResponseStatus, SingleSeqResult, SeqResult, HighlightBox, Molecule } from '../../../models';
 import { ChemScraperService } from 'src/app/chemscraper.service';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-results',
@@ -49,6 +50,10 @@ export class ResultsComponent {
 
   pollForResult: boolean = true;
   selectedMolecule!: Molecule;
+
+  firstRowIndex: number = 0;
+
+  @ViewChild('resultsTable') resultsTable: Table;
 
   constructor(
     private router: Router,
@@ -342,6 +347,7 @@ export class ResultsComponent {
       }
       this.highlightBoxes[parseInt(molecule.page_no)].push({
         moleculeId: molecule.id,
+        moleculeName: molecule.name,
         x: parseInt(molecule.minX),
         y: parseInt(molecule.minY),
         width: parseInt(molecule.width),
@@ -365,6 +371,23 @@ export class ResultsComponent {
     if(event.data){
       this.pdfViewerComponent.highlightMolecule(-1);
     }
+  }
+
+  goToRow(rowIndex: number) {
+    // Read the current number of rows per page from the table
+    const rowsPerPage = this.resultsTable.rows;
+
+    // Calculate the start index of the page
+    this.firstRowIndex = Math.floor(rowIndex / rowsPerPage) * rowsPerPage;
+
+    // Scroll to the specific row within the page
+    setTimeout(() => {
+      const rowElements = document.querySelectorAll('.p-datatable-tbody > tr');
+      if (rowElements && rowIndex < this.molecules.length) {
+        rowElements[rowIndex % rowsPerPage].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        this.selectedMolecule = this.molecules[rowIndex];
+      }
+    });
   }
 
 }
