@@ -81,9 +81,6 @@
     }
 }
 
-.loader {
-}
-
 a:link, a:visited, a:active {
     color: #495057;
 }
@@ -91,14 +88,14 @@ a:link, a:visited, a:active {
 .card {
     margin: auto;
     width: 70%;
-}   
+}
 
 :host ::ng-deep .p-message.p-message-info {
-    background: #F2F5FC;
+    background: css_var('interface_background_tint');
     border-width: 0 0 0 0;
     color: #224063;
     text-align: center;
-    .p-message-icon { 
+    .p-message-icon {
         display: none;
     }
 }
@@ -123,4 +120,340 @@ a:link, a:visited, a:active {
     margin: auto;
     text-align: center;
     width: 100%;
+}
+
+.loadingDiv{
+  height: 20rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #F3F5FB;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+  &::ng-deep .p-progress-spinner-circle{
+    stroke: #224063 !important;
+  }
+  & > :first-child {
+    margin-bottom: 48px;
+  }
+}
+
+.loader{
+  .loadingTitle{
+    margin-bottom: 40px;
+  }
+
+  &::ng-deep .p-steps-title{
+    color: #FFFFFF !important;
+  }
+
+  &::ng-deep .completed-stage{
+    background: #224063 !important;
+    color: #FFFFFF !important;
+    border-color: #224063;
+  }
+  &::ng-deep .p-disabled{
+    opacity: 1;
+  }
+
+}
+
+p-panel {
+  ::ng-deep .p-panel-header {
+    gap: $padding * .5;
+
+    background: {
+      color: css_var('interface_background_tint');
+    }
+
+    padding: ($padding);
+
+    .title {
+      font: {
+        weight: bold;
+      }
+    }
+
+    .spacer {
+      flex-grow: 1;
+    }
+  }
+
+  &::ng-deep .result-header-container {
+    display: flex;
+    align-items: center;
+    gap: $padding * .5;
+
+    background: {
+      color: css_var('interface_background');
+    }
+
+    padding: ($padding);
+
+    border: {
+      bottom: 1px solid css_var('interface_border');
+    }
+
+    .header_group {
+      display: flex;
+      align-items: center;
+      gap: $padding * .5;
+    }
+
+    .spacer {
+      flex-grow: 1;
+    }
+  }
+}
+
+.result-container {
+  display: flex;
+  gap: $padding;
+
+  .column1 {
+    position: relative;
+
+    width: 50%;
+    transition: width 0.3s ease;
+
+    border: {
+      right: 1px solid css_var('interface_border');
+    }
+
+    &.collapsed {
+      width: 2rem;
+
+      .content {
+        width: 0;
+      }
+    }
+
+    ::ng-deep .toggle_splitview_button {
+      position: absolute;
+      right: 0px;
+      top: 0px;
+      z-index: 100;
+
+      button {
+        width: 2rem;
+        height: 2rem;
+
+        border: {
+          color: css_var('interface_border');
+          top: 0px;
+          right: 0px;
+        }
+
+        @include border-radius(0px);
+
+        &:not(:hover) {
+          color: css_var('interface_border');
+        }
+
+        .p-button-icon {
+          font: {
+            size: .65rem;
+          }
+        }
+      }
+    }
+
+    .content {
+      overflow: hidden;
+      flex-grow: 1;
+    }
+
+    .document-path-bar {
+      display: flex;
+      align-items: center;
+      gap: $padding * .25;
+
+      height: 2rem; //to match the splitview_button
+
+      padding: {
+        right: 2rem + ($padding * .5); //leave room for splitview_button
+        left: $padding;
+      }
+
+      border: {
+        bottom: 1px solid css_var('interface_border');
+      }
+
+      .pdf_name {
+        font: {
+          weight: bold;
+        }
+      }
+    }
+  }
+
+  .column2 {
+    flex: 1;
+    overflow-x: scroll;
+    overflow-y: hidden;
+
+    border: {
+      left: 1px solid css_var('interface_border');
+    }
+  }
+
+  .input_pdf_container {
+    overflow: {
+        y: auto;
+    }
+    min: {
+        height: 8rem;
+    }
+    max: {
+        height: 750px;
+    }
+
+    // padding: $padding ($padding * 1.5);
+
+    overflow-wrap: break-word;
+  }
+}
+
+.search-row, .sort-row  {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-row {
+  padding: {
+    top: $padding;
+    right: $padding;
+    bottom: $padding * .25;
+    left: $padding * .25;
+  }
+}
+
+.sort-row {
+  padding: ($padding * 0) ($padding * .25);
+}
+
+.search-input, .sort-text {
+  flex: 8;
+  padding: ($padding * .5) ($padding * .75);
+}
+
+.filter-button, .sort-button {
+  flex: 2;
+  margin-left: 6px;
+}
+
+.table-container {
+  // height: 100%;
+  overflow: hidden;
+}
+
+::ng-deep .molecule_table {
+  .p-paginator {
+    border: {
+      top: 1px solid css_var('interface_border');
+    }
+  }
+}
+
+.container ::ng-deep .p-sidebar{
+  z-index: get-index(modal) !important;
+}
+
+.result-molecules-details-container{
+  &::ng-deep .p-panel-header{
+    background-color: #FFFFFF !important;
+    border-bottom: none !important;
+  }
+
+  &::ng-deep .result-molecules-details-button{
+    height: 0.5rem;
+    font-size: 0.75rem;
+    .p-button-label{
+      font-weight: 400;
+    }
+  }
+
+  &::ng-deep .header-buttons-container{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    .tag-buttons{
+      display: flex;
+      gap: 10px;
+    }
+  }
+
+  &::ng-deep .molecule-details-container{
+    display: inline-grid;
+
+    .molecule-details-col1{
+      grid-column: 1;
+      grid-row: 1;
+
+      div:not(:first-child) {
+        margin-top: 24px;
+      }
+
+      > div {
+        padding: {
+          left: $padding;
+        }
+      }
+    }
+
+    .molecule-details-col2{
+      grid-column: 2;
+      grid-row: 1;
+      margin-left: 40px;
+
+      div:not(:first-child) {
+        margin-top: 24px;
+      }
+    }
+
+    .molecule-details-col3{
+      grid-column: 3;
+      grid-row: 1;
+      margin-left: 40px;
+    }
+
+    .molecule-details-row2{
+      grid-column: 1 / 3;
+      grid-row: 2;
+      margin-top: 24px;
+    }
+
+    .description {
+      padding: $padding;
+      padding: {
+        top: 0px;
+      }
+    }
+  }
+}
+
+.molecule-details-header{
+  color: #495057;
+  font-weight: 600;
+  padding-bottom: 5px;
+}
+
+:host ::ng-deep .page-container .container{
+  max-width: 1180px;
+}
+
+:host ::ng-deep .p-panel-content{
+  padding: 0px !important;
+}
+
+.table-container ::ng-deep td{
+  vertical-align: middle;
+}
+
+:host ::ng-deep .p-datatable-table .p-datatable-tbody > tr > td {
+  overflow-wrap: anywhere;
 }

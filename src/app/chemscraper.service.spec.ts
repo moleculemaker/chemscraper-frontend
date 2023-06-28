@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SequenceService } from './sequence.service';
+import { ChemScraperService } from './chemscraper.service';
 
-describe('SequenceService', () => {
-  let service: SequenceService;
+describe('FileUploadService', () => {
+  let service: ChemScraperService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SequenceService);
+    service = TestBed.inject(ChemScraperService);
   });
 
   it('should be created', () => {

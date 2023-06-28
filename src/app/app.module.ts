@@ -13,17 +13,23 @@ import { PrimeIcons} from 'primeng/api';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SkeletonModule } from 'primeng/skeleton';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { StepsModule } from 'primeng/steps';
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
 import { MessagesModule } from 'primeng/messages';
-
+import { DropdownModule } from 'primeng/dropdown';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ListboxModule } from 'primeng/listbox';
+import { InputTextModule } from 'primeng/inputtext';
+import { SidebarModule } from 'primeng/sidebar';
 
 import { LandingPageComponent} from './components/landing-page/landing-page.component';
 
 import { ConfigurationComponent} from './components/chemscraper/configuration/configuration.component';
 import { ResultsComponent } from './components/chemscraper/results/results.component';
 
-import { SequenceService } from './sequence.service';
+import { ChemScraperService } from './chemscraper.service';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxMatomoTrackerModule } from '@ngx-matomo/tracker';
 import { NgxMatomoRouterModule } from '@ngx-matomo/router';
@@ -55,7 +61,14 @@ import { PdfViewerDialogServiceComponent } from './components/chemscraper/pdf-vi
     ProgressBarModule,
     SelectButtonModule,
     SkeletonModule,
+    ProgressSpinnerModule,
+    StepsModule,
+    DropdownModule,
     TableModule,
+    InputTextModule,
+    ListboxModule,
+    OverlayPanelModule,
+    SidebarModule,
     FileUploadModule,
     PanelModule,
     BrowserAnimationsModule,
@@ -66,11 +79,11 @@ import { PdfViewerDialogServiceComponent } from './components/chemscraper/pdf-vi
     }),
     NgxMatomoRouterModule,
     NgHcaptchaModule.forRoot({
-      siteKey: '0b1663cb-26b9-4e6f-bfa9-352bdd3aeb9f',
+      siteKey: '41c35ed8-6425-4764-b3d5-23c1b896f0dd',
       languageCode: 'en' // optional, will default to browser language
   })
   ],
-  providers: [SequenceService],
+  providers: [ChemScraperService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

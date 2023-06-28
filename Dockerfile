@@ -11,7 +11,8 @@ COPY ./ /usr/local/app/
 RUN npm install
 
 # Generate the build of the application
-RUN npm run build
+ARG configuration=production
+RUN npm run build --configuration=$configuration
 
 
 # Stage 2: Serve app with nginx server

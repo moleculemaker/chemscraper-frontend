@@ -21,6 +21,7 @@ export class PdfViewerDialogServiceComponent {
   pageRendering: boolean = false;
   pageNumPending: number = -1;
   pdfData: Uint8Array;
+  scale: number = 1;
 
   constructor(public ref: DynamicDialogRef, public config: DynamicDialogConfig){
     this.pdfData = config.data.pdfData;
@@ -45,7 +46,7 @@ export class PdfViewerDialogServiceComponent {
     this.pageRendering = true;
     this.pdf.getPage(pageNumber).then((page) => {
 
-      let scale = 1.5;
+      let scale = this.scale;
       let viewport = page.getViewport({scale: scale});
 
       // Prepare canvas using PDF page dimensions
@@ -126,5 +127,19 @@ export class PdfViewerDialogServiceComponent {
     }
     this.pageNumber = num;
     this.queueRenderPage(this.pageNumber);
+  }
+
+  zoomIn(){
+    this.scale += 0.1;
+    this.renderPage(this.pageNumber);
+  }
+
+  zoomOut(){
+    this.scale -= 0.1;
+    this.renderPage(this.pageNumber);
+  }
+
+  getCurrentZoom() {
+    return Math.floor(this.scale * 100);
   }
 }
