@@ -386,6 +386,7 @@ export class ResultsComponent {
       if (rowElements && rowIndex < this.molecules.length) {
         rowElements[rowIndex % rowsPerPage].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
         this.selectedMolecule = this.molecules[rowIndex];
+        this.pdfViewerComponent.highlightMolecule(this.selectedMolecule.id, parseInt(this.selectedMolecule.page_no));
       }
     });
   }
