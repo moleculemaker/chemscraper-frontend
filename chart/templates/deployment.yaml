@@ -19,6 +19,40 @@ spec:
         - name: chemscraper-frontend
           image: {{ .Values.controller.image }}
 
+          env:
+
+          - name: JOB_MANAGER_API_HOSTNAME
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Release.Name }}-config
+                key: hostname
+
+          - name: JOB_MANAGER_API_BASEPATH
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Release.Name }}-config
+                key: basePath
+
+          - name: OAUTH_SIGNIN_URL
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Release.Name }}-config
+                key: signInUrl
+
+          - name: OAUTH_SIGNOUT_URL
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Release.Name }}-config
+                key: signOutUrl
+
+          - name: OAUTH_USERINFO_URL
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Release.Name }}-config
+                key: userInfoUrl
+
+
+
           ports:
             - containerPort: 80
           imagePullPolicy: Always
