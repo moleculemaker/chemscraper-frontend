@@ -55,6 +55,14 @@
 
         <div class="spacer"></div>
 
+        <div class="link">
+
+            <p-menu #menu class="user_menu" [model]="userMenuItems" [popup]="true" appendTo="body"></p-menu>
+            <div class="user_menu_button" *ngIf="userInfo" (click)="menu.toggle($event)">{{ userInfo.email }}</div>
+
+            <a class="login_button" href="#" *ngIf="!userInfo" (click)="$event.preventDefault();$event.stopPropagation();login()">Sign In</a>
+
+        </div>
         <!-- <div class="link">
 
             <a href="https://docs.google.com/document/d/1zFk1Lb7EAhMdcRp2KN9eyWVQSTBnT2HRYm3UKfZt6CE/edit?usp=sharing"

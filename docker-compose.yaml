@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  clean-frontend:
+    image: moleculemaker/clean-frontend:staging
+    container_name: clean-frontend
+    build:
+      context: .
+    env_file: .env
+    ports:
+      - 8989:80
+    restart: unless-stopped
+
+    volumes:
+     - ./src/assets/config/:/usr/share/nginx/html/assets/config:ro
+     #- ./dist/clean:/usr/share/nginx/html:ro
