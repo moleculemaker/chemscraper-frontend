@@ -1,8 +1,8 @@
 {
-  "hostname": "https://mmli.fastapi.localhost",
+  "hostname": "http://mmli.fastapi.localhost",
   "basePath": "/api/v1",
 
-  "signInUrl": "https://mmli1.ncsa.illinois.edu/oauth2/start?rd=http%3A%2F%2Fchemscraper.frontend.proxy.localhost%2Fconfiguration",
-  "signOutUrl": "https://mmli1.ncsa.illinois.edu/oauth2/sign_out?rd=http%3A%2F%2Fchemscraper.frontend.proxy.localhost%2Fconfiguration",
-  "userInfoUrl": "https://mmli1.ncsa.illinois.edu/oauth2/userinfo"
+  "signInUrl": "http://oauth2.proxy.localhost/oauth2/start?rd=http%3A%2F%2Fchemscraper.proxy.localhost%2Fconfiguration",
+  "signOutUrl": "http://oauth2.proxy.localhost/oauth2/sign_out?rd=http%3A%2F%2Fchemscraper.proxy.localhost%2Fconfiguration",
+  "userInfoUrl": "http://oauth2.proxy.localhost/oauth2/userinfo"
 }
