@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
-import { environment } from '../environments/environment';
 
 import { PostResponse, ChemScraperAnalyzeRequestBody, ExampleData, FileUploadResponse, Molecule } from './models';
+import {EnvironmentService} from "./services/environment.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +15,13 @@ export class ChemScraperService {
     submitted_at: "2020-01-01 10:10:10"
   };
 
-  private SERVER_URL: string = environment.apiBaseUrl + '/chemscraper/';
+  private SERVER_URL = this.env.hostname + this.env.basePath + '/chemscraper/';
 
-  constructor(private http: HttpClient) { }
+  get env() {
+    return this.envService.getEnvConfig();
+  }
+
+  constructor(private http: HttpClient, private envService: EnvironmentService) {  }
 
   getExampleResponse(dataLabel: string): Observable<PostResponse>{
     this.responseFromExample.jobId = dataLabel;
