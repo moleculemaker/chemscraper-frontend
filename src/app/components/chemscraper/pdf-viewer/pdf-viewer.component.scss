@@ -58,3 +58,12 @@
   // width: 100%;
   /* Other styles for the scrollable canvas div */
 }
+
+.tooltip {
+  position: absolute;
+  display: none;
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+}
