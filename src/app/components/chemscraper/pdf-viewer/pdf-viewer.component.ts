@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import * as pdfjsLib from 'pdfjs-dist';
 import { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -16,6 +16,10 @@ export class PdfViewerComponent {
   @Input()
   highlightBoxes: HighlightBox[][] = [];
 
+  @Output()
+  scrollToMolecule = new EventEmitter<number>();
+
+
   pdf: PDFDocumentProxy;
   totalPages: number = 0;
   pageNumber: number = 1;
@@ -25,6 +29,12 @@ export class PdfViewerComponent {
   scale: number = 1;
   boxPadding: number = 5;
   highlightedMoleculeId: number = -1;
+  canvas: HTMLCanvasElement;
+  context: CanvasRenderingContext2D | null;
+  canvasBoxes: Path2D[] = [];
+  hoveredMoleculeTooltipText: string = "";
+
+  tooltipStyle = {};
 
   constructor(){}
 
@@ -55,14 +65,14 @@ export class PdfViewerComponent {
       const originY = page.view[1];
 
       // Prepare canvas using PDF page dimensions
-      let canvas = document.getElementById('pdf-canvas') as HTMLCanvasElement;
-      let context = canvas.getContext('2d');
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
+      this.canvas = document.getElementById('pdf-canvas') as HTMLCanvasElement;
+      this.context = this.canvas.getContext('2d');
+      this.canvas.height = viewport.height;
+      this.canvas.width = viewport.width;
 
       // Render PDF page into canvas context
       let renderContext = {
-        canvasContext: context!,
+        canvasContext: this.context!,
         viewport: viewport
       };
       let renderTask = page.render(renderContext);
@@ -70,8 +80,8 @@ export class PdfViewerComponent {
         this.pageRendering = false;
 
         if(this.highlightBoxes && pageNumber < this.highlightBoxes.length){
+          this.canvasBoxes = [];
           this.highlightBoxes[pageNumber].forEach( (box) => {
-            // const padding = this.boxPadding * scale;
             let boxX = (box.x * 72.0) / 300 - originX - this.boxPadding;
             let boxY = (box.y * 72.0) / 300 - originY - this.boxPadding;
             boxX = boxX ? boxX : 0;
@@ -82,27 +92,27 @@ export class PdfViewerComponent {
             let scaledBox = {x: scale * boxX, y: scale * boxY, width: scale * boxWidth, height: scale * boxHeight}
 
             const cornerRadius = scale * 5;
-            if(context){
-              context.beginPath();
-              context.moveTo(scaledBox.x + cornerRadius, scaledBox.y);
-              context.lineTo(scaledBox.x + scaledBox.width - cornerRadius, scaledBox.y);
-              context.arcTo(scaledBox.x + scaledBox.width, scaledBox.y, scaledBox.x + scaledBox.width, scaledBox.y + cornerRadius, cornerRadius);
-              context.lineTo(scaledBox.x + scaledBox.width, scaledBox.y + scaledBox.height - cornerRadius);
-              context.arcTo(scaledBox.x + scaledBox.width, scaledBox.y + scaledBox.height, scaledBox.x + scaledBox.width - cornerRadius, scaledBox.y + scaledBox.height, cornerRadius);
-              context.lineTo(scaledBox.x + cornerRadius, scaledBox.y + scaledBox.height);
-              context.arcTo(scaledBox.x, scaledBox.y + scaledBox.height, scaledBox.x, scaledBox.y + scaledBox.height - cornerRadius, cornerRadius);
-              context.lineTo(scaledBox.x, scaledBox.y + cornerRadius);
-              context.arcTo(scaledBox.x, scaledBox.y, scaledBox.x + cornerRadius, scaledBox.y, cornerRadius);
-              context.closePath();
-              context.fillStyle = "rgba(34, 64, 99, 0.1)";
-              context.strokeStyle = 'rgba(34, 64, 99, 1)';
+            if(this.context){
+              let path = new Path2D();
+              path.moveTo(scaledBox.x + cornerRadius, scaledBox.y);
+              path.lineTo(scaledBox.x + scaledBox.width - cornerRadius, scaledBox.y);
+              path.arcTo(scaledBox.x + scaledBox.width, scaledBox.y, scaledBox.x + scaledBox.width, scaledBox.y + cornerRadius, cornerRadius);
+              path.lineTo(scaledBox.x + scaledBox.width, scaledBox.y + scaledBox.height - cornerRadius);
+              path.arcTo(scaledBox.x + scaledBox.width, scaledBox.y + scaledBox.height, scaledBox.x + scaledBox.width - cornerRadius, scaledBox.y + scaledBox.height, cornerRadius);
+              path.lineTo(scaledBox.x + cornerRadius, scaledBox.y + scaledBox.height);
+              path.arcTo(scaledBox.x, scaledBox.y + scaledBox.height, scaledBox.x, scaledBox.y + scaledBox.height - cornerRadius, cornerRadius);
+              path.lineTo(scaledBox.x, scaledBox.y + cornerRadius);
+              path.arcTo(scaledBox.x, scaledBox.y, scaledBox.x + cornerRadius, scaledBox.y, cornerRadius);
+              path.closePath();
+              this.context.fillStyle = "rgba(34, 64, 99, 0.1)";
+              this.context.strokeStyle = 'rgba(34, 64, 99, 1)';
               if(this.highlightedMoleculeId >= 0 && box.moleculeId == this.highlightedMoleculeId){
-                context.fillStyle = "rgba(5, 0, 255, 0.1)";
-                context.strokeStyle = 'rgba(5, 0, 255, 1)';
+                this.context.fillStyle = "rgba(5, 0, 255, 0.1)";
+                this.context.strokeStyle = 'rgba(5, 0, 255, 1)';
               }
-              context.fill();
-              context.stroke();
-
+              this.context.fill(path);
+              this.context.stroke(path);
+              this.canvasBoxes.push(path);
             }
           });
         }
@@ -162,6 +172,7 @@ export class PdfViewerComponent {
 
   highlightMolecule(moleculeIndex: number, page_num: number = -1) {
     this.highlightedMoleculeId = moleculeIndex;
+
     if(page_num == -1){
       this.queueRenderPage(this.pageNumber);
     } else {
@@ -171,6 +182,59 @@ export class PdfViewerComponent {
   }
 
   onCanvasClick(event: MouseEvent): void {
+    const rect = this.canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
 
+    for (let i = 0; i < this.canvasBoxes.length; i++) {
+      if (this.context && this.context.isPointInPath(this.canvasBoxes[i], x, y)) {
+        this.scrollToMolecule.emit(this.highlightBoxes[this.pageNumber][i].moleculeId);
+        return;
+      }
+    }
   }
+
+  onCanvasMouseMove(event: MouseEvent): void {
+    const rect = this.canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    let isOverMolecule = -1;
+
+    for (let i = 0; i < this.canvasBoxes.length; i++) {
+      if (this.context && this.context.isPointInPath(this.canvasBoxes[i], x, y)) {
+        isOverMolecule = i;
+        let moleculeName = this.highlightBoxes[this.pageNumber][isOverMolecule].moleculeName;
+        if (moleculeName == 'Unavailable') {
+          this.hoveredMoleculeTooltipText = 'Unable to identify';
+        } else {
+          this.hoveredMoleculeTooltipText = `Matched as ${moleculeName}`;
+        }
+        break;
+      }
+    }
+
+    if (isOverMolecule >= 0) {
+      // Show tooltip and set its position
+      this.tooltipStyle = {
+        display: 'block',
+        top: `${y}px`,
+        left: `${x}px`,
+      };
+    } else {
+      // Hide tooltip
+      this.tooltipStyle = {
+        display: 'none'
+      };
+    }
+  }
+
+  onCanvasMouseOut(event: MouseEvent): void {
+    // Hide tooltip when mouse leaves the canvas
+    this.tooltipStyle = {
+      display: 'none'
+    };
+  }
+
+
 }

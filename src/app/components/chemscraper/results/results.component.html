@@ -96,7 +96,7 @@
                   </div>
 
                   <div id="input_pdf_container" class="input_pdf_container">
-                    <chemscraper-pdf-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [highlightBoxes]="highlightBoxes"></chemscraper-pdf-viewer>
+                    <chemscraper-pdf-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [highlightBoxes]="highlightBoxes" (scrollToMolecule)="goToRow($event)"></chemscraper-pdf-viewer>
                   </div>
                 </div>
               </div>
@@ -113,7 +113,7 @@
                   <!-- <button pButton type="button" class="sort-button p-button-text" (click)="sortResults()"> Sort by <i class="p-button-icon-right pi pi-chevron-down"></i></button> -->
                 </div>
                 <div class="table-container">
-                  <p-table [value]="molecules" dataKey="id" selectionMode="single" [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)" (onRowUnselect)="onRowUnselected($event)" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="700px" styleClass="molecule_table">
+                  <p-table #resultsTable [value]="molecules" dataKey="id" selectionMode="single" [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)" (onRowUnselect)="onRowUnselected($event)" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="700px" styleClass="molecule_table" [(first)]="firstRowIndex">
                     <ng-template pTemplate="header">
                       <tr>
                         <!-- <th><p-tableCheckbox></p-tableCheckbox></th> -->
@@ -201,6 +201,7 @@
                       </tr>
                     </ng-template>
                   </p-table>
+                  <button (click)="goToRow(18)">Go to Row 19</button>
                 </div>
               </div>
             </div>

@@ -17,6 +17,7 @@
     </div>
   </div>
   <div>
-    <canvas id="pdf-canvas" class="scrollable-canvas" (click)="onCanvasClick($event)"></canvas>
+    <canvas id="pdf-canvas" class="scrollable-canvas" (click)="onCanvasClick($event)" (mousemove)="onCanvasMouseMove($event)" (mouseout)="onCanvasMouseOut($event)"></canvas>
   </div>
 </div>
+<div #tooltip class="tooltip" [ngStyle]="tooltipStyle">{{hoveredMoleculeTooltipText}}</div>
