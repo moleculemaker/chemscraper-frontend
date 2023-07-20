@@ -6,7 +6,16 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+
+    "openapi:clean": "rm -rf src/app/api/",
+
+    "openapi": "openapi-generator-cli generate --skip-validate-spec -i openapi/mmli-backend.openapi.json -g typescript-angular -o src/app/api/mmli-backend/v1",
+    "openapi:sync": "curl https://mmli.fastapi.mmli1.ncsa.illinois.edu/openapi.json > openapi/mmli-backend.openapi.json && cat openapi/mmli-backend.openapi.json",
+    "openapi:live": "npm run openapi:sync && npm run openapi",
+
+    "openapi:sync:local": "curl http://localhost:8080/openapi.json > openapi/mmli-backend.openapi.json && cat openapi/mmli-backend.openapi.json",
+    "openapi:live:local": "npm run openapi:sync:local && npm run openapi"
   },
   "private": true,
   "dependencies": {
@@ -32,6 +41,7 @@
     "@angular-devkit/build-angular": "^15.1.6",
     "@angular/cli": "~15.1.6",
     "@angular/compiler-cli": "^15.1.0",
+    "@openapitools/openapi-generator-cli": "^2.5.2",
     "@types/jasmine": "~4.3.0",
     "@types/node": "^18.15.3",
     "jasmine-core": "~4.5.0",

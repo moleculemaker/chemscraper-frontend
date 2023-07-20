@@ -38,11 +38,13 @@ import { FileDragNDropDirective } from './components/chemscraper/configuration/f
 import { PdfViewerComponent } from './components/chemscraper/pdf-viewer/pdf-viewer.component';
 import { PdfViewerDialogServiceComponent } from './components/chemscraper/pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
 import {EnvironmentService} from "./services/environment.service";
+import {ApiModule, Configuration} from "./api/mmli-backend/v1";
 import {MenuModule} from "primeng/menu";
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig('/assets/config/envvars.json');
 };
+
 
 @NgModule({
   declarations: [
@@ -88,7 +90,9 @@ const initAppFn = (envService: EnvironmentService) => {
       siteKey: '41c35ed8-6425-4764-b3d5-23c1b896f0dd',
       languageCode: 'en' // optional, will default to browser language
     }),
-    MenuModule
+    MenuModule,
+
+    ApiModule.forRoot(() =>  new Configuration()),
   ],
   providers: [
     ChemScraperService,
