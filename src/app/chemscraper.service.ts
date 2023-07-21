@@ -26,14 +26,9 @@ export class ChemScraperService {
     return this.apiService.analyzeDocumentsChemscraperAnalyzePost(requestBody);
   }
 
-  fileUpload(formData: FormData, jobID: string): Observable<FileUploadResponse>{
-    if(jobID && jobID == "") {
-      //return this.http.post<FileUploadResponse>(this.SERVER_URL + 'upload', formData); //should return a jobID
-      return this.apiService.uploadFileBucketNameUploadPost('chemscraper', formData.get('file') as Blob);
-    } else {
-      //return this.http.post<FileUploadResponse>(this.SERVER_URL + 'upload', formData, { params: params }); //should return a jobID
-      return this.apiService.uploadFileBucketNameUploadPost('chemscraper', formData.get('file') as Blob, jobID);
-    }
+  fileUpload(formData: FormData, jobID?: string): Observable<FileUploadResponse>{
+    const fileData = formData.get('file') as Blob;
+    return this.apiService.uploadFileBucketNameUploadPost('chemscraper', fileData, jobID);
   }
 
   getResultStatus(jobID: string): Observable<string>{
