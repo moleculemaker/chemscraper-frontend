@@ -1,9 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 import { PostResponse, FileUploadResponse } from './models';
-import { EnvironmentService } from "./services/environment.service";
 import { AnalyzeRequestBody, DefaultService, Molecule } from "./api/mmli-backend/v1";
 
 @Injectable({
@@ -16,7 +14,7 @@ export class ChemScraperService {
     submitted_at: "2020-01-01 10:10:10"
   };
 
-  constructor(private http: HttpClient, private apiService: DefaultService) {  }
+  constructor(private apiService: DefaultService) {  }
 
   getExampleResponse(dataLabel: string): Observable<PostResponse>{
     this.responseFromExample.jobId = dataLabel;
