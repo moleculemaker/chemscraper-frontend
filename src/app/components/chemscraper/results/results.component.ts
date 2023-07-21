@@ -293,9 +293,6 @@ export class ResultsComponent {
             if(jobID)
             this._chemScraperService.getResult(jobID).subscribe(
               (data) => {
-                data.forEach(molecule => {
-                  molecule.structure = this.sanitizer.bypassSecurityTrustHtml(molecule.structure.toString());
-                })
                 this.molecules = data;
                 this.updateStatusStage(2);
 

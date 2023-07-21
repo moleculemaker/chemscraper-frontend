@@ -130,7 +130,7 @@
                       <tr [pSelectableRow]="molecule" [pRowToggler]="molecule">
                         <!-- <td ><p-tableCheckbox [value]="molecule" (click)="selectRow($event)"></p-tableCheckbox></td> -->
                         <td> <i [ngClass]="expanded ? 'pi pi-chevron-down p-button-icon-left' : 'pi pi-chevron-right p-button-icon-left'"></i> {{ molecule.name }}</td>
-                        <td [innerHTML]="molecule.structure"></td>
+                        <td [innerHTML]="molecule.structure | safe:'html'"></td>
                         <td>{{ molecule.SMILE }}</td>
                         <!-- <td *ngIf="!splitView">{{ molecule.doc_no }}</td> -->
                         <td *ngIf="!splitView">{{ molecule.page_no }}</td>

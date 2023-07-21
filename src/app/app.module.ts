@@ -40,6 +40,7 @@ import { PdfViewerDialogServiceComponent } from './components/chemscraper/pdf-vi
 import {EnvironmentService} from "./services/environment.service";
 import {ApiModule, Configuration} from "./api/mmli-backend/v1";
 import {MenuModule} from "primeng/menu";
+import {SafePipe} from "./pipes/safe.pipe";
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig('/assets/config/envvars.json');
@@ -49,6 +50,7 @@ const initAppFn = (envService: EnvironmentService) => {
 @NgModule({
   declarations: [
     AppComponent,
+    SafePipe,
 
     LandingPageComponent,
     FileDragNDropDirective,

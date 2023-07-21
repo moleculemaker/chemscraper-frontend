@@ -16,11 +16,7 @@ export class ChemScraperService {
     submitted_at: "2020-01-01 10:10:10"
   };
 
-  get env() {
-    return this.envService.getEnvConfig();
-  }
-
-  constructor(private http: HttpClient, private envService: EnvironmentService, private apiService: DefaultService) {  }
+  constructor(private http: HttpClient, private apiService: DefaultService) {  }
 
   getExampleResponse(dataLabel: string): Observable<PostResponse>{
     this.responseFromExample.jobId = dataLabel;
@@ -43,22 +39,18 @@ export class ChemScraperService {
   }
 
   getResultStatus(jobID: string): Observable<string>{
-    //return this.http.get<string>(this.SERVER_URL + 'result-status/' + jobID)
     return this.apiService.getResultStatusBucketNameResultStatusJobIdGet('chemscraper', jobID);
   }
 
   getResult(jobID: string): Observable<Molecule[]>{
-    //return this.http.get<Molecule[]>(this.SERVER_URL + 'results/' + jobID);
     return this.apiService.getResultsBucketNameResultsJobIdGet('chemscraper', jobID);
   }
 
   getError(jobID: string): Observable<string>{
-    //return this.http.get<string>(this.SERVER_URL + 'errors/' + jobID);
     return this.apiService.getErrorsBucketNameErrorsJobIdGet('chemscraper', jobID);
   }
 
   getInputPDf(jobID: string): Observable<string[]>{
-    //return this.http.get<string[]>(this.SERVER_URL + 'inputs/' + jobID);
     return this.apiService.getInputFileBucketNameInputsJobIdGet('chemscraper', jobID);
   }
 }
