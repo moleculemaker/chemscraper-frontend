@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "clean": {
+    "chemscraper": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/clean",
+            "outputPath": "dist/chemscraper",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -100,13 +100,13 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "clean:build:production"
+              "browserTarget": "chemscraper:build:production"
             },
             "staging": {
-              "browserTarget": "clean:build:staging"
+              "browserTarget": "chemscraper:build:staging"
             },
             "development": {
-              "browserTarget": "clean:build:development"
+              "browserTarget": "chemscraper:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -114,7 +114,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "clean:build"
+            "browserTarget": "chemscraper:build"
           }
         },
         "test": {

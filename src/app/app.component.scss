@@ -60,6 +60,36 @@ header {
         flex-grow: 1;
     }
 
+    .user_menu {
+        /* Coming Soon banner = 8000, top banner = 4500, this should be between them */
+        cursor: pointer !important;
+        z-index: 5500;
+    }
+
+    .login_button, .user_menu_button {
+        cursor: pointer !important;
+
+        color: css_var('button_secondary');
+
+        padding: ($padding * .25) ($padding * .5);
+
+        font: {
+            size: .75rem;
+        }
+        text: {
+            transform: uppercase;
+        }
+
+        @include border-radius($border_radius);
+
+        &:hover {
+            color: css_var('background');
+            background: {
+               color: css_var('button_secondary');
+            }
+        }
+    }
+
     .coming_soon {
         position: relative;
 

@@ -28,21 +28,23 @@
 
     <div class="spacer"></div>
 
-    <!-- <div class="coming_soon"
-        [class.show_popup]="showComingSoonPopup"
-    >
+    <p-menu #menu class="user_menu" [model]="userMenuItems" [popup]="true" appendTo="body"></p-menu>
+    <div class="user_menu_button" *ngIf="userInfo" (click)="menu.toggle($event)">{{ userInfo.email }}</div>
+
+    <a class="login_button" href="#" *ngIf="!userInfo" (click)="$event.preventDefault();$event.stopPropagation();login()">Sign In</a>
+
+
+    <div class="coming_soon" [class.show_popup]="showComingSoonPopup">
         <div class="coming_soon_button" (click)="autocloseComingSoonPopup=false;toggleComingSoonPopup();">Initial Release</div>
 
-        <div class="coming_soon_popup"
-            (click)="toggleComingSoonPopup()"
-        >
+        <div class="coming_soon_popup" (click)="toggleComingSoonPopup()">
             <div class="close_btn"><i class="pi pi-times"></i></div>
 
             <h3>Welcome to our initial release</h3>
 
             <p>We welcome your suggestions and <a [href]="emailstring" target="_top"><u>feedback</u></a>. New features and improvements will be released over the coming weeks.</p>
         </div>
-    </div> -->
+    </div>
 </header>
 
 <div class="page_container tool_header">

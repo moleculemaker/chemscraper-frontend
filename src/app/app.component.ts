@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import {UserInfoService} from "./services/userinfo.service";
+import {MenuItem} from "primeng/api";
 
 @Component({
   selector: 'app-root',
@@ -12,6 +14,18 @@ export class AppComponent {
   showComingSoonPopup: boolean = false;
   comingSoonTimerID: number|null = null;
   autocloseComingSoonPopup: boolean = true;
+
+  get userMenuItems(): Array<MenuItem> {
+    return this.userInfo ? [{ label: 'Sign Out', icon: 'pi pi-fw pi-sign-out', command: () => this.logout() }] : [];
+  }
+
+  get userInfo() {
+    return this.userInfoService.userInfo;
+  }
+
+  constructor(private userInfoService: UserInfoService) {
+
+  }
 
   ngOnInit() {
       this.comingSoonTimerID = setTimeout(()=>{
@@ -35,5 +49,13 @@ export class AppComponent {
         this.toggleComingSoonPopup();
       }, 8000);
     }
+  }
+
+  login() {
+    this.userInfoService.login();
+  }
+
+  logout() {
+    this.userInfoService.logout();
   }
 }
