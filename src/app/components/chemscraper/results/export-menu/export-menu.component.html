@@ -1,0 +1,25 @@
+<p-panel class="export-menu-panel">
+  <ng-template pTemplate="header">
+    <i class="p-button-icon-left pi pi-download"></i><span class="export-header-title">Export</span>
+    <div class="spacer"></div>
+
+  </ng-template>
+  <div class="card flex justify-content-center">
+    <div class="record-filter-options">
+      <p class="options-title">Molecules</p>
+      <div *ngFor="let recordFilter of recordFilterOptions" class="field-radiobuttons">
+          <p-radioButton [inputId]="recordFilter.key" name="recordFilter" [value]="recordFilter" [(ngModel)]="selectedRecordFilter"></p-radioButton>
+          <label [for]="recordFilter.key" class="p-radiobutton-label">{{ recordFilter.name }}</label>
+      </div>
+    </div>
+    <hr>
+    <div class="format-options">
+      <p class="options-title">Formats</p>
+      <div *ngFor="let format of formatOptions" class="field-checkbox">
+        <p-checkbox [value]="format.name" [(ngModel)]="selectedCheckboxes" [inputId]="format.key"></p-checkbox>
+        <label for="format.key" class="p-checkbox-label">{{ format.name }}</label>
+      </div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer"> <p-button (click)="export()">Export</p-button> </ng-template>
+</p-panel>
