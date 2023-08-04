@@ -36,8 +36,12 @@ export interface ChemScraperAnalyzeRequestBody {
 
 export interface ExportRequestBody {
   jobId: string;
-  recordFilter: string;
-  formats: string[];
+  cdxml: boolean;
+  cdxml_filter: string;
+  cdxml_selected_pages: number[];
+  csv: boolean;
+  csv_filter: string;
+  csv_molecules: number[];
 }
 
 export interface PostResponse {

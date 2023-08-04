@@ -8,26 +8,20 @@ import { ExportRequestBody } from 'src/app/models';
   styleUrls: ['./export-menu.component.scss']
 })
 export class ExportMenuComponent implements OnInit{
-  selectedRecordFilter: string = '';
-  selectedFormats: string[] = [];
+  format_checkbox: string[] = [];
 
-  recordFilterOptions: any[] = [
-      { name: 'All Molecules', key: 'ALL' },
-      // { name: 'Selected Molecules', key: 'M' }
-  ];
-
-  formatOptions: any[] = [
-    { name: 'CDXML file(s)', key: 'CDXML' },
-    { name: 'Molecule Table (csv)', key: 'CSV' },
-    // { name: 'Annotated document(s) (pdf)', key: 'PDF' }
-  ];
-
-  selectedAllFormats: any[] = [];
+  // pages: number[] = Array.from({length: 10}, (_, i) => i + 1);
+  pages: any[] = [];
+  selectedPage: any;
 
   exportRequestBody : ExportRequestBody = {
     jobId: '',
-    recordFilter: '',
-    formats: []
+    cdxml: false,
+    cdxml_filter: 'all_molecules',
+    cdxml_selected_pages: [],
+    csv: false,
+    csv_filter: 'full_table',
+    csv_molecules: []
   };
 
   constructor(
@@ -35,18 +29,17 @@ export class ExportMenuComponent implements OnInit{
   ){ }
 
   ngOnInit() {
-      this.selectedRecordFilter = this.recordFilterOptions[0].key;
+    for(let i = 1; i <= 10; i++) { // Replace 10 with N to generate numbers up to N
+      this.pages.push({label: i.toString(), value: i});
+    }
   }
 
   export(){
-    console.log(this.selectedRecordFilter);
-    console.log(this.selectedFormats);
     const jobId = window.location.href.split('/').at(-1);
     if(jobId){
       this.exportRequestBody.jobId = jobId;
     }
-    this.exportRequestBody.formats = this.selectedFormats;
-    this.exportRequestBody.recordFilter = this.selectedRecordFilter
+    this.exportRequestBody.cdxml_selected_pages = [this.selectedPage.value];
     this._chemScraperService.exportFiles(this.exportRequestBody).subscribe((file: Blob) => {
       const url = window.URL.createObjectURL(file);
       const link = document.createElement('a');
@@ -58,18 +51,22 @@ export class ExportMenuComponent implements OnInit{
     });
   }
 
-  selectAllFormats() {
-    if(this.selectedAllFormats.includes('ALL')){
-      this.selectedFormats = this.formatOptions.map(formatOption => formatOption.key);
+  onCheckboxesChange(){
+    if (this.format_checkbox.includes('CDXML')) {
+      this.exportRequestBody.cdxml = true;
     } else {
-      this.selectedFormats = [];
+      this.exportRequestBody.cdxml = false;
+    }
+
+    if (this.format_checkbox.includes('CSV')) {
+      this.exportRequestBody.csv = true;
+    } else {
+      this.exportRequestBody.csv = false;
     }
   }
 
-  onCheckboxesChange() {
-    if(this.selectedFormats.length < this.formatOptions.length){
-      this.selectedAllFormats = [];
-    }
+  onRadioButtonChange(){
+
   }
 
 }

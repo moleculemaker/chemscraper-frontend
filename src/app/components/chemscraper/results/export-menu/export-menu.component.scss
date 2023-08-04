@@ -17,6 +17,7 @@
   margin-bottom: 10px;
   display: flex;
   align-items: center;
+  margin-left: 36px;
 }
 
 .field-checkbox{
@@ -24,6 +25,10 @@
   margin-bottom: 10px;
   display: flex;
   align-items: center;
+}
+
+.field-dropdown{
+  margin-left: 72px;
 }
 
 ::ng-deep .p-panel .p-panel-footer{
