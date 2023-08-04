@@ -34,6 +34,12 @@ export interface ChemScraperAnalyzeRequestBody {
   fileList: string[];
 }
 
+export interface ExportRequestBody {
+  jobId: string;
+  recordFilter: string;
+  formats: string[];
+}
+
 export interface PostResponse {
   jobId: string;
   submitted_at: string;

@@ -8,15 +8,19 @@
     <div class="record-filter-options">
       <p class="options-title">Molecules</p>
       <div *ngFor="let recordFilter of recordFilterOptions" class="field-radiobuttons">
-          <p-radioButton [inputId]="recordFilter.key" name="recordFilter" [value]="recordFilter" [(ngModel)]="selectedRecordFilter"></p-radioButton>
+          <p-radioButton [inputId]="recordFilter.key" name="recordFilter" [value]="recordFilter.key" [(ngModel)]="selectedRecordFilter"></p-radioButton>
           <label [for]="recordFilter.key" class="p-radiobutton-label">{{ recordFilter.name }}</label>
       </div>
     </div>
     <hr>
     <div class="format-options">
       <p class="options-title">Formats</p>
+      <div class="field-checkbox">
+        <p-checkbox [value] = "'ALL'" [(ngModel)]="selectedAllFormats" [inputId]="'ALL'" (onChange)="selectAllFormats()"></p-checkbox>
+        <label for="ALL" class="p-checkbox-label">All Formats</label>
+      </div>
       <div *ngFor="let format of formatOptions" class="field-checkbox">
-        <p-checkbox [value]="format.name" [(ngModel)]="selectedCheckboxes" [inputId]="format.key"></p-checkbox>
+        <p-checkbox [value]="format.key" [(ngModel)]="selectedFormats" [inputId]="format.key" (onChange)="onCheckboxesChange()"></p-checkbox>
         <label for="format.key" class="p-checkbox-label">{{ format.name }}</label>
       </div>
     </div>
