@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { FormsModule } from '@angular/forms';
@@ -40,6 +40,12 @@ import { FileDragNDropDirective } from './components/chemscraper/configuration/f
 import { PdfViewerComponent } from './components/chemscraper/pdf-viewer/pdf-viewer.component';
 import { PdfViewerDialogServiceComponent } from './components/chemscraper/pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
 import { ExportMenuComponent } from './components/chemscraper/results/export-menu/export-menu.component';
+import {EnvironmentService} from "./services/environment.service";
+import {MenuModule} from "primeng/menu";
+
+const initAppFn = (envService: EnvironmentService) => {
+  return () => envService.loadEnvConfig('/assets/config/envvars.json');
+};
 
 @NgModule({
   declarations: [
@@ -87,9 +93,18 @@ import { ExportMenuComponent } from './components/chemscraper/results/export-men
     NgHcaptchaModule.forRoot({
       siteKey: '41c35ed8-6425-4764-b3d5-23c1b896f0dd',
       languageCode: 'en' // optional, will default to browser language
-  })
+    }),
+    MenuModule
   ],
-  providers: [ChemScraperService],
+  providers: [
+    ChemScraperService,
+    EnvironmentService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initAppFn,
+      multi: true,
+      deps: [EnvironmentService],
+    },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
