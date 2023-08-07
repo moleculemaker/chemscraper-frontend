@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ChemScraperService } from 'src/app/chemscraper.service';
 import { ExportRequestBody } from 'src/app/models';
 
@@ -8,6 +8,8 @@ import { ExportRequestBody } from 'src/app/models';
   styleUrls: ['./export-menu.component.scss']
 })
 export class ExportMenuComponent implements OnInit{
+  @Input() tableRows: any[];
+
   format_checkbox: string[] = [];
 
   // pages: number[] = Array.from({length: 10}, (_, i) => i + 1);
@@ -32,6 +34,7 @@ export class ExportMenuComponent implements OnInit{
     for(let i = 1; i <= 10; i++) { // Replace 10 with N to generate numbers up to N
       this.pages.push({label: i.toString(), value: i});
     }
+
   }
 
   export(){
@@ -39,7 +42,13 @@ export class ExportMenuComponent implements OnInit{
     if(jobId){
       this.exportRequestBody.jobId = jobId;
     }
-    this.exportRequestBody.cdxml_selected_pages = [this.selectedPage.value];
+    if(this.selectedPage && this.exportRequestBody.cdxml_filter == "single_page")
+      this.exportRequestBody.cdxml_selected_pages = [this.selectedPage.value];
+
+    if(this.exportRequestBody.csv_filter == "current_view"){
+      this.exportRequestBody.csv_molecules = this.tableRows.map(row => row.id)
+    }
+
     this._chemScraperService.exportFiles(this.exportRequestBody).subscribe((file: Blob) => {
       const url = window.URL.createObjectURL(file);
       const link = document.createElement('a');
@@ -63,10 +72,6 @@ export class ExportMenuComponent implements OnInit{
     } else {
       this.exportRequestBody.csv = false;
     }
-  }
-
-  onRadioButtonChange(){
-
   }
 
 }

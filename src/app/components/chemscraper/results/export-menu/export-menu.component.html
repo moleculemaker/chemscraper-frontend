@@ -12,11 +12,11 @@
       </div>
       <div *ngIf="exportRequestBody.cdxml" class="record-filter-options">
         <div class="field-radiobuttons">
-            <p-radioButton [inputId]="'all_molecules'" [value]="'all_molecules'" [(ngModel)]="exportRequestBody.cdxml_filter" (onChange)="onRadioButtonChange()"></p-radioButton>
+            <p-radioButton [inputId]="'all_molecules'" [value]="'all_molecules'" [(ngModel)]="exportRequestBody.cdxml_filter"></p-radioButton>
             <label [for]="'all_molecules'" class="p-radiobutton-label">All Molecules</label>
         </div>
         <div class="field-radiobuttons">
-          <p-radioButton [inputId]="'single_page'" [value]="'single_page'" [(ngModel)]="exportRequestBody.cdxml_filter" (onChange)="onRadioButtonChange()"></p-radioButton>
+          <p-radioButton [inputId]="'single_page'" [value]="'single_page'" [(ngModel)]="exportRequestBody.cdxml_filter"></p-radioButton>
           <label [for]="'single_page'" class="p-radiobutton-label">Single Page</label>
         </div>
         <div class="field-dropdown">
