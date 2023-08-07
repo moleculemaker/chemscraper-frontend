@@ -10,6 +10,8 @@ import { ExportRequestBody } from 'src/app/models';
 export class ExportMenuComponent implements OnInit{
   @Input() tableRows: any[];
 
+  @Input() pages_count: number;
+
   format_checkbox: string[] = [];
 
   // pages: number[] = Array.from({length: 10}, (_, i) => i + 1);
@@ -31,7 +33,7 @@ export class ExportMenuComponent implements OnInit{
   ){ }
 
   ngOnInit() {
-    for(let i = 1; i <= 10; i++) { // Replace 10 with N to generate numbers up to N
+    for(let i = 1; i <= this.pages_count; i++) { // Replace 10 with N to generate numbers up to N
       this.pages.push({label: i.toString(), value: i});
     }
 

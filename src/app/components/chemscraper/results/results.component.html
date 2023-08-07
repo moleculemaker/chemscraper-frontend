@@ -54,7 +54,7 @@
                 <i class="p-button-icon-left pi pi-download"></i> Export
               </p-button></div>
               <p-overlayPanel styleClass="export-menu" #ExportDropdown>
-                <chemscraper-export-menu [tableRows]="resultsTable.value"></chemscraper-export-menu>
+                <chemscraper-export-menu [tableRows]="resultsTable.value" [pages_count]="pages_count"></chemscraper-export-menu>
               </p-overlayPanel>
             </ng-template>
 
