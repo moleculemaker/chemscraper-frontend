@@ -1,7 +1,7 @@
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -39,6 +39,13 @@ import { PdfViewerComponent } from './components/chemscraper/pdf-viewer/pdf-view
 import { PdfViewerDialogServiceComponent } from './components/chemscraper/pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
 import {EnvironmentService} from "./services/environment.service";
 import {MenuModule} from "primeng/menu";
+import {SafePipe} from "./pipes/safe.pipe";
+import {
+  MoleculeDrawingCanvasComponent
+} from "./components/chemscraper/molecule-drawing-canvas/molecule-drawing-canvas.component";
+import {} from "./components/chemscraper/molecule-drawing-canvas/marvinjs";
+import {MarvinJsModule} from "./components/chemscraper/molecule-drawing-canvas/marvinjs/marvinjs.module";
+import {DialogModule} from "primeng/dialog";
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig('/assets/config/envvars.json');
@@ -53,7 +60,9 @@ const initAppFn = (envService: EnvironmentService) => {
     ConfigurationComponent,
     ResultsComponent,
     PdfViewerComponent,
-    PdfViewerDialogServiceComponent
+    PdfViewerDialogServiceComponent,
+
+    MoleculeDrawingCanvasComponent
   ],
   imports: [
     BrowserModule,
@@ -88,7 +97,12 @@ const initAppFn = (envService: EnvironmentService) => {
       siteKey: '41c35ed8-6425-4764-b3d5-23c1b896f0dd',
       languageCode: 'en' // optional, will default to browser language
     }),
-    MenuModule
+    MenuModule,
+
+    ApiModule.forRoot(() => new Configuration()),
+    ReactiveFormsModule,
+    MarvinJsModule,
+    DialogModule
   ],
   providers: [
     ChemScraperService,

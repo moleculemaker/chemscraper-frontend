@@ -101,6 +101,10 @@
                 </div>
               </div>
               <div class="column2">
+                <div class="p-inputgroup">
+                  <input pInputText class="form-control" [(ngModel)]="marvinjsMolecule" />
+                  <button pButton class="p-button-secondary p-button-link p-button-outlined" icon="pi pi-pencil" (click)="openMarvinjsEditor($event)">{{ marvinjsMolecule ? 'Edit' : 'Draw' }} Structure</button>
+                </div>
                 <!-- Content for column 2 goes here -->
                 <!-- <div class="search-row">
                   <input pInputText placeholder="Search by SMILES" [(ngModel)]="searchText" class="search-input" />
@@ -216,4 +220,11 @@
           </div>
         </ng-container>
     </div>
+
+  <p-dialog [(visible)]="showMarvinJsEditor" [modal]="true" [style]="{ width: '50vw', height: '50vh' }" [draggable]="false" [resizable]="false">
+    <app-molecule-drawing-canvas></app-molecule-drawing-canvas>
+    <ng-template pTemplate="footer">
+      <p-button icon="pi pi-check" (click)="showMarvinJsEditor = false" label="Search Structure" styleClass="p-button-primary"></p-button>
+    </ng-template>
+  </p-dialog>
 </div>

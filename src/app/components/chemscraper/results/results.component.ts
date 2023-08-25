@@ -18,6 +18,9 @@ import { Table } from 'primeng/table';
   styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent {
+  marvinjsMolecule: any;
+  showMarvinJsEditor: boolean;
+
   // subscribe to result service to get the predictionRow. after receive, set contentLoaded to false.
   timeInterval: Subscription;
   contentLoaded: boolean = false;
@@ -391,4 +394,11 @@ export class ResultsComponent {
     });
   }
 
+  openMarvinjsEditor($event: MouseEvent) {
+    this.showMarvinJsEditor = true;
+  }
+
+  closeMarvinjsEditor($event: MouseEvent) {
+    this.showMarvinJsEditor = false;
+  }
 }
