@@ -8,7 +8,7 @@
         class="marvin-js"
       ></app-marvin-js-editor>
 
-      <div class="buttons">
+      <div class="buttons" *ngIf="showControls">
         <input type="reset" value="Reset" />
         <input type="submit" value="Accept" />
       </div>
@@ -16,9 +16,10 @@
     </form>
   </div>
 
-  <div class="col">
+  <div class="col" *ngIf="DEBUG">
     <div class="values">
-      <span>Value in form group:</span>  <pre>{{ formGroup.value['structure'] }}</pre>
+      <span>Value in form group:</span>
+      <pre>{{ formGroup.value['structure'] }}</pre>
       <pre>Dirty: {{ formGroup.controls['structure'].dirty }}</pre>
       <pre>Pristine: {{ formGroup.controls['structure'].pristine }}</pre>
       <pre>Touched: {{ formGroup.controls['structure'].touched }}</pre>

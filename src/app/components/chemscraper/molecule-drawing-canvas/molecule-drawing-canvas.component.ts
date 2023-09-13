@@ -8,6 +8,8 @@ import { FormControl, FormGroup } from "@angular/forms";
 })
 export class MoleculeDrawingCanvasComponent {
 
+  DEBUG = false;
+  showControls = false;
   benzene: string = '\n' +
     '  MJ212000                      \n' +
     '\n' +

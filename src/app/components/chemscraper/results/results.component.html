@@ -96,14 +96,15 @@
                   </div>
 
                   <div id="input_pdf_container" class="input_pdf_container">
-                    <chemscraper-pdf-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [highlightBoxes]="highlightBoxes" (scrollToMolecule)="goToRow($event)"></chemscraper-pdf-viewer>
+                    <chemscraper-pdf-viewer *ngIf="jobID === 'example_PDF'" pdfUrl="assets/chemscraper_example.pdf"></chemscraper-pdf-viewer>
+                    <chemscraper-pdf-viewer *ngIf="jobID !== 'example_PDF' && pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [highlightBoxes]="highlightBoxes" (scrollToMolecule)="goToRow($event)"></chemscraper-pdf-viewer>
                   </div>
                 </div>
               </div>
               <div class="column2">
                 <div class="p-inputgroup">
-                  <input pInputText class="form-control" [(ngModel)]="marvinjsMolecule" />
-                  <button pButton class="p-button-secondary p-button-link p-button-outlined" icon="pi pi-pencil" (click)="openMarvinjsEditor($event)">{{ marvinjsMolecule ? 'Edit' : 'Draw' }} Structure</button>
+                  <textarea pInputTextarea class="form-control" [(ngModel)]="smiles" placeholder="Search by SMILES..."></textarea>
+                  <button pButton class="p-button-secondary p-button-link p-button-outlined" icon="pi pi-pencil" (click)="openMarvinjsEditor($event)">{{ smiles ? 'Edit' : 'Draw' }} Structure</button>
                 </div>
                 <!-- Content for column 2 goes here -->
                 <!-- <div class="search-row">
@@ -112,12 +113,12 @@
                 </div> -->
                 <div class="sort-row">
                   <div class="sort-text">
-                    Showing {{molecules.length}} identified molecules
+                    Showing {{filterBySmiles(molecules, smiles).length}} / {{molecules.length}} identified molecules
                   </div>
                   <!-- <button pButton type="button" class="sort-button p-button-text" (click)="sortResults()"> Sort by <i class="p-button-icon-right pi pi-chevron-down"></i></button> -->
                 </div>
                 <div class="table-container">
-                  <p-table #resultsTable [value]="molecules" dataKey="id" selectionMode="single" [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)" (onRowUnselect)="onRowUnselected($event)" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="700px" styleClass="molecule_table" [(first)]="firstRowIndex">
+                  <p-table #resultsTable [value]="filterBySmiles(molecules, smiles)" dataKey="id" selectionMode="single" [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)" (onRowUnselect)="onRowUnselected($event)" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="700px" styleClass="molecule_table" [(first)]="firstRowIndex">
                     <ng-template pTemplate="header">
                       <tr>
                         <!-- <th><p-tableCheckbox></p-tableCheckbox></th> -->
@@ -221,8 +222,9 @@
         </ng-container>
     </div>
 
-  <p-dialog [(visible)]="showMarvinJsEditor" [modal]="true" [style]="{ width: '50vw', height: '50vh' }" [draggable]="false" [resizable]="false">
-    <app-molecule-drawing-canvas></app-molecule-drawing-canvas>
+  <p-dialog *ngIf="showMarvinJsEditor" [(visible)]="showMarvinJsEditor" [modal]="true" [style]="{ width: '50vw', height: '50vh' }" [draggable]="false" [resizable]="false">
+    <!--<app-molecule-drawing-canvas></app-molecule-drawing-canvas>-->
+    <app-marvin-js-editor [(smiles)]="smiles"></app-marvin-js-editor>
     <ng-template pTemplate="footer">
       <p-button icon="pi pi-check" (click)="showMarvinJsEditor = false" label="Search Structure" styleClass="p-button-primary"></p-button>
     </ng-template>

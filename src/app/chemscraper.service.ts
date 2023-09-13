@@ -45,11 +45,19 @@ export class ChemScraperService {
   }
 
   getResultStatus(jobID: string): Observable<string>{
-    return this.http.get<string>(this.SERVER_URL + 'result-status/' + jobID)
+    if(jobID === "example_PDF") {
+      return of("Ready");
+    } else {
+      return this.http.get<string>(this.SERVER_URL + 'result-status/' + jobID)
+    }
   }
 
   getResult(jobID: string): Observable<Molecule[]>{
-    return this.http.get<Molecule[]>(this.SERVER_URL + 'results/' + jobID);
+    if(jobID === "example_PDF") {
+      return this.http.get<Molecule[]>('assets/example_PDF.tsv');
+    } else {
+      return this.http.get<Molecule[]>(this.SERVER_URL + 'results/' + jobID);
+    }
   }
 
   getError(jobID: string): Observable<string>{
@@ -57,6 +65,10 @@ export class ChemScraperService {
   }
 
   getInputPDf(jobID: string): Observable<string[]>{
-    return this.http.get<string[]>(this.SERVER_URL + 'inputs/' + jobID);
+    if(jobID === "example_PDF") {
+      return of([]);
+    } else {
+      return this.http.get<string[]>(this.SERVER_URL + 'inputs/' + jobID);
+    }
   }
 }

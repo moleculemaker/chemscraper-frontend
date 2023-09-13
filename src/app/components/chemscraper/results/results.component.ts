@@ -67,6 +67,7 @@ export class ResultsComponent {
   ) { }
 
   @ViewChild(PdfViewerComponent) pdfViewerComponent: PdfViewerComponent;
+  smiles: string = '';
 
   ngOnInit(): void {
     this.preComputedMessage = [
@@ -284,9 +285,12 @@ export class ResultsComponent {
 
   getResult(){
     let jobID = window.location.href.split('/').at(-1);
-    if(jobID){
+
+    if(jobID === "example_PDF"){
+      this.process_example_file();
+    } else if(jobID && jobID !== "example_PDF"){
       timer(0, 10000).pipe(
-        switchMap(() => this._chemScraperService.getResultStatus(jobID ? jobID : "example_PDF")),
+        switchMap(() => this._chemScraperService.getResultStatus(jobID!)),
         takeWhile(() => this.pollForResult)
       ).subscribe(
         (response) => {
@@ -400,5 +404,9 @@ export class ResultsComponent {
 
   closeMarvinjsEditor($event: MouseEvent) {
     this.showMarvinJsEditor = false;
+  }
+
+  filterBySmiles(molecules: Molecule[], smiles: string) {
+    return molecules.filter((molecule) => molecule.SMILE?.includes(smiles));
   }
 }

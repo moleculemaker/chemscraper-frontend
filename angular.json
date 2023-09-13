@@ -49,7 +49,8 @@
 
               "node_modules/@chemaxon/marvinjs/gui/lib/promise-1.0.0.min.js",
               "node_modules/@chemaxon/marvinjs/js/marvinjslauncher.js",
-              "node_modules/@chemaxon/marvinjs/js/util.js"
+              "node_modules/@chemaxon/marvinjs/js/util.js",
+              "node_modules/@chemaxon/marvinjs/js/webservices.js"
             ]
           },
           "configurations": {
@@ -156,7 +157,8 @@
             "scripts": [
               "node_modules/@chemaxon/marvinjs/gui/lib/promise-1.0.0.min.js",
               "node_modules/@chemaxon/marvinjs/js/marvinjslauncher.js",
-              "node_modules/@chemaxon/marvinjs/js/util.js"
+              "node_modules/@chemaxon/marvinjs/js/util.js",
+              "node_modules/@chemaxon/marvinjs/js/webservices.js"
             ]
           }
         }

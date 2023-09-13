@@ -1,6 +1,12 @@
-import { Component } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { ReplaySubject } from "rxjs";
+import { ReplaySubject, Subscription, take } from "rxjs";
 import { MarvinJSUtilInstance, Sketch } from ".";
 
 export type onChangeFunc<T> = (newValue: T) => void;
@@ -10,7 +16,7 @@ declare let MarvinJSUtil: MarvinJSUtilInstance;
 
 @Component({
   selector: 'app-marvin-js-editor',
-  template: '<iframe id="sketch" src="/assets/marvin-js/editorws.html" height="100%" width="100%" style="border: 0; padding: 0; margin: 0"></iframe>',
+  template: '<iframe id="sketch" src="/demo.html" height="100%" width="100%" style="border: 0; padding: 0; margin: 0"></iframe>',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -19,24 +25,48 @@ declare let MarvinJSUtil: MarvinJSUtilInstance;
     }
   ]
 })
-export class MarvinJsEditorComponent implements ControlValueAccessor {
-  private sketcherInstance$ = new ReplaySubject<Sketch>(1);
+export class MarvinJsEditorComponent implements ControlValueAccessor, AfterContentInit {
+  @Input()
+  smiles = '';
+  @Output()
+  smilesChange = new EventEmitter<string>();
+
+  sketcherInstance$ = new ReplaySubject<Sketch>(1);
 
   private onTouched: onTouchedFunc = () => {};
   private onChange: onChangeFunc<string | undefined> = s => {};
 
   private isTouched = false;
+  private sub: Subscription;
 
-  constructor() {
-    this.grabSketcherInstance();
+  ngAfterContentInit(): void {
+    // Short delay for the iframe to render
+    setTimeout(() => {
+      this.grabSketcherInstance().then(() => {
+        console.log('init SMILES in editor: ', this.smiles);
+        this.sketcherInstance$.pipe(
+          take(1)
+        ).subscribe(sketcherInstance => {
+          if (this.smiles) {
+            sketcherInstance?.importStructure('auto', this.smiles).then();
+          } else {
+            sketcherInstance?.clear();
+          }
+        });
+      });
+    }, 2000);
+  }
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
   }
 
   writeValue(val: string): void {
     this.sketcherInstance$.subscribe(sketcherInstance => {
       if (val) {
-        sketcherInstance.importStructure('mol', val).then();
+        sketcherInstance?.importStructure('mol', val).then();
       } else {
-        sketcherInstance.clear();
+        sketcherInstance?.clear();
       }
     });
   }
@@ -60,19 +90,43 @@ export class MarvinJsEditorComponent implements ControlValueAccessor {
     // not supported
   }
 
-  private grabSketcherInstance(): void {
-    MarvinJSUtil.getEditor('#sketch').then(
+
+  getWebServices(base: string = 'http://localhost:8080') {
+    const services = {
+      "clean2dws" : base + "/rest-v1/util/convert/clean",
+      "clean3dws" : base + "/rest-v1/util/convert/clean",
+      "molconvertws" : base + "/rest-v1/util/calculate/molExport",
+      "stereoinfows" : base + "/rest-v1/util/calculate/cipStereoInfo",
+      "reactionconvertws" : base + "/rest-v1/util/calculate/reactionExport",
+      "hydrogenizews" : base + "/rest-v1/util/convert/hydrogenizer",
+      "automapperws" : base + "/rest-v1/util/convert/reactionConverter",
+      "aromatizews" : base + "/rest-v1/util/calculate/molExport"
+    };
+    return services;
+  }
+
+  grabSketcherInstance(): Promise<void> {
+    return MarvinJSUtil.getEditor('sketch').catch(err => {
+      console.error('Sketcher not yet ready! ', err);
+      // try again in 100ms when the first attempt was too early
+      setTimeout(() => {
+        this.grabSketcherInstance();
+      }, 100);
+    }).then(
       (sketcherInstance: any) => {
         this.sketcherInstance$.next(sketcherInstance);
         sketcherInstance.on('molchange', async () => {
           this.markAsTouched();
-          const structure = sketcherInstance.isEmpty()
-            ? undefined
-            : await sketcherInstance.exportStructure('mol');
-          this.onChange(structure);
+          const smiles = sketcherInstance.isEmpty()
+            ? ''
+            : await sketcherInstance.exportStructure('smiles');
+          this.smilesChange.emit(this.smiles = smiles);
+          this.onChange(this.smiles);
         });
+        return sketcherInstance;
       },
-      () => {
+      (err) => {
+        console.error('Sketcher not yet ready! ', err);
         // try again in 100ms when the first attempt was too early
         setTimeout(() => {
           this.grabSketcherInstance();
