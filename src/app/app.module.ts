@@ -40,10 +40,6 @@ import { PdfViewerDialogServiceComponent } from './components/chemscraper/pdf-vi
 import {EnvironmentService} from "./services/environment.service";
 import {MenuModule} from "primeng/menu";
 //import {SafePipe} from "./pipes/safe.pipe";
-import {
-  MoleculeDrawingCanvasComponent
-} from "./components/chemscraper/molecule-drawing-canvas/molecule-drawing-canvas.component";
-import {} from "./components/chemscraper/molecule-drawing-canvas/marvinjs";
 import {MarvinJsModule} from "./components/chemscraper/molecule-drawing-canvas/marvinjs/marvinjs.module";
 import {DialogModule} from "primeng/dialog";
 
@@ -61,8 +57,6 @@ const initAppFn = (envService: EnvironmentService) => {
     ResultsComponent,
     PdfViewerComponent,
     PdfViewerDialogServiceComponent,
-
-    MoleculeDrawingCanvasComponent
   ],
   imports: [
     BrowserModule,
