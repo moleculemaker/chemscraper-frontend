@@ -66,7 +66,7 @@ export class ChemScraperService {
 
   getInputPDf(jobID: string): Observable<string[]>{
     if(jobID === "example_PDF") {
-      return of([]);
+      return of(['/assets/chemscraper_example.pdf']);
     } else {
       return this.http.get<string[]>(this.SERVER_URL + 'inputs/' + jobID);
     }

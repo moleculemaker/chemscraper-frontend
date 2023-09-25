@@ -1,5 +1,5 @@
 {
-  "hostname": "http://localhost:8080",
+  "hostname": "http://localhost:8081",
   "basePath": "",
 
   "signInUrl": "https://mmli1.ncsa.illinois.edu/oauth2/start?rd=http%3A%2F%2Fchemscraper.proxy.localhost%2Fconfiguration",

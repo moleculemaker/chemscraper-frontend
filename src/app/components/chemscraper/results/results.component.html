@@ -96,8 +96,7 @@
                   </div>
 
                   <div id="input_pdf_container" class="input_pdf_container">
-                    <chemscraper-pdf-viewer *ngIf="jobID === 'example_PDF'" pdfUrl="assets/chemscraper_example.pdf"></chemscraper-pdf-viewer>
-                    <chemscraper-pdf-viewer *ngIf="jobID !== 'example_PDF' && pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [highlightBoxes]="highlightBoxes" (scrollToMolecule)="goToRow($event)"></chemscraper-pdf-viewer>
+                    <chemscraper-pdf-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [highlightBoxes]="highlightBoxes" (scrollToMolecule)="goToRow($event)"></chemscraper-pdf-viewer>
                   </div>
                 </div>
               </div>

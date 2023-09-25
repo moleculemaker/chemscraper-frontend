@@ -1,0 +1,22 @@
+{
+  "/rest-v1": {
+    "target": "http://localhost:8080",
+    "secure": true,
+    "changeOrigin": true
+  },
+  "/demo.html": {
+    "target": "http://localhost:8080",
+    "secure": true,
+    "changeOrigin": true
+  },
+  "/gui": {
+    "target": "http://localhost:8080",
+    "secure": true,
+    "changeOrigin": true
+  },
+  "/js": {
+    "target": "http://localhost:8080",
+    "secure": true,
+    "changeOrigin": true
+  }
+}
