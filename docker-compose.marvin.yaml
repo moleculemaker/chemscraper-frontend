@@ -2,7 +2,7 @@
 version: '3.9'
 
 secrets:
-  .npmrc:
+  NPMRC:
     file: ~/.npmrc
 
 networks:
@@ -61,7 +61,7 @@ services:
     build:
       context: .
       secrets:
-        - .npmrc
+        - NPMRC
     env_file:
       - .env
     networks:

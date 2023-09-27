@@ -1,7 +1,7 @@
 # Builds a Docker image for the ChemScraper Frontend
 #
 # Usage:
-#     docker build --secret id=.npmrc,src=$HOME/.npmrc -t moleculemaker/chemscraper-frontend .
+#     docker build --secret id=NPMRC,src=$HOME/.npmrc -t moleculemaker/chemscraper-frontend .
 #
 
 # Use official node image as the base image
@@ -11,14 +11,14 @@ FROM --platform=$BUILDPLATFORM node:16 as build
 WORKDIR /usr/local/app
 
 # Pass in NPM credentials as a Docker build secret
-ENV NPM_CONFIG_USERCONFIG="/run/secrets/.npmrc"
+ENV NPM_CONFIG_USERCONFIG="/run/secrets/NPMRC"
 ENV DEBIAN_FRONTEND noninteractive
 
 # Add dependencies manifest to app
 COPY package.json package-lock.json ./
 
 # Install all the dependencies
-RUN --mount=type=secret,id=.npmrc npm install
+RUN --mount=type=secret,id=NPMRC npm install
 
 # Add the source code to app
 COPY angular.json entrypoint.sh tsconfig*.json package*.json proxy.conf.json .

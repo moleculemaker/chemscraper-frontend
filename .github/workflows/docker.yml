@@ -77,7 +77,7 @@ jobs:
           build-args:
             configuration=production
           secret-files: |
-            ".npmrc:~/.npmrc"
+            "NPMRC:$HOME/.npmrc"
 
 
       - name: Build and push Docker image (staging)
@@ -92,4 +92,4 @@ jobs:
           build-args:
             configuration=staging
           secret-files: |
-            ".npmrc:~/.npmrc"
+            "NPMRC:$HOME/.npmrc"
