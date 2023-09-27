@@ -167,7 +167,7 @@
                                 <div class="molecule-details-col1">
                                   <div>
                                     <p class="molecule-details-header">Results Summary</p>
-                                    <p>Identified, Found {{molecule.OtherInstances.length}} time(s) in 1 document</p>
+                                    <p>Identified, Found {{molecule.OtherInstances?.length}} time(s) in 1 document</p>
                                   </div>
                                   <div>
                                     <p class="molecule-details-header">Location</p>
@@ -175,7 +175,7 @@
                                   </div>
                                   <div>
                                     <p class="molecule-details-header">Other Instances</p>
-                                    <p>{{currentPDFName}} | page(s): {{molecule.OtherInstances.join(', ')}}</p>
+                                    <p>{{currentPDFName}} | page(s): {{molecule.OtherInstances?.join(', ')}}</p>
                                   </div>
                                 </div>
                                 <div class="molecule-details-col2">
@@ -186,8 +186,8 @@
                                   </div>
                                   <div>
                                     <p class="molecule-details-header">Chemical Safety</p>
-                                    <p *ngIf="molecule.chemicalSafety.length > 0"><span *ngFor="let chemicalSafetyProperty of molecule.chemicalSafety">{{chemicalSafetyProperty}}</span></p>
-                                    <p *ngIf="molecule.chemicalSafety.length == 0">Unavailable</p>
+                                    <p *ngIf="molecule.chemicalSafety?.length > 0"><span *ngFor="let chemicalSafetyProperty of molecule.chemicalSafety">{{chemicalSafetyProperty}}</span></p>
+                                    <p *ngIf="molecule.chemicalSafety?.length == 0">Unavailable</p>
                                   </div>
                                   <div>
                                     <p class="molecule-details-header">External References</p>

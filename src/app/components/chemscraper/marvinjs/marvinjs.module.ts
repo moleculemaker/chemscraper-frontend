@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MarvinJsEditorComponent } from '.';
+import { MarvinJsEditorComponent } from './index';
 
 
 
