@@ -78,7 +78,7 @@ jobs:
             configuration=production
           secret-files: |
             ".npmrc:~/.npmrc"
- 	
+
 
       - name: Build and push Docker image (staging)
         if: github.event_name == 'pull_request'
