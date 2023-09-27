@@ -284,7 +284,6 @@ export class ResultsComponent {
 
   getResult(){
     let jobID = window.location.href.split('/').at(-1);
-
     if(jobID){
       timer(0, 10000).pipe(
         switchMap(() => this._chemScraperService.getResultStatus(jobID ? jobID : "example_PDF")),
