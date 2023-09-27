@@ -76,6 +76,9 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args:
             configuration=production
+          secret-files: |
+            ".npmrc:~/.npmrc"
+ 	
 
       - name: Build and push Docker image (staging)
         if: github.event_name == 'pull_request'
@@ -88,3 +91,5 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args:
             configuration=staging
+          secret-files: |
+            ".npmrc:~/.npmrc"
