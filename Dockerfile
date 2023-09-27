@@ -21,7 +21,8 @@ COPY package.json package-lock.json ./
 RUN --mount=type=secret,id=.npmrc npm install
 
 # Add the source code to app
-COPY . .
+COPY angular.json entrypoint.sh tsconfig*.json package*.json proxy.conf.json .
+COPY src ./src
 
 # Generate the build of the application
 RUN npm run build
@@ -31,11 +32,9 @@ RUN npm run build
 
 # Use official nginx image as the base image
 FROM nginx
-#FROM hub.chemaxon.com/cxn-docker-release/chemaxon/mjs-webservice:latest
 
 # Copy the build output to replace the default nginx contents
 COPY --from=build /usr/local/app/dist/chemscraper /usr/share/nginx/html/
-#COPY --from=build /usr/local/app/dist/chemscraper /app/mjs-webservice/static/
 
 # Copy the nginx config file, which has a try_files rule for SPA routing
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf

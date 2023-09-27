@@ -1,21 +1,25 @@
 {
   "/rest-v1": {
-    "target": "http://localhost:8080",
+    "localTarget": "http://localhost:8080",
+    "target": "https://marvinjs.backend.mmli1.ncsa.illinois.edu",
     "secure": true,
     "changeOrigin": true
   },
   "/demo.html": {
-    "target": "http://localhost:8080",
+    "localTarget": "http://localhost:8080",
+    "target": "https://marvinjs.backend.mmli1.ncsa.illinois.edu",
     "secure": true,
     "changeOrigin": true
   },
   "/gui": {
-    "target": "http://localhost:8080",
+    "localTarget": "http://localhost:8080",
+    "target": "https://marvinjs.backend.mmli1.ncsa.illinois.edu",
     "secure": true,
     "changeOrigin": true
   },
   "/js": {
-    "target": "http://localhost:8080",
+    "localTarget": "http://localhost:8080",
+    "target": "https://marvinjs.backend.mmli1.ncsa.illinois.edu",
     "secure": true,
     "changeOrigin": true
   }
