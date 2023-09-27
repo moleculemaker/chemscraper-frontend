@@ -55,8 +55,6 @@ export class PdfViewerComponent {
   }
 
   renderPage(pageNumber: number) {
-    if (!pageNumber) { return; }
-
     this.pageRendering = true;
     this.pdf.getPage(pageNumber).then((page) => {
 

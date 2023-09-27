@@ -18,8 +18,8 @@ import { Table } from 'primeng/table';
   styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent {
-  marvinjsMolecule: any;
   showMarvinJsEditor: boolean;
+  marvinJsSmiles: string = '';
 
   // subscribe to result service to get the predictionRow. after receive, set contentLoaded to false.
   timeInterval: Subscription;
@@ -67,7 +67,6 @@ export class ResultsComponent {
   ) { }
 
   @ViewChild(PdfViewerComponent) pdfViewerComponent: PdfViewerComponent;
-  smiles: string = '';
 
   ngOnInit(): void {
     this.preComputedMessage = [
@@ -286,11 +285,9 @@ export class ResultsComponent {
   getResult(){
     let jobID = window.location.href.split('/').at(-1);
 
-    if(jobID === "example_PDF"){
-      this.process_example_file();
-    } else if(jobID && jobID !== "example_PDF"){
+    if(jobID){
       timer(0, 10000).pipe(
-        switchMap(() => this._chemScraperService.getResultStatus(jobID!)),
+        switchMap(() => this._chemScraperService.getResultStatus(jobID ? jobID : "example_PDF")),
         takeWhile(() => this.pollForResult)
       ).subscribe(
         (response) => {
