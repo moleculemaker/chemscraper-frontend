@@ -48,7 +48,7 @@ export class ChemScraperService {
     return this.apiService.getInputFileBucketNameInputsJobIdGet('chemscraper', jobID);
   }
 
-  exportFiles(requestBody: ExportRequestBody): Observable<Blob> {
-    return this.apiService.analyzeDocumentsBucketNameExportResultsPost('chemscraper', requestBody);
+  exportFiles(requestBody: ExportRequestBody): Observable<any> {
+    return this.apiService.analyzeDocumentsBucketNameExportResultsPost('chemscraper', requestBody, 'body', false, { httpHeaderAccept: 'application/zip' as any });
   }
 }
