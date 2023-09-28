@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 import { PostResponse, FileUploadResponse } from './models';
-import { AnalyzeRequestBody, DefaultService, Molecule } from "./api/mmli-backend/v1";
+import { AnalyzeRequestBody, DefaultService, Molecule, ExportRequestBody } from "./api/mmli-backend/v1";
+
 
 @Injectable({
   providedIn: 'root'
@@ -45,5 +46,9 @@ export class ChemScraperService {
 
   getInputPDf(jobID: string): Observable<string[]>{
     return this.apiService.getInputFileBucketNameInputsJobIdGet('chemscraper', jobID);
+  }
+
+  exportFiles(requestBody: ExportRequestBody): Observable<Blob> {
+    return this.apiService.analyzeDocumentsBucketNameExportResultsPost('chemscraper', requestBody);
   }
 }

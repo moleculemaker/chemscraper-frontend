@@ -457,3 +457,7 @@ p-panel {
 :host ::ng-deep .p-datatable-table .p-datatable-tbody > tr > td {
   overflow-wrap: anywhere;
 }
+
+:host ::ng-deep .export-menu{
+  width: 450px !important;
+}
