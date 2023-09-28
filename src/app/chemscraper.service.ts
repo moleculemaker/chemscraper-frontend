@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
 
-import { PostResponse, ChemScraperAnalyzeRequestBody, ExampleData, FileUploadResponse, Molecule } from './models';
+import { PostResponse, ChemScraperAnalyzeRequestBody, ExampleData, FileUploadResponse, Molecule, ExportRequestBody } from './models';
 import {EnvironmentService} from "./services/environment.service";
 
 @Injectable({
@@ -58,5 +58,9 @@ export class ChemScraperService {
 
   getInputPDf(jobID: string): Observable<string[]>{
     return this.http.get<string[]>(this.SERVER_URL + 'inputs/' + jobID);
+  }
+
+  exportFiles(requestBody: ExportRequestBody): Observable<Blob> {
+    return this.http.post<Blob>(this.SERVER_URL + 'export-results', requestBody, { responseType: 'blob' as 'json' });
   }
 }

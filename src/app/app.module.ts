@@ -23,6 +23,8 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ListboxModule } from 'primeng/listbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { SidebarModule } from 'primeng/sidebar';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { CheckboxModule } from 'primeng/checkbox';
 
 import { LandingPageComponent} from './components/landing-page/landing-page.component';
 
@@ -37,11 +39,13 @@ import { NgHcaptchaModule } from 'ng-hcaptcha';
 import { FileDragNDropDirective } from './components/chemscraper/configuration/file-drag-n-drop.directive';
 import { PdfViewerComponent } from './components/chemscraper/pdf-viewer/pdf-viewer.component';
 import { PdfViewerDialogServiceComponent } from './components/chemscraper/pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
+
 import { EnvironmentService } from "./services/environment.service";
 import { MenuModule } from "primeng/menu";
 //import {SafePipe} from "./pipes/safe.pipe";
 import { MarvinJsModule } from "./components/chemscraper/marvinjs/marvinjs.module";
 import { DialogModule } from "primeng/dialog";
+import { ExportMenuComponent } from './components/chemscraper/results/export-menu/export-menu.component';
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig('/assets/config/envvars.json');
@@ -57,6 +61,7 @@ const initAppFn = (envService: EnvironmentService) => {
     ResultsComponent,
     PdfViewerComponent,
     PdfViewerDialogServiceComponent,
+    ExportMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -78,6 +83,8 @@ const initAppFn = (envService: EnvironmentService) => {
     ListboxModule,
     OverlayPanelModule,
     SidebarModule,
+    RadioButtonModule,
+    CheckboxModule,
     FileUploadModule,
     PanelModule,
     BrowserAnimationsModule,
