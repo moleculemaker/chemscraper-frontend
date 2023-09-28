@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 README.md
 api.module.ts
 api/api.ts
@@ -9,6 +8,7 @@ encoder.ts
 git_push.sh
 index.ts
 model/analyzeRequestBody.ts
+model/exportRequestBody.ts
 model/hTTPValidationError.ts
 model/locationInner.ts
 model/models.ts
