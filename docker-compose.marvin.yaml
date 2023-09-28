@@ -16,11 +16,8 @@ services:
     networks:
       - proxy
     command:
-      - "--log.level=DEBUG"
-#      - "--api.insecure=true"
-#      - "--providers.docker=true"
-#      - "--providers.docker.exposedbydefault=false"
-#      - "--entrypoints.web.address=:80"
+      - --log.level=DEBUG
+      - --api.insecure=true
 
       - --api=true
       #- --api.dashboard=true
@@ -69,9 +66,9 @@ services:
 
     restart: unless-stopped
 
-    volumes:
-     - ./src/assets/config/:/usr/share/nginx/html/assets/config
-     - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    #volumes:
+    # - ./src/assets/config/:/usr/share/nginx/html/assets/config
+    # - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     # - ./dist/clean:/usr/share/nginx/html
     labels:
       - "traefik.enable=true"
@@ -84,5 +81,3 @@ services:
       - "traefik.http.middlewares.cors-headers.headers.accesscontrolmaxage=100"
       - "traefik.http.middlewares.cors-headers.headers.addvaryheader=true"
       - "traefik.http.routers.chemscraper.middlewares=cors-headers"
-      #- "traefik.http.routers.chemscraper.middlewares=chemscraper-stripprefix"
-      #- "traefik.http.middlewares.chemscraper-stripprefix.stripprefix.prefixes=/chemscraper"
