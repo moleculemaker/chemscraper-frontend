@@ -454,6 +454,10 @@ p-panel {
   vertical-align: middle;
 }
 
+.svg-column{
+  width: 200px;
+}
+
 :host ::ng-deep .p-datatable-table .p-datatable-tbody > tr > td {
   overflow-wrap: anywhere;
 }
