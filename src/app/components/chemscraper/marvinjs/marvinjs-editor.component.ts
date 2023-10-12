@@ -62,7 +62,7 @@ export class MarvinJsEditorComponent implements ControlValueAccessor, AfterConte
   }
 
   writeValue(val: string): void {
-    this.sketcherInstance$.subscribe(sketcherInstance => {
+    this.sub = this.sketcherInstance$.subscribe(sketcherInstance => {
       if (val) {
         sketcherInstance?.importStructure('mol', val).then();
       } else {
