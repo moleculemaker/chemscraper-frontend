@@ -75,14 +75,13 @@
               </div> -->
             </div>
             <div class="result-container">
-              <div class="column1" [ngClass]="{'collapsed': !splitView}">
+              <!-- <div class="column1" [ngClass]="{'collapsed': !splitView}">
                 <p-button class="toggle_splitview_button" styleClass="p-button-outlined p-button-xs"
                   [icon]="(splitView) ? 'pi pi-chevron-left' : 'pi pi-chevron-right'"
                   (click)="toggleSplitView()"
                 ></p-button>
 
                 <div class="content">
-                  <!-- Content for column 1 goes here -->
                   <div class="document-path-bar">
                     Document Center > <span class="pdf_name">{{currentPDFName}}</span>
                   </div>
@@ -91,7 +90,8 @@
                     <chemscraper-pdf-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [highlightBoxes]="highlightBoxes" (scrollToMolecule)="goToRow($event)"></chemscraper-pdf-viewer>
                   </div>
                 </div>
-              </div>
+              </div> -->
+
               <div class="column2">
                 <!-- Content for column 2 goes here -->
                 <!-- <div class="search-row">
@@ -110,7 +110,8 @@
                       <tr>
                         <!-- <th><p-tableCheckbox></p-tableCheckbox></th> -->
                         <th pSortableColumn="name">Molecule<p-sortIcon field="name"></p-sortIcon></th>
-                        <th>Structure</th>
+                        <th>Structure (Extracted)</th>
+                        <th>Structure (Original)</th>
                         <th>SMILES</th>
                         <!-- <th *ngIf="!splitView">Document</th> -->
                         <th *ngIf="!splitView">Page</th>
@@ -122,6 +123,9 @@
                       <tr [pSelectableRow]="molecule" [pRowToggler]="molecule">
                         <td> <i [ngClass]="expanded ? 'pi pi-chevron-down p-button-icon-left' : 'pi pi-chevron-right p-button-icon-left'"></i> {{ molecule.name }}</td>
                         <td class="svg-column" [innerHTML]="molecule.structure"></td>
+                        <td>
+                          <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [startX]="molecule.minX" [startY]="molecule.minY" [width]="molecule.width" [height]="molecule.height" [pageNumber]="molecule.page_no"></chemscraper-pdf-context-viewer>
+                        </td>
                         <td>{{ molecule.SMILE }}</td>
                         <td *ngIf="!splitView">{{ molecule.page_no }}</td>
                         <td *ngIf="!splitView">{{ molecule.PubChemCID }}</td>

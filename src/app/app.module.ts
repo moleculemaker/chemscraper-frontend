@@ -42,6 +42,7 @@ import { PdfViewerDialogServiceComponent } from './components/chemscraper/pdf-vi
 import { ExportMenuComponent } from './components/chemscraper/results/export-menu/export-menu.component';
 import {EnvironmentService} from "./services/environment.service";
 import {MenuModule} from "primeng/menu";
+import { PdfContextViewerComponent } from './components/chemscraper/results/pdf-context-viewer/pdf-context-viewer.component';
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig('/assets/config/envvars.json');
@@ -57,7 +58,8 @@ const initAppFn = (envService: EnvironmentService) => {
     ResultsComponent,
     PdfViewerComponent,
     PdfViewerDialogServiceComponent,
-    ExportMenuComponent
+    ExportMenuComponent,
+    PdfContextViewerComponent
   ],
   imports: [
     BrowserModule,
