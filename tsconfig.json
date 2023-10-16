@@ -19,6 +19,12 @@
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
+    "paths": {
+      "~/*": ["./src/*"],
+      "@services/*": ["./src/app/services/*"],
+      "@api/*": ["./src/app/api/*"],
+      /* add additional virtual module aliases here */
+    },
     "lib": [
       "ES2022",
       "dom"

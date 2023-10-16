@@ -7,10 +7,11 @@ import { finalize, startWith, switchMap, takeWhile } from "rxjs/operators";
 import { Router } from '@angular/router';
 import { MenuItem, Message } from 'primeng/api';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { PredictionRow, PollingResponseResult, PollingResponseStatus, SingleSeqResult, SeqResult, HighlightBox, Molecule } from '../../../models';
+import { PredictionRow, PollingResponseResult, PollingResponseStatus, SingleSeqResult, SeqResult, HighlightBox } from '../../../models';
 import { ChemScraperService } from 'src/app/chemscraper.service';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 import { Table } from 'primeng/table';
+import {Molecule} from "@api/mmli-backend/v1";
 
 @Component({
   selector: 'app-results',
@@ -168,8 +169,13 @@ export class ResultsComponent {
             if(jobID)
             this._chemScraperService.getResult(jobID).subscribe(
               (data) => {
+                data.forEach(molecule => {
+                  molecule.structure = this.modifySvg(molecule.structure.toString());
+                })
+
                 this.molecules = data;
                 this.pages_count = Math.max(...this.molecules.map(molecule => parseInt(molecule.page_no)))
+
                 this.updateStatusStage(2);
 
                 this.getHighlightBoxes(1);
@@ -263,5 +269,33 @@ export class ResultsComponent {
       }
     });
   }
+
+  modifySvg(svgString: string): string {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgString, 'image/svg+xml');
+    const svgElem = doc.querySelector('svg');
+
+    if (svgElem) {
+      // Extract width and height values
+      const width = svgElem.getAttribute('width');
+      const height = svgElem.getAttribute('height');
+
+      // Remove width and height attributes
+      svgElem.removeAttribute('width');
+      svgElem.removeAttribute('height');
+
+      // Add viewBox attribute
+      if (width && height && !svgElem.getAttribute('viewBox')) {
+        svgElem.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      }
+
+      // Convert modified SVG back to string
+      const serializer = new XMLSerializer();
+      return serializer.serializeToString(svgElem);
+    }
+
+    return svgString; // return original if modifications failed
+  }
+
 
 }
