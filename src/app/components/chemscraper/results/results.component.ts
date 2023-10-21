@@ -11,11 +11,14 @@ import { PredictionRow, PollingResponseResult, PollingResponseStatus, SingleSeqR
 import { ChemScraperService } from 'src/app/chemscraper.service';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 import { Table } from 'primeng/table';
+import { PdfViewerDialogServiceComponent } from '../pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-results',
   templateUrl: './results.component.html',
-  styleUrls: ['./results.component.scss']
+  styleUrls: ['./results.component.scss'],
+  providers: [DialogService]
 })
 export class ResultsComponent {
   // subscribe to result service to get the predictionRow. after receive, set contentLoaded to false.
@@ -54,6 +57,7 @@ export class ResultsComponent {
   firstRowIndex: number = 0;
 
   pages_count: number = 0;
+  ref: DynamicDialogRef;
 
   @ViewChild('resultsTable') resultsTable: Table;
 
@@ -62,7 +66,8 @@ export class ResultsComponent {
     private _resultService: ResultService,
     private httpClient: HttpClient,
     private _chemScraperService: ChemScraperService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private dialogService: DialogService
   ) { }
 
   @ViewChild(PdfViewerComponent) pdfViewerComponent: PdfViewerComponent;
@@ -295,5 +300,18 @@ export class ResultsComponent {
     return svgString; // return original if modifications failed
   }
 
+  OpenPDFOverlay(moleculeId: number){
+    this.ref = this.dialogService.open(PdfViewerDialogServiceComponent, {
+      height:'80%',
+      data:{
+        pdfURL: this.currentPDF,
+        highlightBoxes: this.highlightBoxes,
+        highlightedMoleculeId: moleculeId,
+        pageNumber: parseInt(this.molecules[moleculeId].page_no)
+      }
+    });
+  }
 
 }
+
+

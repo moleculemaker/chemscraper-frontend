@@ -124,7 +124,7 @@
                         <td> <i [ngClass]="expanded ? 'pi pi-chevron-down p-button-icon-left' : 'pi pi-chevron-right p-button-icon-left'"></i> {{ molecule.name }}</td>
                         <td class="svg-column" [innerHTML]="molecule.structure"></td>
                         <td>
-                          <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [startX]="molecule.minX" [startY]="molecule.minY" [width]="molecule.width" [height]="molecule.height" [pageNumber]="molecule.page_no"></chemscraper-pdf-context-viewer>
+                          <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [startX]="molecule.minX" [startY]="molecule.minY" [width]="molecule.width" [height]="molecule.height" [pageNumber]="molecule.page_no" [showContext]="false"></chemscraper-pdf-context-viewer>
                         </td>
                         <td>{{ molecule.SMILE }}</td>
                         <td *ngIf="!splitView">{{ molecule.page_no }}</td>
@@ -140,40 +140,68 @@
                               <ng-template pTemplate="header">
 
                               </ng-template>
-                              <div class="molecule-details-container">
-                                <div class="molecule-details-col1">
-                                  <div>
-                                    <p class="molecule-details-header">Results Summary</p>
-                                    <p>Identified, Found {{molecule.OtherInstances.length}} time(s) in 1 document</p>
+                              <div class="molecule-info-container">
+                                <div class="molecule-details-container">
+                                  <div class="molecule-details-col1">
+                                    <div>
+                                      <p class="molecule-details-header">Results Summary</p>
+                                      <p>Identified, Found {{molecule.OtherInstances.length}} time(s) in 1 document</p>
+                                    </div>
+                                    <div>
+                                      <p class="molecule-details-header">Location</p>
+                                      <p>{{currentPDFName}}{{molecule.Location}}</p>
+                                    </div>
+                                    <div>
+                                      <p class="molecule-details-header">Other Instances</p>
+                                      <p>{{currentPDFName}} | page(s): {{molecule.OtherInstances.join(', ')}}</p>
+                                    </div>
                                   </div>
-                                  <div>
-                                    <p class="molecule-details-header">Location</p>
-                                    <p>{{currentPDFName}}{{molecule.Location}}</p>
+                                  <div class="molecule-details-col2">
+                                    <div>
+                                      <p class="molecule-details-header">Molecular Information</p>
+                                      <p>Formula: {{molecule.molecularFormula}} <br>
+                                        Weight: {{molecule.molecularWeight}} g/mol</p>
+                                    </div>
+                                    <div>
+                                      <p class="molecule-details-header">Chemical Safety</p>
+                                      <p *ngIf="molecule.chemicalSafety.length > 0"><span *ngFor="let chemicalSafetyProperty of molecule.chemicalSafety">{{chemicalSafetyProperty}}</span></p>
+                                      <p *ngIf="molecule.chemicalSafety.length == 0">Unavailable</p>
+                                    </div>
+                                    <div>
+                                      <p class="molecule-details-header">External References</p>
+                                      <p>PubChem ID: {{molecule.PubChemCID}}</p>
+                                    </div>
                                   </div>
-                                  <div>
-                                    <p class="molecule-details-header">Other Instances</p>
-                                    <p>{{currentPDFName}} | page(s): {{molecule.OtherInstances.join(', ')}}</p>
+                                  <div class="description" [ngClass]="splitView ? 'molecule-details-row2' : 'molecule-details-col3'">
+                                    <p class="molecule-details-header">Description</p>
+                                    <p>{{molecule.Description}}</p>
                                   </div>
                                 </div>
-                                <div class="molecule-details-col2">
-                                  <div>
-                                    <p class="molecule-details-header">Molecular Information</p>
-                                    <p>Formula: {{molecule.molecularFormula}} <br>
-                                      Weight: {{molecule.molecularWeight}} g/mol</p>
+                                <div class="molecule-structure-info-container">
+                                  <p>Structural Information</p>
+                                  <div class="structural-info-container">
+                                    <div class="extracted-structure-container">
+                                      <p>Extracted Structure</p>
+                                      <div class="bordered-div" [innerHTML]="molecule.structure"></div>
+                                    </div>
+                                    <div class="original-structure-container">
+                                      <p>Original Structure</p>
+                                      <div class="bordered-div">
+                                        <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [startX]="molecule.minX" [startY]="molecule.minY" [width]="molecule.width" [height]="molecule.height" [pageNumber]="molecule.page_no" [showContext]="false"></chemscraper-pdf-context-viewer>
+                                      </div>
+                                    </div>
+                                    <div class="SMILES-container">
+                                      <p>SMILES</p>
+                                      <div>{{ molecule.SMILE }}</div>
+                                    </div>
                                   </div>
-                                  <div>
-                                    <p class="molecule-details-header">Chemical Safety</p>
-                                    <p *ngIf="molecule.chemicalSafety.length > 0"><span *ngFor="let chemicalSafetyProperty of molecule.chemicalSafety">{{chemicalSafetyProperty}}</span></p>
-                                    <p *ngIf="molecule.chemicalSafety.length == 0">Unavailable</p>
+                                  <div class="original-context-container">
+                                    <p>Original Context</p>
+                                    <button (click)="OpenPDFOverlay(molecule.id)">Open in PDF viewer</button>
+                                    <div class="bordered-div">
+                                      <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [startX]="molecule.minX" [startY]="molecule.minY" [width]="molecule.width" [height]="molecule.height" [pageNumber]="molecule.page_no" [showContext]="true"></chemscraper-pdf-context-viewer>
+                                    </div>
                                   </div>
-                                  <div>
-                                    <p class="molecule-details-header">External References</p>
-                                    <p>PubChem ID: {{molecule.PubChemCID}}</p>
-                                  </div>
-                                </div>
-                                <div class="description" [ngClass]="splitView ? 'molecule-details-row2' : 'molecule-details-col3'">
-                                  <p class="molecule-details-header">Description</p>
-                                  <p>{{molecule.Description}}</p>
                                 </div>
                               </div>
                             </p-panel>

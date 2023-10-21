@@ -362,6 +362,12 @@ p-panel {
   z-index: get-index(modal) !important;
 }
 
+.molecule-info-container{
+  display: flex;
+  justify-content: space-between;
+}
+
+
 .result-molecules-details-container{
   &::ng-deep .p-panel-header{
     background-color: #FFFFFF !important;
@@ -387,8 +393,15 @@ p-panel {
     }
   }
 
+  &::ng-deep .molecule-structure-info-container{
+    flex: 1;
+    margin: 0 10px;
+  }
+
   &::ng-deep .molecule-details-container{
     display: inline-grid;
+    flex: 1;
+    margin: 0 10px;
 
     .molecule-details-col1{
       grid-column: 1;
@@ -464,4 +477,40 @@ p-panel {
 
 :host ::ng-deep .export-menu{
   width: 450px !important;
+}
+
+.structural-info-container{
+  display: inline-grid;
+  width: 100%;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+
+
+  .extracted-structure-container > div{
+    // border: #Dee2e6 1px;
+    // border-radius: 6px;
+  }
+
+  .extracted-structure-container::ng-deep svg{
+    // grid-column: 1;
+    height: 150px;
+
+  }
+
+  .original-structure-container{
+    // grid-column: 1;
+  }
+
+  .SMILES-container{
+  }
+
+}
+
+.original-context-container{
+}
+
+.bordered-div{
+  border: #Dee2e6 1px solid;
+  border-radius: 6px;
+  padding: 2px;
 }

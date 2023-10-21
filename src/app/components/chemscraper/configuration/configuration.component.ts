@@ -157,23 +157,19 @@ export class ConfigurationComponent {
   }
 
   viewFile(index: number){
-    // console.log(this.uploaded_files[index]);
-
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      // console.log(fileReader.result);
-      if(fileReader.result instanceof ArrayBuffer){
-        this.ref = this.dialogService.open(PdfViewerDialogServiceComponent, {
-          height:'60%',
-          data:{
-            pdfData: new Uint8Array(fileReader.result)
-          }
-        });
+    this._chemScraperService.getInputPDf(this.jobID).subscribe(
+      (urls) => {
+        let pdfURLs = urls;
+        if(pdfURLs.length > 0) {
+          this.ref = this.dialogService.open(PdfViewerDialogServiceComponent, {
+            height:'60%',
+            data:{
+              pdfURL: pdfURLs[0]
+            }
+          });
+        }
       }
-
-    };
-    fileReader.readAsArrayBuffer(this.uploaded_files[index]);
-
+    );
   }
 
 }
