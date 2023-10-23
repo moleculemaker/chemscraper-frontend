@@ -93,7 +93,7 @@ const initAppFn = (envService: EnvironmentService) => {
     }),
     NgxMatomoRouterModule,
     NgHcaptchaModule.forRoot({
-      siteKey: '41c35ed8-6425-4764-b3d5-23c1b896f0dd',
+      siteKey: '08c29fc6-fb0f-4253-b519-dcd859771948',
       languageCode: 'en' // optional, will default to browser language
     }),
     MenuModule

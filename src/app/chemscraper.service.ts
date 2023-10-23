@@ -63,4 +63,11 @@ export class ChemScraperService {
   exportFiles(requestBody: ExportRequestBody): Observable<Blob> {
     return this.http.post<Blob>(this.SERVER_URL + 'export-results', requestBody, { responseType: 'blob' as 'json' });
   }
+
+  getSimilaritySortedOrder(jobID: string, smile: string): Observable<number[]>{
+    let params = new HttpParams();
+    params = params.append('smile_string', smile);
+    return this.http.get<number[]>(this.SERVER_URL + 'similarity-sorted-order/' + jobID, { params: params });
+  }
+
 }

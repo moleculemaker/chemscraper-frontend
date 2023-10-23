@@ -68,6 +68,7 @@ export interface Molecule {
   Description: string;
   Location: string;
   OtherInstances: string[];
+  fingerprint: string;
 }
 
 export interface FileUploadResponse {

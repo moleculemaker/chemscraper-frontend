@@ -77,30 +77,19 @@ export class ConfigurationComponent {
           this.router.navigate(['/results', data.jobId]);
         });
     } else {
-      // this.hcaptchaService.verify().pipe(
-      //   switchMap((data) => {
-      //     this.requestBody.captcha_token = data;
-      //     this.requestBody.jobId = this.jobID;
-      //     const fileNames: string[] = this.uploaded_files.map(file => file.name);
-      //     this.requestBody.fileList = fileNames;
-      //     return this._chemScraperService.analyzeDocument(this.requestBody);
-      //   })
-      // ).subscribe(
-      //   (data) => {
-      //     console.log(data);
-      //     this.router.navigate(['/results', data.jobId]);
-      //   },
-      //   (error) => {
-      //     // TODO replace this with a call to the message service, and display the correct error message
-      //     console.error('Error getting contacts via subscribe() method:', error);
-      //   }
-      // );
-      // this.requestBody.captcha_token = data;
-      this.requestBody.jobId = this.jobID;
-      const fileNames: string[] = this.uploaded_files.map(file => file.name);
-      this.requestBody.fileList = fileNames;
-      this._chemScraperService.analyzeDocument(this.requestBody).subscribe(
-        res => {
+      this.hcaptchaService.verify().pipe(
+        switchMap((data) => {
+          console.log(data);
+
+          this.requestBody.captcha_token = data;
+          this.requestBody.jobId = this.jobID;
+          const fileNames: string[] = this.uploaded_files.map(file => file.name);
+          this.requestBody.fileList = fileNames;
+          return this._chemScraperService.analyzeDocument(this.requestBody);
+
+        })
+      ).subscribe(
+        (res) => {
           this.router.navigate(['/results', this.jobID]);
         }
       );

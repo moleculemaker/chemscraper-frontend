@@ -268,7 +268,7 @@ export class ResultsComponent {
       if (rowElements && rowIndex < this.molecules.length) {
         rowElements[rowIndex % rowsPerPage].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
         this.selectedMolecule = this.molecules[rowIndex];
-        this.pdfViewerComponent.highlightMolecule(this.selectedMolecule.id, parseInt(this.selectedMolecule.page_no));
+        // this.pdfViewerComponent.highlightMolecule(this.selectedMolecule.id, parseInt(this.selectedMolecule.page_no));
       }
     });
   }
@@ -310,6 +310,24 @@ export class ResultsComponent {
         pageNumber: parseInt(this.molecules[moleculeId].page_no)
       }
     });
+  }
+
+  customSort(){
+
+  }
+
+  similaritySort(smile: string){
+    if(this.jobID)
+    this._chemScraperService.getSimilaritySortedOrder(this.jobID, smile).subscribe(
+      (response) => {
+        this.molecules.sort((data1: Molecule, data2: Molecule) => {
+          const indexA = response.indexOf(data1.id);
+          const indexB = response.indexOf(data2.id);
+          return indexA - indexB;
+        });
+        this.goToRow(0);
+      }
+    );
   }
 
 }
