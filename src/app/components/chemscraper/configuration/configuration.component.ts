@@ -79,14 +79,11 @@ export class ConfigurationComponent {
     } else {
       this.hcaptchaService.verify().pipe(
         switchMap((data) => {
-          console.log(data);
-
           this.requestBody.captcha_token = data;
           this.requestBody.jobId = this.jobID;
           const fileNames: string[] = this.uploaded_files.map(file => file.name);
           this.requestBody.fileList = fileNames;
           return this._chemScraperService.analyzeDocument(this.requestBody);
-
         })
       ).subscribe(
         (res) => {

@@ -166,8 +166,8 @@ export class ResultsComponent {
         switchMap(() => this._chemScraperService.getResultStatus(jobID ? jobID : "example_PDF")),
         takeWhile(() => this.pollForResult)
       ).subscribe(
-        (response) => {
-          if (response == "Ready") {
+        (jobStatus) => {
+          if (jobStatus.phase == "completed") {
             this.updateStatusStage(1);
             this.pollForResult = false;
             if(jobID)
@@ -200,7 +200,7 @@ export class ResultsComponent {
                 );
               }
             );
-          } else if (response == "Error") {
+          } else if (jobStatus.phase == "error") {
             if(jobID)
             this._chemScraperService.getError(jobID).subscribe(
               (response) => {

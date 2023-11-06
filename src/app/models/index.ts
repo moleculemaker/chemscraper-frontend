@@ -100,3 +100,18 @@ export interface HighlightBox {
   height: number;
 }
 
+export interface Job {
+  job_info: string;
+  email: string;
+  job_id: string;
+  run_id: number;
+  phase: string;
+  type: string;
+  image: string;
+  command: string;
+  time_created: number;
+  time_start: number;
+  time_end: number;
+  deleted: number;
+  user_agent: string;
+}
