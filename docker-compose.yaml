@@ -1,16 +1,31 @@
-version: '3'
+
+version: '3.9'
+
+secrets:
+  NPMRC:
+    file: ~/.npmrc
+
+networks:
+  proxy:
+
 
 services:
-  clean-frontend:
-    image: moleculemaker/clean-frontend:staging
-    container_name: clean-frontend
+  chemscraper:
+    image: moleculemaker/chemscraper-frontend:staging
+    container_name: chemscraper-frontend
     build:
       context: .
-    env_file: .env
+      secrets:
+        - NPMRC
+    env_file:
+      - .env
     ports:
-      - 8989:80
+      - 4200:80
+    networks:
+      - proxy
+
     restart: unless-stopped
 
     volumes:
-     - ./src/assets/config/:/usr/share/nginx/html/assets/config:ro
-     #- ./dist/clean:/usr/share/nginx/html:ro
+     - ./src/assets/config/:/usr/share/nginx/html/assets/config
+     - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
