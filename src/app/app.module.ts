@@ -40,19 +40,14 @@ import { FileDragNDropDirective } from './components/chemscraper/configuration/f
 import { PdfViewerComponent } from './components/chemscraper/pdf-viewer/pdf-viewer.component';
 import { PdfViewerDialogServiceComponent } from './components/chemscraper/pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
 
-import { EnvironmentService } from "./services/environment.service";
+import { EnvironmentService } from "@services/environment.service";
 import { MenuModule } from "primeng/menu";
-//import {SafePipe} from "./pipes/safe.pipe";
 import { MarvinJsModule } from "./components/chemscraper/marvinjs/marvinjs.module";
 import { DialogModule } from "primeng/dialog";
 import { ExportMenuComponent } from './components/chemscraper/results/export-menu/export-menu.component';
-<<<<<<< HEAD
-import {EnvironmentService} from "./services/environment.service";
-import {ApiModule, Configuration} from "./api/mmli-backend/v1";
-import {MenuModule} from "primeng/menu";
-import {SafePipe} from "./pipes/safe.pipe";
-=======
->>>>>>> 09ff2161710905af26df4e3be75313ee2fdf14c5
+
+import { ApiModule, Configuration } from "@api/mmli-backend/v1";
+import { SafePipe } from "./pipes/safe.pipe";
 
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig('/assets/config/envvars.json');
