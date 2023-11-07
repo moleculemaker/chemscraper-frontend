@@ -341,6 +341,11 @@ export class ResultsComponent {
     );
   }
 
+  searchStructure(){
+    this.similaritySort(this.marvinJsSmiles);
+    this.showMarvinJsEditor = false;
+  }
+
 }
 
 

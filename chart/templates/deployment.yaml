@@ -51,6 +51,12 @@ spec:
                 name: {{ .Release.Name }}-config
                 key: userInfoUrl
 
+          - name: ENABLE_HCAPTCHA
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Release.Name }}-config
+                key: enableHCaptcha
+
 
 
           ports:

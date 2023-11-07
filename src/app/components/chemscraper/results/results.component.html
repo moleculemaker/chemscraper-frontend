@@ -235,7 +235,7 @@
     <!--<app-molecule-drawing-canvas></app-molecule-drawing-canvas>-->
     <app-marvin-js-editor [(smiles)]="marvinJsSmiles"></app-marvin-js-editor>
     <ng-template pTemplate="footer">
-      <p-button icon="pi pi-check" (click)="showMarvinJsEditor = false" label="Search Structure" styleClass="p-button-primary"></p-button>
+      <p-button icon="pi pi-check" (click)="searchStructure()" label="Search Structure" styleClass="p-button-primary"></p-button>
     </ng-template>
   </p-dialog>
 </div>

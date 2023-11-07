@@ -7,4 +7,5 @@ export interface EnvVars {
   signOutUrl: string;
 
   userInfoUrl: string;
+  enableHCaptcha: string;
 }
