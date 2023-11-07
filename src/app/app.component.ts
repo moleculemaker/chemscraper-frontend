@@ -28,6 +28,7 @@ export class AppComponent {
   }
 
   ngOnInit() {
+    this.userInfoService.fetchUserInfo();
       this.comingSoonTimerID = setTimeout(()=>{
         this.toggleComingSoonPopup();
       }, 2000);
