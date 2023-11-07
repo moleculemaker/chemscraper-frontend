@@ -5,6 +5,7 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-production
     kubernetes.io/tls-acme: "true"
     traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.middlewares: oauth2-proxy-ip-ratelimit@kubernetescrd
 
 controller:
   image: moleculemaker/chemscraper-frontend:latest
