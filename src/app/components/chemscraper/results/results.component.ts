@@ -164,7 +164,41 @@ export class ResultsComponent {
 
   getResult(){
     let jobID = window.location.href.split('/').at(-1);
-    if(jobID){
+    if(jobID == "example_PDF"){
+      this.updateStatusStage(1);
+      this.pollForResult = false;
+      if(jobID)
+      this._chemScraperService.getResult(jobID).subscribe(
+        (data) => {
+          data.forEach(molecule => {
+            molecule.structure = this.sanitizer.bypassSecurityTrustHtml(this.modifySvg(molecule.structure.toString()));
+          })
+          this.molecules = data;
+          this.pages_count = Math.max(...this.molecules.map(molecule => parseInt(molecule.page_no)))
+
+          this.updateStatusStage(2);
+
+          this.getHighlightBoxes(1);
+
+          if(jobID)
+          this._chemScraperService.getInputPDf(jobID).subscribe(
+            (urls) => {
+              this.pdfURLs = urls;
+              if(this.pdfURLs.length > 0) {
+                this.currentPDF = this.pdfURLs[0];
+                const pdfName = this.currentPDF.split("/").pop();
+                if(pdfName){
+                  this.currentPDFName = pdfName;
+                  this.fileNames.push(pdfName);
+                }
+                this.contentLoaded = true;
+              }
+            }
+          );
+        }
+      );
+    }
+    else if(jobID){
       timer(0, 10000).pipe(
         switchMap(() => this._chemScraperService.getResultStatus(jobID ? jobID : "example_PDF")),
         takeWhile(() => this.pollForResult)
