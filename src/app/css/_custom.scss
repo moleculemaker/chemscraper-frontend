@@ -40,6 +40,9 @@ $colors: map.merge($colors, (
 	interface_background_tint: #f2f5fc,
 	interface_border: #dee2e6,
 
+	link: lighten(get_color('primary'), 20%),
+	link_hover: get_color('primary'),
+
 	status_error: #f88,
 	status_error_text: #a33,
 	status_warning: #fef2e8,
