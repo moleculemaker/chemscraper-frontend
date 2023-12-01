@@ -35,7 +35,6 @@ import { ChemScraperService } from './chemscraper.service';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxMatomoTrackerModule } from '@ngx-matomo/tracker';
 import { NgxMatomoRouterModule } from '@ngx-matomo/router';
-import { NgHcaptchaModule } from 'ng-hcaptcha';
 import { FileDragNDropDirective } from './components/chemscraper/configuration/file-drag-n-drop.directive';
 import { PdfViewerComponent } from './components/chemscraper/pdf-viewer/pdf-viewer.component';
 import { PdfViewerDialogServiceComponent } from './components/chemscraper/pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
