@@ -11,7 +11,7 @@ networks:
 
 services:
   chemscraper:
-    image: moleculemaker/chemscraper-frontend:staging
+    image: moleculemaker/chemscraper-frontend:localdev
     container_name: chemscraper-frontend
     build:
       context: .

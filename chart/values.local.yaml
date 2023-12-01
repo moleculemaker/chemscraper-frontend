@@ -1,3 +1,7 @@
 ingress:
-  ingressClassName: nginx
+  ingressClassName: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: mmli-cors-header@kubernetescrd
 
+config:
+  hostname: "http://mmli.fastapi.localhost"
