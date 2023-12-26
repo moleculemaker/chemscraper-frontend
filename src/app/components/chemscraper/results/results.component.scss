@@ -626,3 +626,22 @@ p-panel {
   border-radius: 6px;
   padding: 2px;
 }
+
+.marvin-filter-container{
+  padding: 5px;
+  border: #CED4DA;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 6px;
+
+  .p-inputgroup{
+    textarea{
+      border-width: 0px;
+    }
+    button{
+      background-color: #F8F9FA;
+      border-color: #CED4DA;
+      border-radius: 6px;
+    }
+  }
+}

@@ -8,7 +8,6 @@ import { switchMap } from 'rxjs/operators';
 
 import { PostResponse, ChemScraperAnalyzeRequestBody, SingleSeqData, ExampleData } from '../../../models';
 import { ResultsComponent } from '../results/results.component';
-import { NgHcaptchaService } from "ng-hcaptcha";
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 import { PdfViewerDialogServiceComponent } from '../pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
@@ -47,7 +46,6 @@ export class ConfigurationComponent {
   requestBody: ChemScraperAnalyzeRequestBody = {
     jobId: '',
     user_email: '',
-    captcha_token: '',
     fileList: []
   };
 
@@ -56,7 +54,6 @@ export class ConfigurationComponent {
     private _chemScraperService: ChemScraperService,
     private httpClient: HttpClient,
     private trackingService: TrackingService,
-    private hcaptchaService: NgHcaptchaService,
     private dialogService: DialogService,
     private envService: EnvironmentService
   ) { }
@@ -83,31 +80,14 @@ export class ConfigurationComponent {
           this.router.navigate(['/results', data.jobId]);
         });
     } else {
-      if(this.env.enableHCaptcha == "true"){
-        this.hcaptchaService.verify().pipe(
-          switchMap((data) => {
-            this.requestBody.captcha_token = data;
-            this.requestBody.jobId = this.jobID;
-            const fileNames: string[] = this.uploaded_files.map(file => file.name);
-            this.requestBody.fileList = fileNames;
-            return this._chemScraperService.analyzeDocument(this.requestBody);
-          })
-        ).subscribe(
-          (res) => {
-            this.router.navigate(['/results', this.jobID]);
-          }
-        );
-      } else {
-        this.requestBody.captcha_token = "";
-        this.requestBody.jobId = this.jobID;
-        const fileNames: string[] = this.uploaded_files.map(file => file.name);
-        this.requestBody.fileList = fileNames;
-        this._chemScraperService.analyzeDocument(this.requestBody).subscribe(
-          (res) => {
-            this.router.navigate(['/results', this.jobID]);
-          }
-        );
-      }
+      this.requestBody.jobId = this.jobID;
+      const fileNames: string[] = this.uploaded_files.map(file => file.name);
+      this.requestBody.fileList = fileNames;
+      this._chemScraperService.analyzeDocument(this.requestBody).subscribe(
+        (res) => {
+          this.router.navigate(['/results', this.jobID]);
+        }
+      );
     }
   }
 

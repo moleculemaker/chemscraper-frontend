@@ -63,39 +63,16 @@
                 <chemscraper-export-menu [tableRows]="resultsTable.value" [pages_count]="pages_count"></chemscraper-export-menu>
               </p-overlayPanel>
 
-              <!-- <div class="header_group">
-                <div class="label">Apply document as table filter</div>
-                <p-selectButton [options]="tableFilterStateOptions" [(ngModel)]="tableFilterValue" optionLabel="label" optionValue="value"></p-selectButton>
-              </div> -->
             </div>
             <div class="result-container">
-              <!-- <div class="column1" [ngClass]="{'collapsed': !splitView}">
-                <p-button class="toggle_splitview_button" styleClass="p-button-outlined p-button-xs"
-                  [icon]="(splitView) ? 'pi pi-chevron-left' : 'pi pi-chevron-right'"
-                  (click)="toggleSplitView()"
-                ></p-button>
-
-                <div class="content">
-                  <div class="document-path-bar">
-                    Document Center > <span class="pdf_name">{{currentPDFName}}</span>
-                  </div>
-
-                  <div id="input_pdf_container" class="input_pdf_container">
-                    <chemscraper-pdf-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [highlightBoxes]="highlightBoxes" (scrollToMolecule)="goToRow($event)"></chemscraper-pdf-viewer>
-                  </div>
-                </div>
-              </div> -->
-
               <div class="column2">
-                <div class="p-inputgroup">
-                  <textarea pInputTextarea class="form-control" [(ngModel)]="marvinJsSmiles" placeholder="Filter by SMILES..."></textarea>
-                  <button pButton class="p-button-secondary p-button-link p-button-outlined" icon="pi pi-pencil" (click)="openMarvinjsEditor($event)">{{ marvinJsSmiles ? 'Edit' : 'Draw' }} Structure</button>
+                <div class="marvin-filter-container">
+                  <div class="p-inputgroup">
+                    <textarea pInputTextarea class="form-control" [(ngModel)]="marvinJsSmiles" placeholder="Filter results by SMILES..."></textarea>
+                    <button pButton class="p-button-secondary p-button-link p-button-outlined" icon="pi pi-pencil" (click)="openMarvinjsEditor($event)">{{ marvinJsSmiles ? 'Edit' : 'Draw' }} Structure</button>
+                  </div>
                 </div>
-                <!-- Content for column 2 goes here -->
-                <!-- <div class="search-row">
-                  <input pInputText placeholder="Search by SMILES" [(ngModel)]="searchText" class="search-input" />
-                  <button pButton type="button" class="filter-button p-button-outlined p-button-sm" (click)="filterResults()"> <i class="p-button-icon-left pi pi-filter"></i> Filter </button>
-                </div> -->
+
                 <div class="sort-row">
                   <div class="sort-text">
                     Showing {{filterBySmiles(molecules, marvinJsSmiles).length}} / {{molecules.length}} identified molecules

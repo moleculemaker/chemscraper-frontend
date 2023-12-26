@@ -96,10 +96,6 @@ const initAppFn = (envService: EnvironmentService) => {
       trackerUrl: 'https://matomo.mmli1.ncsa.illinois.edu/'
     }),
     NgxMatomoRouterModule,
-    NgHcaptchaModule.forRoot({
-      siteKey: '08c29fc6-fb0f-4253-b519-dcd859771948',
-      languageCode: 'en' // optional, will default to browser language
-    }),
     MenuModule,
 
     //ApiModule.forRoot(() => new Configuration()),

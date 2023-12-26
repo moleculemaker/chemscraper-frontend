@@ -30,7 +30,6 @@ export interface SingleSeqData {
 export interface ChemScraperAnalyzeRequestBody {
   jobId: string;
   user_email: string;
-  captcha_token: string;
   fileList: string[];
 }
 
