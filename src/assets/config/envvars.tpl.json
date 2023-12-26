@@ -4,6 +4,6 @@
 
   "signInUrl": "${OAUTH_SIGNIN_URL}",
   "signOutUrl": "${OAUTH_SIGNOUT_URL}",
-  "userInfoUrl": "${OAUTH_USERINFO_URL}",
+  "userInfoUrl": "${OAUTH_USERINFO_URL}"
 }
 

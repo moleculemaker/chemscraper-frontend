@@ -18,7 +18,6 @@ config:
   signInUrl: "https://auth.platform.moleculemaker.org/oauth2/start?rd=https%3A%2F%2Fchemcraper.platform.moleculemaker.org%2Fconfiguration"
   signOutUrl: "https://auth.platform.moleculemaker.org/oauth2/sign_out?rd=https%3A%2F%2Fchemscraper.platform.moleculemaker.org%2Fconfiguration"
   userInfoUrl: "https://auth.platform.moleculemaker.org/oauth2/userinfo"
-  enableHCaptcha: "true"
 
 extraDeploy:
 - apiVersion: traefik.containo.us/v1alpha1
