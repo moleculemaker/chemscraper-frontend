@@ -20,7 +20,7 @@
           <label [for]="'single_page'" class="p-radiobutton-label">Single Page</label>
         </div>
         <div class="field-dropdown">
-          <p-dropdown *ngIf="this.exportRequestBody.cdxml_filter == 'single_page'" placeholder="Select page" [options]="pages" [(ngModel)]="selectedPage" optionLabel="label"></p-dropdown>
+          <p-dropdown *ngIf="this.exportRequestBody.cdxml_filter == 'single_page'" [options]="pages" [(ngModel)]="selectedPage" optionLabel="label"></p-dropdown>
         </div>
       </div>
       <hr>
@@ -40,5 +40,5 @@
       </div>
     </div>
   </div>
-  <ng-template pTemplate="footer"> <p-button (click)="export()">Export</p-button> </ng-template>
+  <ng-template pTemplate="footer"> <p-button [disabled]="isExportDisabled" (click)="export()">Export</p-button> </ng-template>
 </p-panel>

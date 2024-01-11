@@ -13,6 +13,7 @@ export class ExportMenuComponent implements OnInit{
   @Input() pages_count: number;
 
   format_checkbox: string[] = [];
+  isExportDisabled: boolean;
 
   // pages: number[] = Array.from({length: 10}, (_, i) => i + 1);
   pages: any[] = [];
@@ -36,6 +37,9 @@ export class ExportMenuComponent implements OnInit{
     for(let i = 1; i <= this.pages_count; i++) { // Replace 10 with N to generate numbers up to N
       this.pages.push({label: i.toString(), value: i});
     }
+
+    this.isExportDisabled = true;
+    this.selectedPage = this.pages[0].value;
 
   }
 
@@ -73,6 +77,11 @@ export class ExportMenuComponent implements OnInit{
       this.exportRequestBody.csv = true;
     } else {
       this.exportRequestBody.csv = false;
+    }
+    if(this.pages_count > 0 && ( this.exportRequestBody.cdxml || this.exportRequestBody.csv)){
+      this.isExportDisabled = false;
+    } else {
+      this.isExportDisabled = true;
     }
   }
 

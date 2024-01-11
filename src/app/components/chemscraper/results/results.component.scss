@@ -193,7 +193,7 @@ p-panel {
     padding: ($padding);
 
     border: {
-      bottom: 1px solid css_var('interface_border');
+      top: 1px solid css_var('interface_border');
     }
 
     .header_group {
@@ -356,16 +356,95 @@ p-panel {
       top: 1px solid css_var('interface_border');
     }
   }
+
+  .p-datatable-thead {
+    position: relative;
+
+    &:after,
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0px;
+      right: 0px;
+      z-index: get_index(interface);
+
+      pointer-events: none;
+    }
+
+    &:after {
+      top: 0px;
+
+      border: {
+        top: 1px solid css_var('interface_border');
+      }
+    }
+
+    &:after {
+      bottom: 0px;
+
+      border: {
+        bottom: 1px solid css_var('interface_border');
+      }
+    }
+  }
+
+  .column_name {
+    width: 17rem;
+
+    .column_container {
+      display: flex;
+      align-items: flex-start;
+      gap: $padding * .25;
+    }
+  }
+
+  tr.p-highlight {
+    outline: 0px !important;
+
+    > td {
+      border: {
+        bottom: 0px;
+      }
+    }
+  }
+
+  .row_expansion {
+    background: {
+      color: #eff6ff !important;
+    }
+
+    td {
+      border: none !important;
+    }
+  }
 }
 
 .container ::ng-deep .p-sidebar{
   z-index: get-index(modal) !important;
 }
 
+.molecule-info-container{
+  display: flex;
+  justify-content: space-between;
+}
+
+
 .result-molecules-details-container{
+  .molecule-details-header-container {
+    margin: {
+      bottom: $padding;
+    }
+    padding: $padding * .5;
+  }
+
+  ::ng-deep .p-panel {
+    @include border-radius($border_radius);
+  }
+
   &::ng-deep .p-panel-header{
-    background-color: #FFFFFF !important;
+    background: none !important;
     border-bottom: none !important;
+    padding: 0px !important;
   }
 
   &::ng-deep .result-molecules-details-button{
@@ -387,8 +466,16 @@ p-panel {
     }
   }
 
+  &::ng-deep .molecule-structure-info-container{
+    flex: 1;
+    margin: 0 10px;
+  }
+
   &::ng-deep .molecule-details-container{
     display: inline-grid;
+    flex: 1;
+    margin: 0 10px;
+    margin-bottom: $padding;
 
     .molecule-details-col1{
       grid-column: 1;
@@ -400,7 +487,7 @@ p-panel {
 
       > div {
         padding: {
-          left: $padding;
+//          left: $padding;
         }
       }
     }
@@ -427,12 +514,14 @@ p-panel {
       margin-top: 24px;
     }
 
+/*
     .description {
       padding: $padding;
       padding: {
         top: 0px;
       }
     }
+*/
   }
 }
 
@@ -464,4 +553,95 @@ p-panel {
 
 :host ::ng-deep .export-menu{
   width: 450px !important;
+}
+
+.structural-info-container{
+  display: inline-grid;
+  width: 100%;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+
+
+  .extracted-structure-container > div{
+    // border: #Dee2e6 1px;
+    // border-radius: 6px;
+  }
+
+  .extracted-structure-container::ng-deep svg{
+    // grid-column: 1;
+    height: 150px;
+
+  }
+
+  .original-structure-container{
+    // grid-column: 1;
+  }
+
+  .SMILES-container{
+  }
+
+}
+
+.original-context-container{
+  margin: {
+    top: $padding;
+    bottom: $padding;
+  }
+
+  .title_bar {
+    display: flex;
+    align-items: center;
+    gap: $padding * .25;
+
+    margin: {
+      bottom: $padding * .25;
+    }
+
+    .molecule-details-header {
+      padding: 0px;
+    }
+
+    .spacer {
+      flex-grow: 1;
+    }
+
+    .pdf_link {
+      cursor: pointer;
+
+      display: flex;
+      align-items: center;
+      gap: $padding * .25;
+
+      color: css_var('link');
+
+      &:hover {
+        color: css_var('link_hover');
+      }
+    }
+  }
+}
+
+.bordered-div{
+  border: #Dee2e6 1px solid;
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.marvin-filter-container{
+  padding: 5px;
+  border: #CED4DA;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 6px;
+
+  .p-inputgroup{
+    textarea{
+      border-width: 0px;
+    }
+    button{
+      background-color: #F8F9FA;
+      border-color: #CED4DA;
+      border-radius: 6px;
+    }
+  }
 }

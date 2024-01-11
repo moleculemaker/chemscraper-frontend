@@ -12,23 +12,30 @@ import { HighlightBox } from 'src/app/models';
 export class PdfViewerDialogServiceComponent {
 
   // **Inputs cannot be used with PrimeNG DialogService for overlays**
-  @Input()
-  highlightBoxes: HighlightBox[][] = [];
+  // @Input()
+  // highlightBoxes: HighlightBox[][] = [];
 
   pdf: PDFDocumentProxy;
   totalPages: number = 0;
   pageNumber: number = 1;
   pageRendering: boolean = false;
   pageNumPending: number = -1;
-  pdfData: Uint8Array;
+  pdfURL: string;
   scale: number = 1;
+  boxPadding: number = 5;
+  highlightBoxes: HighlightBox[][] = [];
+  highlightedMoleculeId: number = -1;
 
   constructor(public ref: DynamicDialogRef, public config: DynamicDialogConfig){
-    this.pdfData = config.data.pdfData;
+    this.pdfURL = config.data.pdfURL;
+    this.highlightBoxes = config.data.highlightBoxes;
+    this.highlightedMoleculeId = config.data.highlightedMoleculeId;
+    if(config.data.pageNumber)
+    this.pageNumber = config.data.pageNumber;
   }
 
   ngOnInit(){
-    let loadingTask = pdfjsLib.getDocument({data: this.pdfData});
+    let loadingTask = pdfjsLib.getDocument(this.pdfURL);
 
     loadingTask.promise.then((pdf) =>{
       this.pdf = pdf;
@@ -48,6 +55,8 @@ export class PdfViewerDialogServiceComponent {
 
       let scale = this.scale;
       let viewport = page.getViewport({scale: scale});
+      const originX = page.view[0];
+      const originY = page.view[1];
 
       // Prepare canvas using PDF page dimensions
       let canvas = document.getElementById('pdf-canvas') as HTMLCanvasElement;
@@ -64,35 +73,45 @@ export class PdfViewerDialogServiceComponent {
       renderTask.promise.then( () => {
         this.pageRendering = false;
 
-        if(pageNumber-1 < this.highlightBoxes.length){
-          this.highlightBoxes[pageNumber-1].forEach(function (box) {
-            const cornerRadius = 5;
-            if(context){
-              context.beginPath();
-              context.moveTo(box.x + cornerRadius, box.y);
-              context.lineTo(box.x + box.width - cornerRadius, box.y);
-              context.arcTo(box.x + box.width, box.y, box.x + box.width, box.y + cornerRadius, cornerRadius);
-              context.lineTo(box.x + box.width, box.y + box.height - cornerRadius);
-              context.arcTo(box.x + box.width, box.y + box.height, box.x + box.width - cornerRadius, box.y + box.height, cornerRadius);
-              context.lineTo(box.x + cornerRadius, box.y + box.height);
-              context.arcTo(box.x, box.y + box.height, box.x, box.y + box.height - cornerRadius, cornerRadius);
-              context.lineTo(box.x, box.y + cornerRadius);
-              context.arcTo(box.x, box.y, box.x + cornerRadius, box.y, cornerRadius);
-              context.closePath();
-              context.fillStyle = "rgba(228, 248, 240, 0.5)";
-              context.strokeStyle = 'rgba(30, 169, 124, 1)';
-              context.fill();
-              context.stroke();
+        if(this.highlightBoxes && pageNumber < this.highlightBoxes.length){
+          this.highlightBoxes[pageNumber].forEach( (box) => {
+            let boxX = (box.x * 72.0) / 300 - originX - this.boxPadding;
+            let boxY = (box.y * 72.0) / 300 - originY - this.boxPadding;
+            boxX = boxX ? boxX : 0;
+            boxY = boxY ? boxY : 0;
+            let boxWidth = (box.width * 72.0) / 300 + ( 2 * this.boxPadding );
+            let boxHeight = (box.height * 72.0) / 300 + ( 2 * this.boxPadding );
 
+            let scaledBox = {x: scale * boxX, y: scale * boxY, width: scale * boxWidth, height: scale * boxHeight}
+
+            const cornerRadius = scale * 5;
+            if(context){
+              let path = new Path2D();
+              path.moveTo(scaledBox.x + cornerRadius, scaledBox.y);
+              path.lineTo(scaledBox.x + scaledBox.width - cornerRadius, scaledBox.y);
+              path.arcTo(scaledBox.x + scaledBox.width, scaledBox.y, scaledBox.x + scaledBox.width, scaledBox.y + cornerRadius, cornerRadius);
+              path.lineTo(scaledBox.x + scaledBox.width, scaledBox.y + scaledBox.height - cornerRadius);
+              path.arcTo(scaledBox.x + scaledBox.width, scaledBox.y + scaledBox.height, scaledBox.x + scaledBox.width - cornerRadius, scaledBox.y + scaledBox.height, cornerRadius);
+              path.lineTo(scaledBox.x + cornerRadius, scaledBox.y + scaledBox.height);
+              path.arcTo(scaledBox.x, scaledBox.y + scaledBox.height, scaledBox.x, scaledBox.y + scaledBox.height - cornerRadius, cornerRadius);
+              path.lineTo(scaledBox.x, scaledBox.y + cornerRadius);
+              path.arcTo(scaledBox.x, scaledBox.y, scaledBox.x + cornerRadius, scaledBox.y, cornerRadius);
+              path.closePath();
+              context.fillStyle = "rgba(34, 64, 99, 0.1)";
+              context.strokeStyle = 'rgba(34, 64, 99, 1)';
+              if(this.highlightedMoleculeId >= 0 && box.moleculeId == this.highlightedMoleculeId){
+                context.fillStyle = "rgba(5, 0, 255, 0.1)";
+                context.strokeStyle = 'rgba(5, 0, 255, 1)';
+              }
+              context.fill(path);
+              context.stroke(path);
             }
           });
         }
-
         if (this.pageNumPending !== -1) {
           this.renderPage(this.pageNumPending);
           this.pageNumPending = -1;
         }
-
       });
     });
   }

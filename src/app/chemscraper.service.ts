@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
 
-import { PostResponse, ChemScraperAnalyzeRequestBody, ExampleData, FileUploadResponse, Molecule, ExportRequestBody } from './models';
+import { PostResponse, ChemScraperAnalyzeRequestBody, ExampleData, FileUploadResponse, Molecule, ExportRequestBody, Job } from './models';
 import {EnvironmentService} from "./services/environment.service";
 
 @Injectable({
@@ -44,8 +44,8 @@ export class ChemScraperService {
     }
   }
 
-  getResultStatus(jobID: string): Observable<string>{
-    return this.http.get<string>(this.SERVER_URL + 'result-status/' + jobID)
+  getResultStatus(jobID: string): Observable<Job>{
+    return this.http.get<Job>(this.SERVER_URL + 'jobs/' + jobID + '/0');
   }
 
   getResult(jobID: string): Observable<Molecule[]>{
@@ -63,4 +63,11 @@ export class ChemScraperService {
   exportFiles(requestBody: ExportRequestBody): Observable<Blob> {
     return this.http.post<Blob>(this.SERVER_URL + 'export-results', requestBody, { responseType: 'blob' as 'json' });
   }
+
+  getSimilaritySortedOrder(jobID: string, smile: string): Observable<number[]>{
+    let params = new HttpParams();
+    params = params.append('smile_string', smile);
+    return this.http.get<number[]>(this.SERVER_URL + 'similarity-sorted-order/' + jobID, { params: params });
+  }
+
 }
