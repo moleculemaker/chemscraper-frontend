@@ -11,9 +11,15 @@
  */
 
 
-export interface AnalyzeRequestBody { 
-    jobId: string;
-    user_email: string;
-    fileList: Array<string>;
-}
+/**
+ * An enumeration.
+ */
+export type JobStatus = 'queued' | 'processing' | 'completed' | 'error';
+
+export const JobStatus = {
+    Queued: 'queued' as JobStatus,
+    Processing: 'processing' as JobStatus,
+    Completed: 'completed' as JobStatus,
+    Error: 'error' as JobStatus
+};
 

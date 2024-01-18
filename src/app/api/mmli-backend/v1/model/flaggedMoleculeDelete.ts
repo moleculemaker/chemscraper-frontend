@@ -11,9 +11,8 @@
  */
 
 
-export interface AnalyzeRequestBody { 
-    jobId: string;
-    user_email: string;
-    fileList: Array<string>;
+export interface FlaggedMoleculeDelete { 
+    smile: string;
+    job_id: string;
 }
 

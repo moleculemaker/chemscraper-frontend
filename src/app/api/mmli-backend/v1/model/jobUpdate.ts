@@ -9,11 +9,21 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { JobStatus } from './jobStatus';
 
 
-export interface AnalyzeRequestBody { 
-    jobId: string;
-    user_email: string;
-    fileList: Array<string>;
+export interface JobUpdate { 
+    job_id: string;
+    run_id: number;
+    time_start?: number;
+    time_end?: number;
+    job_info?: string;
+    email?: string;
+    image?: string;
+    command?: string;
+    phase?: JobStatus;
 }
+export namespace JobUpdate {
+}
+
 

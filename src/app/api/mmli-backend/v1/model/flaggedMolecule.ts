@@ -11,9 +11,10 @@
  */
 
 
-export interface AnalyzeRequestBody { 
-    jobId: string;
-    user_email: string;
-    fileList: Array<string>;
+export interface FlaggedMolecule { 
+    smile?: string;
+    job_id?: string;
+    doc_id?: string;
+    time_created?: number;
 }
 

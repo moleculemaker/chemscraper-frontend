@@ -11,9 +11,10 @@
  */
 
 
-export interface AnalyzeRequestBody { 
-    jobId: string;
-    user_email: string;
-    fileList: Array<string>;
+export interface JobCreate { 
+    job_info?: string;
+    email?: string;
+    job_id?: string;
+    run_id?: number;
 }
 

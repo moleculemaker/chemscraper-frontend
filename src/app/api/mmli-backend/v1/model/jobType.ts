@@ -11,9 +11,14 @@
  */
 
 
-export interface AnalyzeRequestBody { 
-    jobId: string;
-    user_email: string;
-    fileList: Array<string>;
-}
+/**
+ * An enumeration.
+ */
+export type JobType = 'clean' | 'chemscraper' | 'molli';
+
+export const JobType = {
+    Clean: 'clean' as JobType,
+    Chemscraper: 'chemscraper' as JobType,
+    Molli: 'molli' as JobType
+};
 

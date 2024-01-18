@@ -16,19 +16,20 @@ export interface Molecule {
     doc_no: string;
     file_path: string;
     page_no: string;
-    name: string;
+    name?: string;
     SMILE: string;
     structure: string;
     minX: number;
     minY: number;
     width: number;
     height: number;
-    PubChemCID: string;
-    molecularFormula: string;
-    molecularWeight: string;
-    chemicalSafety: Array<string>;
-    Description: string;
+    PubChemCID?: string;
+    molecularFormula?: string;
+    molecularWeight?: string;
+    chemicalSafety?: Array<string>;
+    Description?: string;
     Location: string;
     OtherInstances: Array<string>;
+    fingerprint: string;
 }
 
