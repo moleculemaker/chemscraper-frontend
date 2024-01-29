@@ -7,12 +7,13 @@ import { finalize, startWith, switchMap, takeWhile } from "rxjs/operators";
 import { Router } from '@angular/router';
 import { MenuItem, Message } from 'primeng/api';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { PredictionRow, PollingResponseResult, PollingResponseStatus, SingleSeqResult, SeqResult, HighlightBox, Molecule } from '../../../models';
+import { PredictionRow, PollingResponseResult, PollingResponseStatus, SingleSeqResult, SeqResult, HighlightBox, Molecule, Job } from '../../../models';
 import { ChemScraperService } from 'src/app/chemscraper.service';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 import { Table } from 'primeng/table';
 import { PdfViewerDialogServiceComponent } from '../pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { OverlayPanel } from 'primeng/overlaypanel';
 
 @Component({
   selector: 'app-results',
@@ -36,7 +37,7 @@ export class ResultsComponent {
   failedJob: boolean = false;
   jobID: string | undefined;
   downloadRows: string[][] = [['Identifier', 'Predicted EC Number']];
-  statusResponse: PollingResponseStatus;
+  statusResponse: Job;
   useExample: boolean = false;
   preComputedMessage: Message[];
   jobFailedMessage: Message[];
@@ -61,8 +62,17 @@ export class ResultsComponent {
 
   pages_count: number = 0;
   ref: DynamicDialogRef;
+  sortOptions: any[];
+  moleculeStatusFilterOptions: any[];
+  flaggedFilterOptions: any[];
+  selectedSortOption: any;
+  selectedMoleculeStatusFilterOption: any;
+  selectedFlaggedFilterOption: any;
+  similaritySortSMILE: string = "";
+  isAscending: boolean = true;
 
   @ViewChild('resultsTable') resultsTable: Table;
+  @ViewChild('sortOverlay') sortOverlay: OverlayPanel;
 
   constructor(
     private router: Router,
@@ -71,7 +81,24 @@ export class ResultsComponent {
     private _chemScraperService: ChemScraperService,
     private sanitizer: DomSanitizer,
     private dialogService: DialogService
-  ) { }
+  ) {
+    this.sortOptions = [
+      { label: 'Location In PDF (default)', value: 'Location In PDF', disabled: false },
+      { label: 'Molecular Weight', value: 'Molecular Weight', disabled: false },
+      { label: 'Occurrences', value: 'Occurrences', disabled: false },
+      { label: 'Similarity', value: 'Similarity', disabled: true }
+    ];
+    this.moleculeStatusFilterOptions = [
+      { label: 'All molecules found', value: 'all' },
+      { label: 'Has converted CDXML structure', value: 'hasCDXML' },
+      { label: 'No converted CDXML structure', value: 'noCDXML' }
+    ];
+    this.flaggedFilterOptions = [
+      { label: 'All', value: 'all' },
+      { label: 'No', value: 'no' },
+      { label: 'Yes', value: 'yes' }
+    ];
+  }
 
   @ViewChild(PdfViewerComponent) pdfViewerComponent: PdfViewerComponent;
 
@@ -106,6 +133,9 @@ export class ResultsComponent {
 
     // Temp file read function
     // this.process_example_file();
+    this.selectedSortOption = "Location In PDF";
+    this.selectedMoleculeStatusFilterOption = "all";
+    this.selectedFlaggedFilterOption = "all";
 
     this.getResult();
 
@@ -154,10 +184,6 @@ export class ResultsComponent {
     this.filterPanelVisible = true;
   }
 
-  sortResults(){
-
-  }
-
   selectRow(event: Event){
     // event.stopPropagation();
   }
@@ -204,6 +230,9 @@ export class ResultsComponent {
         takeWhile(() => this.pollForResult)
       ).subscribe(
         (jobStatus) => {
+          this.statusResponse = jobStatus;
+          console.log(jobStatus);
+
           if (jobStatus.phase == "completed") {
             this.updateStatusStage(1);
             this.pollForResult = false;
@@ -362,13 +391,18 @@ export class ResultsComponent {
   }
 
   similaritySort(smile: string){
+    this.similaritySortSMILE = smile;
+    this.updateSimilaritySortDisabledState();
     if(this.jobID)
     this._chemScraperService.getSimilaritySortedOrder(this.jobID, smile).subscribe(
       (response) => {
         this.molecules.sort((data1: Molecule, data2: Molecule) => {
           const indexA = response.indexOf(data1.id);
           const indexB = response.indexOf(data2.id);
-          return indexA - indexB;
+          if(this.isAscending){
+            return indexA - indexB;
+          }
+          return indexB - indexA;
         });
         this.goToRow(0);
       }
@@ -378,6 +412,75 @@ export class ResultsComponent {
   searchStructure(){
     this.similaritySort(this.marvinJsSmiles);
     this.showMarvinJsEditor = false;
+  }
+
+  toggleSort() {
+    console.log(this.isAscending);
+
+    this.isAscending = !this.isAscending;
+    this.sortData(this.selectedSortOption);
+  }
+
+  onSortChange(event: any) {
+    this.sortData(event.value);
+    // this.sortOverlay.hide();
+  }
+
+  onFilterChange(event: any) {
+    console.log(this.selectedMoleculeStatusFilterOption);
+    console.log(this.selectedFlaggedFilterOption);
+
+  }
+
+  sortData(value: string){
+    if(value == "Location In PDF"){
+      this.molecules.sort((data1: Molecule, data2: Molecule) => {
+        if(this.isAscending){
+          return data1.id - data2.id;
+        }
+        return data2.id - data1.id;
+      });
+    } else if (value == "Molecular Weight") {
+      this.molecules.sort((data1: Molecule, data2: Molecule) => {
+        if(!data2.molecularWeight || data2.molecularWeight == 'Unavailable'){
+          return -1;
+        }
+        if(!data1.molecularWeight || data1.molecularWeight == 'Unavailable'){
+          return 1;
+        }
+        const weight1 = parseFloat(data1.molecularWeight);
+        const weight2 = parseFloat(data2.molecularWeight);
+        if (isNaN(weight2)){
+          return -1;
+        }
+        if(isNaN(weight1)){
+          return 1;
+        }
+        if(this.isAscending){
+          return weight1 - weight2;
+        }
+        return weight2 - weight1;
+      });
+
+    } else if (value == "Occurrences") {
+      this.molecules.sort((data1: Molecule, data2: Molecule) => {
+        if(this.isAscending){
+          return data1.OtherInstances.length - data2.OtherInstances.length;
+        }
+        return data2.OtherInstances.length - data1.OtherInstances.length;
+      });
+    } else if (value == "Similarity") {
+      this.similaritySort(this.similaritySortSMILE);
+    }
+  }
+
+  updateSimilaritySortDisabledState(){
+    this.sortOptions = this.sortOptions.map(sortOption => {
+      if (sortOption.value === 'Similarity') {
+        return { ...sortOption, label: "Similarity: " + this.similaritySortSMILE, disabled: this.similaritySortSMILE == "" };
+      }
+      return sortOption;
+    });
   }
 
 }
