@@ -1,10 +1,22 @@
-# Clean
+# Chemscraper
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.1.6.
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+For marwin.js license add the following lines to the ~/.npmrc file:
+```
+@chemaxon:registry=https://hub.chemaxon.com/artifactory/api/npm/npm/
+hub.chemaxon.com/artifactory/api/npm/npm/:_auth="<auth>"
+hub.chemaxon.com/artifactory/api/npm/npm/:_password="<password>"
+hub.chemaxon.com/artifactory/api/npm/npm/:username=<user>
+hub.chemaxon.com/artifactory/api/npm/npm/:email=<email>
+hub.chemaxon.com/artifactory/api/npm/npm/:always-auth=true
+```
+
+Reach out to developers for the secrets.
+
+Run `npm start` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 
