@@ -7,15 +7,11 @@
                     <i class="pi pi-copy copy_and_paste_button" (click)="copyAndPasteURL()"></i>
                 </h3>
 <!-- todo: change to output job summary data -->
-                <h5>Job summary goes here</h5>
-
-                <!-- <div class="details">
-                    <div class="sequence_time">Submission Time: {{statusResponse?.created_at | date:'short' }}</div>
-                </div> -->
+                <div class="details">
+                    <div *ngIf="statusResponse" class="sequence_time">Document Submitted: {{statusResponse.job_info}} | Submission Time: {{statusResponse.time_created | date:'short' }}</div>
+                </div>
             </div>
-
             <div class="spacer"></div>
-
             <div class="buttons">
                 <!-- <button *ngIf="!contentLoaded" pButton label="Cancel" class="p-button-outlined p-button-secondary p-button-xs"></button> -->
                 <a pButton label="Run a new Request" icon="pi pi-plus" class="p-button-outlined p-button-sm"
@@ -66,10 +62,42 @@
             </div>
             <div class="result-container">
               <div class="column2">
-                <div class="marvin-filter-container">
-                  <div class="p-inputgroup">
-                    <textarea pInputTextarea class="form-control" [(ngModel)]="marvinJsSmiles" placeholder="Filter results by SMILES..."></textarea>
-                    <button pButton class="p-button-secondary p-button-link p-button-outlined" icon="pi pi-pencil" (click)="openMarvinjsEditor($event)">{{ marvinJsSmiles ? 'Edit' : 'Draw' }} Structure</button>
+                <div class="table-controls">
+                  <div class="marvin-filter-container">
+                    <div class="p-inputgroup">
+                      <textarea pInputTextarea class="form-control" [(ngModel)]="marvinJsSmiles" [rows]="1" placeholder="Filter results by SMILES..."></textarea>
+                      <button pButton class="p-button-secondary p-button-link p-button-outlined" icon="pi pi-pencil" (click)="openMarvinjsEditor($event)"> {{ marvinJsSmiles ? 'Edit' : 'Draw' }} Structure</button>
+                    </div>
+                  </div>
+                  <div>
+                    <p-button styleClass="p-button-outlined ui-button-success"><i class="p-button-icon-left pi pi-file-edit"></i></p-button>
+                  </div>
+                  <div>
+                    <p-button styleClass="p-button-outlined ui-button-success" (click)="sortOverlay.toggle($event)"><i class="p-button-icon-left pi pi-sort-alt"></i>{{selectedSortOption}}</p-button>
+
+                    <p-overlayPanel #sortOverlay>
+                      <div class="table-controls-overlay">
+                        <p class="table-controls-overlay-heading">Sort by<p>
+                        <p-dropdown [options]="sortOptions" [(ngModel)]="selectedSortOption" (onChange)="onSortChange($event)" placeholder="Select"></p-dropdown>
+                        <p-button *ngIf="isAscending" icon="pi pi-sort-amount-up-alt" (click)="toggleSort()"></p-button>
+                        <p-button *ngIf="!isAscending" icon="pi pi-sort-amount-down" (click)="toggleSort()"></p-button>
+                      </div>
+                    </p-overlayPanel>
+
+                  </div>
+                  <div>
+                    <p-button styleClass="p-button-outlined ui-button-success" (click)="filterOverlay.toggle($event)"><i class="p-button-icon-left pi pi-filter"></i></p-button>
+
+                    <p-overlayPanel #filterOverlay>
+                      <div class="table-controls-overlay">
+                        <p class="table-controls-overlay-heading">Molecule Status<p>
+                        <p-dropdown [options]="moleculeStatusFilterOptions" [(ngModel)]="selectedMoleculeStatusFilterOption" (onChange)="onFilterChange($event)" placeholder="Select"></p-dropdown>
+                      </div>
+                      <div class="table-controls-overlay">
+                        <p class="table-controls-overlay-heading">Flagged<p>
+                        <p-dropdown [options]="flaggedFilterOptions" [(ngModel)]="selectedFlaggedFilterOption" (onChange)="onFilterChange($event)" placeholder="Select"></p-dropdown>
+                      </div>
+                    </p-overlayPanel>
                   </div>
                 </div>
 
@@ -77,7 +105,6 @@
                   <div class="sort-text">
                     Showing {{filterBySmiles(molecules, marvinJsSmiles).length}} / {{molecules.length}} identified molecules
                   </div>
-                  <!-- <button pButton type="button" class="sort-button p-button-text" (click)="sortResults()"> Sort by <i class="p-button-icon-right pi pi-chevron-down"></i></button> -->
                 </div>
                 <div class="table-container">
                   <p-table #resultsTable [value]="filterBySmiles(molecules, marvinJsSmiles)" dataKey="id" selectionMode="single" [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)" (onRowUnselect)="onRowUnselected($event)" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="700px" styleClass="molecule_table" [(first)]="firstRowIndex">

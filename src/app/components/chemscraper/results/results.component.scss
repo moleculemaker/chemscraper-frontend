@@ -627,12 +627,21 @@ p-panel {
   padding: 2px;
 }
 
+.table-controls{
+  margin: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
 .marvin-filter-container{
   padding: 5px;
   border: #CED4DA;
   border-style: solid;
   border-width: 1px;
   border-radius: 6px;
+  flex: 1;
 
   .p-inputgroup{
     textarea{
@@ -644,4 +653,13 @@ p-panel {
       border-radius: 6px;
     }
   }
+}
+
+.table-controls-overlay{
+  padding: 12px;
+}
+
+.table-controls-overlay-heading{
+  font-weight: 700;
+  margin-bottom: 12px;
 }
