@@ -74,4 +74,19 @@ export class ChemScraperService {
     return this.apiService.getSimilaritySortedOrderChemscraperSimilaritySortedOrderJobIdGet(jobID, smile)
   }
 
+  flagMolecule(jobID: string, molecule: Molecule) {
+    return this.chemscraperService.flagMoleculeChemscraperFlagPost({
+      smile: molecule.SMILE,
+      doc_id: molecule.doc_no,
+      job_id: jobID
+    });
+  }
+
+  unflagMolecule(jobID: string, molecule: Molecule) {
+    return this.chemscraperService.deleteFlaggedMoleculeChemscraperFlagDelete({
+      smile: molecule.SMILE,
+      // TODO: does this need doc_no?
+      job_id: jobID
+    });
+  }
 }

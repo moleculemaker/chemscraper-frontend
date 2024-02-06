@@ -151,6 +151,21 @@ export class ResultsComponent {
 
   }
 
+  flagMolecule(molecule: Molecule) {
+    this._chemScraperService.flagMolecule(this.jobID + '', molecule).subscribe(result => {
+      // finally, mark this as flagged
+      molecule.flagged = true;
+    });
+  }
+
+  unflagMolecule(molecule: Molecule) {
+    this._chemScraperService.unflagMolecule(this.jobID + '', molecule).subscribe(result => {
+      // finally, mark this as not flagged
+      molecule.flagged = false;
+    });
+
+  }
+
   updateStatusStage(currentStage: number){
     this.activeStage = currentStage;
     const listItems = Array.from(document.querySelectorAll('#LoadingStages ul li'));

@@ -13,6 +13,7 @@
 
 export interface Molecule { 
     id: number;
+    flagged: boolean;
     doc_no: string;
     file_path: string;
     page_no: string;
