@@ -35,7 +35,6 @@ import { ChemScraperService } from './chemscraper.service';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxMatomoTrackerModule } from '@ngx-matomo/tracker';
 import { NgxMatomoRouterModule } from '@ngx-matomo/router';
-import { NgHcaptchaModule } from 'ng-hcaptcha';
 import { FileDragNDropDirective } from './components/chemscraper/configuration/file-drag-n-drop.directive';
 import { PdfViewerComponent } from './components/chemscraper/pdf-viewer/pdf-viewer.component';
 import { PdfViewerDialogServiceComponent } from './components/chemscraper/pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
@@ -45,6 +44,7 @@ import { MenuModule } from "primeng/menu";
 import { MarvinJsModule } from "./components/chemscraper/marvinjs/marvinjs.module";
 import { DialogModule } from "primeng/dialog";
 import { ExportMenuComponent } from './components/chemscraper/results/export-menu/export-menu.component';
+import { PdfContextViewerComponent } from './components/chemscraper/results/pdf-context-viewer/pdf-context-viewer.component';
 
 import { ApiModule, Configuration } from "@api/mmli-backend/v1";
 import { SafePipe } from "./pipes/safe.pipe";
@@ -65,7 +65,8 @@ const initAppFn = (envService: EnvironmentService) => {
     ResultsComponent,
     PdfViewerComponent,
     PdfViewerDialogServiceComponent,
-    ExportMenuComponent
+    ExportMenuComponent,
+    PdfContextViewerComponent
   ],
   imports: [
     BrowserModule,
@@ -98,10 +99,6 @@ const initAppFn = (envService: EnvironmentService) => {
       trackerUrl: 'https://matomo.mmli1.ncsa.illinois.edu/'
     }),
     NgxMatomoRouterModule,
-    NgHcaptchaModule.forRoot({
-      siteKey: '41c35ed8-6425-4764-b3d5-23c1b896f0dd',
-      languageCode: 'en' // optional, will default to browser language
-    }),
     MenuModule,
 
     ApiModule.forRoot(() => new Configuration()),

@@ -51,8 +51,6 @@ spec:
                 name: {{ .Release.Name }}-config
                 key: userInfoUrl
 
-
-
           ports:
             - containerPort: 80
           imagePullPolicy: Always

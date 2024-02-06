@@ -7,16 +7,29 @@ import { finalize, startWith, switchMap, takeWhile } from "rxjs/operators";
 import { Router } from '@angular/router';
 import { MenuItem, Message } from 'primeng/api';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { PredictionRow, PollingResponseResult, PollingResponseStatus, SingleSeqResult, SeqResult, HighlightBox } from '../../../models';
+
+import {
+  PredictionRow,
+  PollingResponseResult,
+  PollingResponseStatus,
+  SingleSeqResult,
+  SeqResult,
+  HighlightBox,
+  Job
+} from '../../../models';
 import { ChemScraperService } from 'src/app/chemscraper.service';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 import { Table } from 'primeng/table';
 import {Molecule} from "@api/mmli-backend/v1";
+import { PdfViewerDialogServiceComponent } from '../pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { OverlayPanel } from 'primeng/overlaypanel';
 
 @Component({
   selector: 'app-results',
   templateUrl: './results.component.html',
-  styleUrls: ['./results.component.scss']
+  styleUrls: ['./results.component.scss'],
+  providers: [DialogService]
 })
 export class ResultsComponent {
   showMarvinJsEditor: boolean;
@@ -34,7 +47,7 @@ export class ResultsComponent {
   failedJob: boolean = false;
   jobID: string | undefined;
   downloadRows: string[][] = [['Identifier', 'Predicted EC Number']];
-  statusResponse: PollingResponseStatus;
+  statusResponse: Job;
   useExample: boolean = false;
   preComputedMessage: Message[];
   jobFailedMessage: Message[];
@@ -58,16 +71,44 @@ export class ResultsComponent {
   firstRowIndex: number = 0;
 
   pages_count: number = 0;
+  ref: DynamicDialogRef;
+  sortOptions: any[];
+  moleculeStatusFilterOptions: any[];
+  flaggedFilterOptions: any[];
+  selectedSortOption: any;
+  selectedMoleculeStatusFilterOption: any;
+  selectedFlaggedFilterOption: any;
+  similaritySortSMILE: string = "";
+  isAscending: boolean = true;
 
   @ViewChild('resultsTable') resultsTable: Table;
+  @ViewChild('sortOverlay') sortOverlay: OverlayPanel;
 
   constructor(
     private router: Router,
     private _resultService: ResultService,
     private httpClient: HttpClient,
     private _chemScraperService: ChemScraperService,
-    private sanitizer: DomSanitizer
-  ) { }
+    private sanitizer: DomSanitizer,
+    private dialogService: DialogService
+  ) {
+    this.sortOptions = [
+      { label: 'Location In PDF (default)', value: 'Location In PDF', disabled: false },
+      { label: 'Molecular Weight', value: 'Molecular Weight', disabled: false },
+      { label: 'Occurrences', value: 'Occurrences', disabled: false },
+      { label: 'Similarity', value: 'Similarity', disabled: true }
+    ];
+    this.moleculeStatusFilterOptions = [
+      { label: 'All molecules found', value: 'all' },
+      { label: 'Has converted CDXML structure', value: 'hasCDXML' },
+      { label: 'No converted CDXML structure', value: 'noCDXML' }
+    ];
+    this.flaggedFilterOptions = [
+      { label: 'All', value: 'all' },
+      { label: 'No', value: 'no' },
+      { label: 'Yes', value: 'yes' }
+    ];
+  }
 
   @ViewChild(PdfViewerComponent) pdfViewerComponent: PdfViewerComponent;
 
@@ -102,6 +143,9 @@ export class ResultsComponent {
 
     // Temp file read function
     // this.process_example_file();
+    this.selectedSortOption = "Location In PDF";
+    this.selectedMoleculeStatusFilterOption = "all";
+    this.selectedFlaggedFilterOption = "all";
 
     this.getResult();
 
@@ -150,23 +194,53 @@ export class ResultsComponent {
     this.filterPanelVisible = true;
   }
 
-  sortResults(){
-
-  }
-
   selectRow(event: Event){
     // event.stopPropagation();
   }
 
   getResult(){
     let jobID = window.location.href.split('/').at(-1);
-    if(jobID){
+    if(jobID == "example_PDF"){
+      this.updateStatusStage(1);
+      this.pollForResult = false;
+      if(jobID)
+      this._chemScraperService.getResult(jobID).subscribe(
+        (data) => {
+          this.molecules = data;
+          this.pages_count = Math.max(...this.molecules.map(molecule => parseInt(molecule.page_no)))
+
+          this.updateStatusStage(2);
+
+          this.getHighlightBoxes(1);
+
+          if(jobID)
+          this._chemScraperService.getInputPDf(jobID).subscribe(
+            (urls) => {
+              this.pdfURLs = urls;
+              if(this.pdfURLs.length > 0) {
+                this.currentPDF = this.pdfURLs[0];
+                const pdfName = this.currentPDF.split("/").pop();
+                if(pdfName){
+                  this.currentPDFName = pdfName;
+                  this.fileNames.push(pdfName);
+                }
+                this.contentLoaded = true;
+              }
+            }
+          );
+        }
+      );
+    }
+    else if(jobID){
       timer(0, 10000).pipe(
         switchMap(() => this._chemScraperService.getResultStatus(jobID ? jobID : "example_PDF")),
         takeWhile(() => this.pollForResult)
       ).subscribe(
-        (response) => {
-          if (response == "Ready") {
+        (jobStatus) => {
+          this.statusResponse = jobStatus;
+          console.log(jobStatus);
+
+          if (jobStatus.phase == "completed") {
             this.updateStatusStage(1);
             this.pollForResult = false;
             if(jobID)
@@ -200,7 +274,7 @@ export class ResultsComponent {
                 );
               }
             );
-          } else if (response == "Error") {
+          } else if (jobStatus.phase == "error") {
             if(jobID)
             this._chemScraperService.getError(jobID).subscribe(
               (response) => {
@@ -239,20 +313,20 @@ export class ResultsComponent {
   }
 
   onRowSelected(event: any) {
-    if(event.data){
-      this.pdfViewerComponent.highlightMolecule(event.data.id, parseInt(event.data.page_no));
-      const input_pdf_container = document.getElementById("input_pdf_container");
-      if(input_pdf_container){
-        input_pdf_container.scrollBy(-10000, -10000);
-        input_pdf_container.scrollBy((parseInt(event.data.minX) * 72.0) / 300, (parseInt(event.data.minY) * 72.0) / 300);
-      }
-    }
+    // if(event.data){
+    //   this.pdfViewerComponent.highlightMolecule(event.data.id, parseInt(event.data.page_no));
+    //   const input_pdf_container = document.getElementById("input_pdf_container");
+    //   if(input_pdf_container){
+    //     input_pdf_container.scrollBy(-10000, -10000);
+    //     input_pdf_container.scrollBy((parseInt(event.data.minX) * 72.0) / 300, (parseInt(event.data.minY) * 72.0) / 300);
+    //   }
+    // }
   }
 
   onRowUnselected(event: any){
-    if(event.data){
-      this.pdfViewerComponent.highlightMolecule(-1);
-    }
+    // if(event.data){
+    //   this.pdfViewerComponent.highlightMolecule(-1);
+    // }
   }
 
   goToRow(rowIndex: number) {
@@ -268,7 +342,7 @@ export class ResultsComponent {
       if (rowElements && rowIndex < this.molecules.length) {
         rowElements[rowIndex % rowsPerPage].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
         this.selectedMolecule = this.molecules[rowIndex];
-        this.pdfViewerComponent.highlightMolecule(this.selectedMolecule.id, parseInt(this.selectedMolecule.page_no));
+        // this.pdfViewerComponent.highlightMolecule(this.selectedMolecule.id, parseInt(this.selectedMolecule.page_no));
       }
     });
   }
@@ -312,4 +386,111 @@ export class ResultsComponent {
     return svgString; // return original if modifications failed
   }
 
+  OpenPDFOverlay(moleculeId: number){
+    this.ref = this.dialogService.open(PdfViewerDialogServiceComponent, {
+      height:'80%',
+      data:{
+        pdfURL: this.currentPDF,
+        highlightBoxes: this.highlightBoxes,
+        highlightedMoleculeId: moleculeId,
+        pageNumber: parseInt(this.molecules[moleculeId].page_no)
+      }
+    });
+  }
+
+  similaritySort(smile: string){
+    this.similaritySortSMILE = smile;
+    this.updateSimilaritySortDisabledState();
+    if(this.jobID)
+    this._chemScraperService.getSimilaritySortedOrder(this.jobID, smile).subscribe(
+      (response) => {
+        this.molecules.sort((data1: Molecule, data2: Molecule) => {
+          const indexA = response.indexOf(data1.id);
+          const indexB = response.indexOf(data2.id);
+          if(this.isAscending){
+            return indexA - indexB;
+          }
+          return indexB - indexA;
+        });
+        this.goToRow(0);
+      }
+    );
+  }
+
+  searchStructure(){
+    this.similaritySort(this.marvinJsSmiles);
+    this.showMarvinJsEditor = false;
+  }
+
+  toggleSort() {
+    console.log(this.isAscending);
+
+    this.isAscending = !this.isAscending;
+    this.sortData(this.selectedSortOption);
+  }
+
+  onSortChange(event: any) {
+    this.sortData(event.value);
+    // this.sortOverlay.hide();
+  }
+
+  onFilterChange(event: any) {
+    console.log(this.selectedMoleculeStatusFilterOption);
+    console.log(this.selectedFlaggedFilterOption);
+
+  }
+
+  sortData(value: string){
+    if(value == "Location In PDF"){
+      this.molecules.sort((data1: Molecule, data2: Molecule) => {
+        if(this.isAscending){
+          return data1.id - data2.id;
+        }
+        return data2.id - data1.id;
+      });
+    } else if (value == "Molecular Weight") {
+      this.molecules.sort((data1: Molecule, data2: Molecule) => {
+        if(!data2.molecularWeight || data2.molecularWeight == 'Unavailable'){
+          return -1;
+        }
+        if(!data1.molecularWeight || data1.molecularWeight == 'Unavailable'){
+          return 1;
+        }
+        const weight1 = parseFloat(data1.molecularWeight);
+        const weight2 = parseFloat(data2.molecularWeight);
+        if (isNaN(weight2)){
+          return -1;
+        }
+        if(isNaN(weight1)){
+          return 1;
+        }
+        if(this.isAscending){
+          return weight1 - weight2;
+        }
+        return weight2 - weight1;
+      });
+
+    } else if (value == "Occurrences") {
+      this.molecules.sort((data1: Molecule, data2: Molecule) => {
+        if(this.isAscending){
+          return data1.OtherInstances.length - data2.OtherInstances.length;
+        }
+        return data2.OtherInstances.length - data1.OtherInstances.length;
+      });
+    } else if (value == "Similarity") {
+      this.similaritySort(this.similaritySortSMILE);
+    }
+  }
+
+  updateSimilaritySortDisabledState(){
+    this.sortOptions = this.sortOptions.map(sortOption => {
+      if (sortOption.value === 'Similarity') {
+        return { ...sortOption, label: "Similarity: " + this.similaritySortSMILE, disabled: this.similaritySortSMILE == "" };
+      }
+      return sortOption;
+    });
+  }
+
 }
+
+

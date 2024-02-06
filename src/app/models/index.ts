@@ -32,7 +32,6 @@ export interface SingleSeqData {
 export interface ChemScraperAnalyzeRequestBody {
   jobId: string;
   user_email: string;
-  captcha_token: string;
   fileList: string[];
 }
 
@@ -70,6 +69,7 @@ export interface Molecule {
   Description: string;
   Location: string;
   OtherInstances: string[];
+  fingerprint: string;
 }
 
 export interface FileUploadResponse {
@@ -101,3 +101,18 @@ export interface HighlightBox {
   height: number;
 }
 
+export interface Job {
+  job_info: string;
+  email: string;
+  job_id: string;
+  run_id: number;
+  phase: string;
+  type: string;
+  image: string;
+  command: string;
+  time_created: number;
+  time_start: number;
+  time_end: number;
+  deleted: number;
+  user_agent: string;
+}

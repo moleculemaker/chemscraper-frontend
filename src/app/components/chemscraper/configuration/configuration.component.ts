@@ -8,10 +8,10 @@ import { switchMap } from 'rxjs/operators';
 
 import { PostResponse, ChemScraperAnalyzeRequestBody, SingleSeqData, ExampleData } from '../../../models';
 import { ResultsComponent } from '../results/results.component';
-import { NgHcaptchaService } from "ng-hcaptcha";
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 import { PdfViewerDialogServiceComponent } from '../pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
+import { EnvironmentService } from 'src/app/services/environment.service';
 
 @Component({
   selector: 'app-configuration',
@@ -46,7 +46,6 @@ export class ConfigurationComponent {
   requestBody: ChemScraperAnalyzeRequestBody = {
     jobId: '',
     user_email: '',
-    captcha_token: '',
     fileList: []
   };
 
@@ -55,8 +54,8 @@ export class ConfigurationComponent {
     private _chemScraperService: ChemScraperService,
     private httpClient: HttpClient,
     private trackingService: TrackingService,
-    private hcaptchaService: NgHcaptchaService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private envService: EnvironmentService
   ) { }
 
   ngOnInit() {
@@ -69,6 +68,10 @@ export class ConfigurationComponent {
     this.uploaded_files = [];
   }
 
+  get env() {
+    return this.envService.getEnvConfig();
+  }
+
   submitData() {
     if (this.selectedInputMethod == 'use_example') {
       let label = "example_PDF"
@@ -77,30 +80,11 @@ export class ConfigurationComponent {
           this.router.navigate(['/results', data.jobId]);
         });
     } else {
-      // this.hcaptchaService.verify().pipe(
-      //   switchMap((data) => {
-      //     this.requestBody.captcha_token = data;
-      //     this.requestBody.jobId = this.jobID;
-      //     const fileNames: string[] = this.uploaded_files.map(file => file.name);
-      //     this.requestBody.fileList = fileNames;
-      //     return this._chemScraperService.analyzeDocument(this.requestBody);
-      //   })
-      // ).subscribe(
-      //   (data) => {
-      //     console.log(data);
-      //     this.router.navigate(['/results', data.jobId]);
-      //   },
-      //   (error) => {
-      //     // TODO replace this with a call to the message service, and display the correct error message
-      //     console.error('Error getting contacts via subscribe() method:', error);
-      //   }
-      // );
-      // this.requestBody.captcha_token = data;
       this.requestBody.jobId = this.jobID;
       const fileNames: string[] = this.uploaded_files.map(file => file.name);
       this.requestBody.fileList = fileNames;
       this._chemScraperService.analyzeDocument(this.requestBody).subscribe(
-        res => {
+        (res) => {
           this.router.navigate(['/results', this.jobID]);
         }
       );
@@ -157,23 +141,19 @@ export class ConfigurationComponent {
   }
 
   viewFile(index: number){
-    // console.log(this.uploaded_files[index]);
-
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      // console.log(fileReader.result);
-      if(fileReader.result instanceof ArrayBuffer){
-        this.ref = this.dialogService.open(PdfViewerDialogServiceComponent, {
-          height:'60%',
-          data:{
-            pdfData: new Uint8Array(fileReader.result)
-          }
-        });
+    this._chemScraperService.getInputPDf(this.jobID).subscribe(
+      (urls) => {
+        let pdfURLs = urls;
+        if(pdfURLs.length > 0) {
+          this.ref = this.dialogService.open(PdfViewerDialogServiceComponent, {
+            height:'60%',
+            data:{
+              pdfURL: pdfURLs[0]
+            }
+          });
+        }
       }
-
-    };
-    fileReader.readAsArrayBuffer(this.uploaded_files[index]);
-
+    );
   }
 
 }
