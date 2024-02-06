@@ -139,8 +139,8 @@
 
                         <td>{{ molecule.SMILE }}</td>
                         <td>
-                          <button class="p-button p-button-link" *ngIf="!molecule.flagged" (click)="flag(molecule)"><i class="pi pi-flag"></i></button>
-                          <button class="p-button p-button-link" *ngIf="molecule.flagged" (click)="unflag(molecule)"><i class="pi pi-flag-filled"></i></button>
+                          <button class="p-button p-button-link" *ngIf="!molecule.flagged" (click)="flagMolecule(molecule)"><i class="pi pi-flag"></i></button>
+                          <button class="p-button p-button-link" *ngIf="molecule.flagged" (click)="unflagMolecule(molecule)"><i class="pi pi-flag-filled"></i></button>
                         </td>
                         <td *ngIf="!splitView">{{ molecule.page_no }}</td>
                         <td *ngIf="!splitView">{{ molecule.PubChemCID }}</td>
@@ -156,7 +156,7 @@
                           <div class="result-molecules-details-container">
                             <p-panel>
                               <div class="molecule-details-header-container">
-                                <p-button styleClass="p-button-outlined p-button-secondary" (click)="similaritySort(molecule.SMILE);selectedMolecule=undefined;">View Similar Structures</p-button>
+                                <p-button styleClass="p-button-outlined p-button-secondary" (click)="similaritySort(molecule.SMILE);">View Similar Structures</p-button>
                               </div>
 
                               <div class="molecule-info-container">

@@ -66,7 +66,7 @@ export class ResultsComponent {
   tableFilterValue: string = 'off';
 
   pollForResult: boolean = true;
-  selectedMolecule!: Molecule;
+  selectedMolecule?: Molecule;
 
   firstRowIndex: number = 0;
 
@@ -428,6 +428,7 @@ export class ResultsComponent {
           return indexB - indexA;
         });
         this.goToRow(0);
+        this.selectedMolecule = undefined;
       }
     );
   }
