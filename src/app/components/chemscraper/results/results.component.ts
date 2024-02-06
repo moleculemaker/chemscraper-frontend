@@ -428,7 +428,9 @@ export class ResultsComponent {
           return indexB - indexA;
         });
         this.goToRow(0);
-        this.selectedMolecule = null;
+
+        // Collapse all rows
+        this.resultsTable.expandedRowKeys = {};
       }
     );
   }
