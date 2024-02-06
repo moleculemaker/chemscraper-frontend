@@ -140,7 +140,7 @@
                         <td>{{ molecule.SMILE }}</td>
                         <td>
                           <button class="p-button p-button-link" *ngIf="!molecule.flagged" (click)="flagMolecule(molecule)"><i class="pi pi-flag"></i></button>
-                          <button class="p-button p-button-link" *ngIf="molecule.flagged" (click)="unflagMolecule(molecule)"><i class="pi pi-flag-filled"></i></button>
+                          <button class="p-button p-button-link" *ngIf="molecule.flagged" (click)="unflagMolecule(molecule)"><i class="pi pi-flag-fill"></i></button>
                         </td>
                         <td *ngIf="!splitView">{{ molecule.page_no }}</td>
                         <td *ngIf="!splitView">{{ molecule.PubChemCID }}</td>
