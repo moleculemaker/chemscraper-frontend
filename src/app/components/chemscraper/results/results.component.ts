@@ -155,14 +155,16 @@ export class ResultsComponent {
 
   }
 
-  flagMolecule(molecule: Molecule) {
+  flagMolecule(molecule: Molecule, event: Event) {
+    event.stopPropagation();
     this._chemScraperService.flagMolecule(this.jobID + '', molecule).subscribe(result => {
       // finally, mark this as flagged
       molecule.flagged = true;
     });
   }
 
-  unflagMolecule(molecule: Molecule) {
+  unflagMolecule(molecule: Molecule, event: Event) {
+    event.stopPropagation();
     this._chemScraperService.unflagMolecule(this.jobID + '', molecule).subscribe(result => {
       // finally, mark this as not flagged
       molecule.flagged = false;
