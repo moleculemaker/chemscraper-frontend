@@ -135,11 +135,16 @@
                     <th pSortableColumn="name">Molecule<p-sortIcon field="name"></p-sortIcon></th>
                     <th>Structure (Extracted)</th>
                     <th>Structure (Original)</th>
-                    <th>SMILES</th>
+                    <th
+                      pTooltip="SMILES strings correspond to extracted structures and may contain asterisks (*), which represent an abbreviation that ChemScraper is currently unable to expand."
+                      tooltipPosition="top">SMILES</th>
+
                     <!-- <th *ngIf="!splitView">Document</th> -->
                     <th *ngIf="!splitView">Page</th>
                     <th *ngIf="!splitView">PubChem CID</th>
-                    <th *ngIf="!splitView">Confidence</th>
+                    <th *ngIf="!splitView"
+                      pTooltip="Confidence scores represent the confidence of structure recognition as a percentage + confidence band (Low/Medium/High). For molecules recognized directly from PDF instructions, in the first release this is reported as a dash (-)."
+                      tooltipPosition="top">Confidence</th>
                     <th></th>
                   </tr>
                 </ng-template>
