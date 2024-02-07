@@ -1,5 +1,7 @@
 import { SafeHtml } from "@angular/platform-browser";
 
+/** Legacy models - prefer models from modules/api/v1/models */
+
 export interface PredictionRow {
   sequence: string;
   ecNumbers: string[];

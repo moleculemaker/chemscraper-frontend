@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChemScraperService } from 'src/app/chemscraper.service';
@@ -83,11 +83,21 @@ export class ConfigurationComponent {
       this.requestBody.jobId = this.jobID;
       const fileNames: string[] = this.uploaded_files.map(file => file.name);
       this.requestBody.fileList = fileNames;
-      this._chemScraperService.analyzeDocument(this.requestBody).subscribe(
-        (res) => {
-          this.router.navigate(['/results', this.jobID]);
+      this._chemScraperService.analyzeDocument(this.requestBody).subscribe({
+        next: (res) => this.router.navigate(['/results', this.jobID]),
+        error: (err: HttpErrorResponse) => {
+          if (err.status === 429) {
+            const h = err.headers;
+            const retryAfter = h.get('Retry-After');
+            const retryIn = h.get('X-Retry-In');
+
+            window.alert(`Too many requests.. try again in ${retryIn}`)
+            console.log(`Too many requests.. try again after ${retryAfter}:`, err);
+          } else {
+            console.log('Failed to submit new job request:', err);
+          }
         }
-      );
+      });
     }
   }
 

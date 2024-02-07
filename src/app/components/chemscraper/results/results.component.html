@@ -137,14 +137,15 @@
                     <th>Structure (Original)</th>
                     <th
                       pTooltip="SMILES strings correspond to extracted structures and may contain asterisks (*), which represent an abbreviation that ChemScraper is currently unable to expand."
-                      tooltipPosition="top">SMILES</th>
-
+                      tooltipPosition="top" pSortableColumn="SMILE">SMILES<p-sortIcon field="SMILE"></p-sortIcon></th>
+                    <th
+                      pTooltip="Use the <strong>Flag</strong> icon to mark errors or molecules that you want to remember. You can also apply this field as a filter or use it to sort the extracted results."
+                      tooltipPosition="top" pSortableColumn="flagged">Flagged?<p-sortIcon field="flagged"></p-sortIcon>
+                    </th>
                     <!-- <th *ngIf="!splitView">Document</th> -->
                     <th *ngIf="!splitView">Page</th>
                     <th *ngIf="!splitView">PubChem CID</th>
-                    <th *ngIf="!splitView"
-                      pTooltip="Confidence scores represent the confidence of structure recognition as a percentage + confidence band (Low/Medium/High). For molecules recognized directly from PDF instructions, in the first release this is reported as a dash (-)."
-                      tooltipPosition="top">Confidence</th>
+                    <th *ngIf="!splitView">Confidence</th>
                     <th></th>
                   </tr>
                 </ng-template>
