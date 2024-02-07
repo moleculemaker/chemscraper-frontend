@@ -83,6 +83,8 @@ export class ResultsComponent {
   similaritySortSMILE: string = "";
   isAscending: boolean = true;
 
+  copySuccess = false;
+
   @ViewChild('resultsTable') resultsTable: Table;
   @ViewChild('sortOverlay') sortOverlay: OverlayPanel;
 
@@ -183,6 +185,18 @@ export class ResultsComponent {
       // this.useExample = true;
     }
 
+  }
+
+  copySmilesToClipboard() {
+    navigator.clipboard.writeText(this.marvinJsSmiles).then(() => {
+      this.copySuccess = true;
+      setTimeout(() => {
+        this.copySuccess = false;
+      }, 5000);
+
+    }, () => {
+      alert('Failure: Unable to copy SMILES string to clipboard.');
+    });
   }
 
   copyAndPasteURL(): void {

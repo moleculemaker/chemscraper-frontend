@@ -72,8 +72,16 @@
                 <div class="p-inputgroup">
                   <input type="text" pInputText class="form-control" [(ngModel)]="marvinJsSmiles"
                     placeholder="Filter results by SMILES..." />
+                  <div [ngStyle]="{'padding': '2px'}"></div>
                   <button pButton class="p-button-secondary p-button-link p-button-outlined" icon="pi pi-pencil"
-                    (click)="openMarvinjsEditor($event)"> {{ marvinJsSmiles ? 'Edit' : 'Draw' }} Structure</button>
+                    [ngStyle]="{'padding': '8px'}" (click)="openMarvinjsEditor($event)">{{ marvinJsSmiles ? '&nbsp;Edit'
+                    : '&nbsp;Draw' }}
+                    Structure</button>
+                  <div [ngStyle]="{'padding': '2px'}"></div>
+                  <button pButton class="p-button-secondary p-button-link p-button-outlined"
+                    [icon]="copySuccess ? 'pi pi-check' : 'pi pi-copy'"
+                    [ngStyle]="{'color': copySuccess ? 'green' : 'inherit', 'padding': '8px'}"
+                    (click)="copySmilesToClipboard()">&nbsp;Copy</button>
                 </div>
               </div>
               <div>
