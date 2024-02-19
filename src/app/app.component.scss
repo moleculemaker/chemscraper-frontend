@@ -129,7 +129,7 @@ header {
             position: absolute;
             right: 0px;
             top: -($padding);
-            z-index: get_index(modal);
+            z-index: get_index(modal) + 1;
 
             width: 30rem;
 

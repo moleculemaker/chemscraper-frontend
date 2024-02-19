@@ -260,9 +260,9 @@
         </ng-container>
     </div>
 
-  <p-dialog *ngIf="showMarvinJsEditor" [(visible)]="showMarvinJsEditor" [modal]="true" [style]="{ width: '50vw', height: '50vh' }" [draggable]="false" [resizable]="false">
+  <p-dialog *ngIf="showMarvinJsEditor" class="marvin-editor-container" [(visible)]="showMarvinJsEditor" [modal]="true" [draggable]="false" [resizable]="false">
     <!--<app-molecule-drawing-canvas></app-molecule-drawing-canvas>-->
-    <app-marvin-js-editor [(smiles)]="marvinJsSmiles"></app-marvin-js-editor>
+    <app-marvin-js-editor class="marvin-editor" [(smiles)]="marvinJsSmiles"></app-marvin-js-editor>
     <ng-template pTemplate="footer">
       <p-button icon="pi pi-check" (click)="searchStructure()" label="Search Structure" styleClass="p-button-primary"></p-button>
     </ng-template>
