@@ -59,7 +59,7 @@ export class ExportMenuComponent implements OnInit{
       const url = window.URL.createObjectURL(file);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'ChemScraper-result.zip'); // replace with your filename
+      link.setAttribute('download', `chemscraper-${jobId}.zip`); // replace with your filename
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

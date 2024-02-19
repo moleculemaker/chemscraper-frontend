@@ -7,10 +7,20 @@ import { finalize, startWith, switchMap, takeWhile } from "rxjs/operators";
 import { Router } from '@angular/router';
 import { MenuItem, Message } from 'primeng/api';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { PredictionRow, PollingResponseResult, PollingResponseStatus, SingleSeqResult, SeqResult, HighlightBox, Molecule, Job } from '../../../models';
+
+import {
+  PredictionRow,
+  PollingResponseResult,
+  PollingResponseStatus,
+  SingleSeqResult,
+  SeqResult,
+  HighlightBox,
+  Job
+} from '../../../models';
 import { ChemScraperService } from 'src/app/chemscraper.service';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 import { Table } from 'primeng/table';
+import {Molecule} from "@api/mmli-backend/v1";
 import { PdfViewerDialogServiceComponent } from '../pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { OverlayPanel } from 'primeng/overlaypanel';
@@ -56,7 +66,7 @@ export class ResultsComponent {
   tableFilterValue: string = 'off';
 
   pollForResult: boolean = true;
-  selectedMolecule!: Molecule;
+  selectedMolecule: Molecule | null = null;
 
   firstRowIndex: number = 0;
 
@@ -141,6 +151,21 @@ export class ResultsComponent {
 
   }
 
+  flagMolecule(molecule: Molecule) {
+    this._chemScraperService.flagMolecule(this.jobID + '', molecule).subscribe(result => {
+      // finally, mark this as flagged
+      molecule.flagged = true;
+    });
+  }
+
+  unflagMolecule(molecule: Molecule) {
+    this._chemScraperService.unflagMolecule(this.jobID + '', molecule).subscribe(result => {
+      // finally, mark this as not flagged
+      molecule.flagged = false;
+    });
+
+  }
+
   updateStatusStage(currentStage: number){
     this.activeStage = currentStage;
     const listItems = Array.from(document.querySelectorAll('#LoadingStages ul li'));
@@ -196,9 +221,6 @@ export class ResultsComponent {
       if(jobID)
       this._chemScraperService.getResult(jobID).subscribe(
         (data) => {
-          data.forEach(molecule => {
-            molecule.structure = this.sanitizer.bypassSecurityTrustHtml(this.modifySvg(molecule.structure.toString()));
-          })
           this.molecules = data;
           this.pages_count = Math.max(...this.molecules.map(molecule => parseInt(molecule.page_no)))
 
@@ -240,8 +262,9 @@ export class ResultsComponent {
             this._chemScraperService.getResult(jobID).subscribe(
               (data) => {
                 data.forEach(molecule => {
-                  molecule.structure = this.sanitizer.bypassSecurityTrustHtml(this.modifySvg(molecule.structure.toString()));
+                  molecule.structure = this.modifySvg(molecule.structure.toString());
                 })
+
                 this.molecules = data;
                 this.pages_count = Math.max(...this.molecules.map(molecule => parseInt(molecule.page_no)))
 
@@ -405,6 +428,9 @@ export class ResultsComponent {
           return indexB - indexA;
         });
         this.goToRow(0);
+
+        // Collapse all rows
+        this.resultsTable.expandedRowKeys = {};
       }
     );
   }

@@ -1,8 +1,17 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of, delay } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
-import { PostResponse, ChemScraperAnalyzeRequestBody, ExampleData, FileUploadResponse, Molecule, ExportRequestBody, Job } from './models';
+import { PostResponse, ChemScraperAnalyzeRequestBody, ExampleData, FileUploadResponse, ExportRequestBody, Job } from './models';
+import {
+  AnalyzeRequestBody,
+  ChemScraperService as ChemScraperApiService,
+  DefaultService,
+  //Molecule,
+  //ExportRequestBody,
+  JobsService,
+  FilesService,
+  Molecule
+} from "./api/mmli-backend/v1";
 import {EnvironmentService} from "./services/environment.service";
 
 @Injectable({
@@ -15,13 +24,13 @@ export class ChemScraperService {
     submitted_at: "2020-01-01 10:10:10"
   };
 
-  private SERVER_URL = this.env.hostname + this.env.basePath + '/chemscraper/';
+  constructor(
+    private apiService: DefaultService,
 
-  get env() {
-    return this.envService.getEnvConfig();
-  }
-
-  constructor(private http: HttpClient, private envService: EnvironmentService) {  }
+    private jobsService: JobsService,
+    private filesService: FilesService,
+    private chemscraperService: ChemScraperApiService
+  ) {  }
 
   getExampleResponse(dataLabel: string): Observable<PostResponse>{
     this.responseFromExample.jobId = dataLabel;
@@ -29,45 +38,55 @@ export class ChemScraperService {
     return respond;
   }
 
-  analyzeDocument(requestBody: ChemScraperAnalyzeRequestBody): Observable<PostResponse>{
-    return this.http.post<PostResponse>(this.SERVER_URL + 'analyze', requestBody); //should return a jobID
+  analyzeDocument(requestBody: AnalyzeRequestBody): Observable<PostResponse>{
+    return this.chemscraperService.analyzeDocumentsChemscraperAnalyzePost(requestBody);
   }
 
-  fileUpload(formData: FormData, jobID: string): Observable<FileUploadResponse>{
-    if(jobID && jobID == "") {
-      return this.http.post<FileUploadResponse>(this.SERVER_URL + 'upload', formData); //should return a jobID
-    }
-    else {
-      let params = new HttpParams();
-      params = params.append('job_id', jobID);
-      return this.http.post<FileUploadResponse>(this.SERVER_URL + 'upload', formData, { params: params }); //should return a jobID
-    }
+  fileUpload(formData: FormData, jobID?: string): Observable<FileUploadResponse>{
+    const fileData = formData.get('file') as Blob;
+    return this.filesService.uploadFileBucketNameUploadPost('chemscraper', fileData, jobID);
   }
 
   getResultStatus(jobID: string): Observable<Job>{
-    return this.http.get<Job>(this.SERVER_URL + 'jobs/' + jobID + '/0');
+    return this.jobsService.getJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdGet('chemscraper', jobID, '0');
   }
 
   getResult(jobID: string): Observable<Molecule[]>{
-    return this.http.get<Molecule[]>(this.SERVER_URL + 'results/' + jobID);
+    return this.filesService.getResultsBucketNameResultsJobIdGet('chemscraper', jobID);
   }
 
   getError(jobID: string): Observable<string>{
-    return this.http.get<string>(this.SERVER_URL + 'errors/' + jobID);
+    return this.filesService.getErrorsBucketNameErrorsJobIdGet('chemscraper', jobID);
   }
 
   getInputPDf(jobID: string): Observable<string[]>{
-    return this.http.get<string[]>(this.SERVER_URL + 'inputs/' + jobID);
+    return this.filesService.getInputFileBucketNameInputsJobIdGet('chemscraper', jobID);
   }
 
-  exportFiles(requestBody: ExportRequestBody): Observable<Blob> {
-    return this.http.post<Blob>(this.SERVER_URL + 'export-results', requestBody, { responseType: 'blob' as 'json' });
+  exportFiles(requestBody: ExportRequestBody): Observable<any> {
+    return this.filesService.analyzeDocumentsBucketNameExportResultsPost('chemscraper', requestBody, 'body', false, { httpHeaderAccept: 'application/zip' as any });
   }
 
   getSimilaritySortedOrder(jobID: string, smile: string): Observable<number[]>{
-    let params = new HttpParams();
-    params = params.append('smile_string', smile);
-    return this.http.get<number[]>(this.SERVER_URL + 'similarity-sorted-order/' + jobID, { params: params });
+    //let params = new HttpParams();
+    //params = params.append('smile_string', smile);
+    //return this.http.get<number[]>(this.SERVER_URL + 'similarity-sorted-order/' + jobID, { params: params });
+    return this.apiService.getSimilaritySortedOrderChemscraperSimilaritySortedOrderJobIdGet(jobID, smile)
   }
 
+  flagMolecule(jobID: string, molecule: Molecule) {
+    return this.chemscraperService.flagMoleculeChemscraperFlagPost({
+      smile: molecule.SMILE,
+      doc_id: molecule.doc_no,
+      job_id: jobID
+    });
+  }
+
+  unflagMolecule(jobID: string, molecule: Molecule) {
+    return this.chemscraperService.deleteFlaggedMoleculeChemscraperFlagDelete({
+      smile: molecule.SMILE,
+      // TODO: does this need doc_no?
+      job_id: jobID
+    });
+  }
 }

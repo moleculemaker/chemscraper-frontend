@@ -114,7 +114,8 @@
                         <th pSortableColumn="name">Molecule<p-sortIcon field="name"></p-sortIcon></th>
                         <th>Structure (Extracted)</th>
                         <th>Structure (Original)</th>
-                        <th>SMILES</th>
+                        <th pSortableColumn="SMILE">SMILES<p-sortIcon field="SMILE"></p-sortIcon></th>
+                        <th pSortableColumn="flagged">Flagged?<p-sortIcon field="flagged"></p-sortIcon></th>
                         <!-- <th *ngIf="!splitView">Document</th> -->
                         <th *ngIf="!splitView">Page</th>
                         <th *ngIf="!splitView">PubChem CID</th>
@@ -124,17 +125,23 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-molecule let-expanded="expanded">
                       <tr [pSelectableRow]="molecule" [pRowToggler]="molecule">
+
                         <td class="column_name">
                           <div class="column_container">
                             <i [ngClass]="expanded ? 'pi pi-chevron-down p-button-icon-left' : 'pi pi-chevron-right p-button-icon-left'"></i>
                             <div>{{ molecule.name }}</div>
                           </div>
                         </td>
-                        <td class="svg-column" [innerHTML]="molecule.structure"></td>
+                        <td class="svg-column" [innerHTML]="molecule.structure | safe:'html'"></td>
                         <td>
                           <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [startX]="molecule.minX" [startY]="molecule.minY" [width]="molecule.width" [height]="molecule.height" [pageNumber]="molecule.page_no" [showContext]="false"></chemscraper-pdf-context-viewer>
                         </td>
+
                         <td>{{ molecule.SMILE }}</td>
+                        <td>
+                          <button class="p-button p-button-link" *ngIf="!molecule.flagged" (click)="flagMolecule(molecule)"><i class="pi pi-flag"></i></button>
+                          <button class="p-button p-button-link" *ngIf="molecule.flagged" (click)="unflagMolecule(molecule)"><i class="pi pi-flag-fill"></i></button>
+                        </td>
                         <td *ngIf="!splitView">{{ molecule.page_no }}</td>
                         <td *ngIf="!splitView">{{ molecule.PubChemCID }}</td>
                         <td *ngIf="!splitView">{{ molecule.confidence }}</td>
@@ -149,7 +156,7 @@
                           <div class="result-molecules-details-container">
                             <p-panel>
                               <div class="molecule-details-header-container">
-                                <p-button styleClass="p-button-outlined p-button-secondary" (click)="similaritySort(molecule.SMILE)">View Similar Structures</p-button>
+                                <p-button styleClass="p-button-outlined p-button-secondary" (click)="similaritySort(molecule.SMILE);">View Similar Structures</p-button>
                               </div>
 
                               <div class="molecule-info-container">
@@ -203,12 +210,14 @@
                                         <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [startX]="molecule.minX" [startY]="molecule.minY" [width]="molecule.width" [height]="molecule.height" [pageNumber]="molecule.page_no" [showContext]="false"></chemscraper-pdf-context-viewer>
                                       </div>
                                     </div>
+
 <!--
-                                    <div class="SMILES-container">
-                                      <p>SMILES</p>
-                                      <div>{{ molecule.SMILE }}</div>
+                                    <div class="confidence-container">
+                                      <p>Confidence</p>
+                                      <div>{{ molecule.confidence }}</div>
                                     </div>
 -->
+
                                   </div>
 
                                   <div class="original-context-container">

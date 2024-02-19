@@ -39,21 +39,25 @@ import { FileDragNDropDirective } from './components/chemscraper/configuration/f
 import { PdfViewerComponent } from './components/chemscraper/pdf-viewer/pdf-viewer.component';
 import { PdfViewerDialogServiceComponent } from './components/chemscraper/pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
 
-import { EnvironmentService } from "./services/environment.service";
+import { EnvironmentService } from "@services/environment.service";
 import { MenuModule } from "primeng/menu";
-//import {SafePipe} from "./pipes/safe.pipe";
 import { MarvinJsModule } from "./components/chemscraper/marvinjs/marvinjs.module";
 import { DialogModule } from "primeng/dialog";
 import { ExportMenuComponent } from './components/chemscraper/results/export-menu/export-menu.component';
 import { PdfContextViewerComponent } from './components/chemscraper/results/pdf-context-viewer/pdf-context-viewer.component';
 
+import { ApiModule, Configuration } from "@api/mmli-backend/v1";
+import { SafePipe } from "./pipes/safe.pipe";
+
 const initAppFn = (envService: EnvironmentService) => {
   return () => envService.loadEnvConfig('/assets/config/envvars.json');
 };
 
+
 @NgModule({
   declarations: [
     AppComponent,
+    SafePipe,
 
     LandingPageComponent,
     FileDragNDropDirective,
@@ -97,7 +101,7 @@ const initAppFn = (envService: EnvironmentService) => {
     NgxMatomoRouterModule,
     MenuModule,
 
-    //ApiModule.forRoot(() => new Configuration()),
+    ApiModule.forRoot(() => new Configuration()),
     ReactiveFormsModule,
     MarvinJsModule,
     DialogModule
