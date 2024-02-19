@@ -107,7 +107,7 @@
                   </div>
                 </div>
                 <div class="table-container">
-                  <p-table #resultsTable [value]="filterBySmiles(molecules, marvinJsSmiles)" dataKey="id" selectionMode="single" [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)" (onRowUnselect)="onRowUnselected($event)" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="700px" styleClass="molecule_table" [(first)]="firstRowIndex">
+                  <p-table #resultsTable [value]="filterBySmiles(molecules, marvinJsSmiles)" dataKey="id" selectionMode="single" paginatorDropdownAppendTo="body" [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)" (onRowUnselect)="onRowUnselected($event)" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="700px" styleClass="molecule_table" [(first)]="firstRowIndex">
                     <ng-template pTemplate="header">
                       <tr>
                         <!-- <th><p-tableCheckbox></p-tableCheckbox></th> -->
