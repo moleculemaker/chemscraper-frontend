@@ -655,6 +655,34 @@ p-panel {
   }
 }
 
+.marvin-editor-container {
+  z-index: get_index(modal) !important;
+
+  ::ng-deep .p-dialog {
+    $editor_min_width: 617.5px;
+    $editor_min_height: 650px;
+    height: 50vh;
+    width: 50vw;
+    min-width: $editor_min_width;
+    min-height: $editor_min_height;
+    
+    @media (width <= $editor_min_width) {
+      width: 100vw;
+      min-width: 0px;
+    }
+
+    @media (height <= $editor_min_height) {
+      height: 100vh;
+      min-height: 0px;
+    }
+  }
+
+  .marvin-editor {
+    display: block;
+    height: 100%;
+  }
+}
+
 .table-controls-overlay{
   padding: 12px;
 }

@@ -99,6 +99,7 @@ export class ResultsComponent {
     this.sortOptions = [
       { label: 'Location In PDF (default)', value: 'Location In PDF', disabled: false },
       { label: 'Molecular Weight', value: 'Molecular Weight', disabled: false },
+      { label: 'Number of Atoms', value: 'Number of Atoms', disabled: false },
       { label: 'Occurrences', value: 'Occurrences', disabled: false },
       { label: 'Similarity', value: 'Similarity', disabled: true }
     ];
@@ -483,6 +484,13 @@ export class ResultsComponent {
           return data1.id - data2.id;
         }
         return data2.id - data1.id;
+      });
+    } else if(value == "Number of Atoms") {
+      this.molecules.sort((data1: Molecule, data2: Molecule) => {
+        if (this.isAscending) {
+          return data1.atom_count - data2.atom_count;
+        }
+        return data2.atom_count - data1.atom_count;
       });
     } else if (value == "Molecular Weight") {
       this.molecules.sort((data1: Molecule, data2: Molecule) => {
