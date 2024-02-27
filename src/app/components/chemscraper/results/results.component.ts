@@ -389,9 +389,52 @@ export class ResultsComponent {
     this.showMarvinJsEditor = false;
   }
 
-  filterBySmiles(molecules: Molecule[], smiles: string) {
-    return molecules.filter((molecule) => molecule.SMILE?.includes(smiles));
+  // filterBySmiles(molecules: Molecule[], smiles: string) {
+  //   return molecules.filter((molecule) => molecule.SMILE?.includes(smiles));
+  // }
+
+  // filterBySmiles(molecules: Molecule[], smiles: string) {
+  //   return molecules.sort((a, b) => {
+  //     const aIncludesSmiles = a.SMILE?.includes(smiles) ? 1 : 0;
+  //     const bIncludesSmiles = b.SMILE?.includes(smiles) ? 1 : 0;
+  //     return bIncludesSmiles - aIncludesSmiles;
+  //   });
+  // }
+
+
+  sortBySmiles(molecules: Molecule[], smiles: string) {
+    return molecules.sort((a, b) => {
+      const lengthA = this.longestCommonSubstring(a.SMILE, smiles).length;
+      const lengthB = this.longestCommonSubstring(b.SMILE, smiles).length;
+      return lengthB - lengthA; // Sort in descending order of match length
+    });
   }
+
+  // Helper method to find the longest common substring
+  longestCommonSubstring(s1: string = '', s2: string = ''): string {
+    if (!s1 || !s2) return '';
+
+    const matrix = Array(s2.length + 1).fill(null).map(() => Array(s1.length + 1).fill(0));
+    let longestLength = 0;
+    let longestEndPos = 0;
+
+    for (let i = 1; i <= s2.length; i++) {
+      for (let j = 1; j <= s1.length; j++) {
+        if (s1[j - 1] === s2[i - 1]) {
+          matrix[i][j] = matrix[i - 1][j - 1] + 1;
+          if (matrix[i][j] > longestLength) {
+            longestLength = matrix[i][j];
+            longestEndPos = j;
+          }
+        } else {
+          matrix[i][j] = 0;
+        }
+      }
+    }
+
+    return s1.substring(longestEndPos - longestLength, longestEndPos);
+  }
+
 
   modifySvg(svgString: string): string {
     const parser = new DOMParser();
@@ -485,7 +528,7 @@ export class ResultsComponent {
         }
         return data2.id - data1.id;
       });
-    } else if(value == "Number of Atoms") {
+    } else if (value == "Number of Atoms") {
       this.molecules.sort((data1: Molecule, data2: Molecule) => {
         if (this.isAscending) {
           return data1.atom_count - data2.atom_count;

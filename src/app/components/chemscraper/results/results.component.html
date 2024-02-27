@@ -71,12 +71,13 @@
               <div class="marvin-filter-container">
                 <div class="p-inputgroup">
                   <input type="text" pInputText class="form-control" [(ngModel)]="marvinJsSmiles"
-                    placeholder="Filter results by SMILES..." />
+                    placeholder="Sort results by SMILES or &quot;Draw / Upload&quot; another format..." />
                   <div [ngStyle]="{'padding': '2px'}"></div>
-                  <button pButton class="p-button-secondary p-button-link p-button-outlined" icon="pi pi-pencil"
-                    [ngStyle]="{'padding': '8px'}" (click)="openMarvinjsEditor($event)">{{ marvinJsSmiles ? '&nbsp;Edit'
-                    : '&nbsp;Draw' }}
-                    Structure</button>
+                  <button pButton class="p-button-secondary p-button-link p-button-outlined"
+                    [ngStyle]="{'padding': '8px'}" (click)="openMarvinjsEditor($event)">
+                    <img src="assets/MarvinJS_Logo.svg" alt="MarvinJS Logo" />{{ marvinJsSmiles ? '&nbsp;Edit' :
+                    '&nbsp;Draw' }} / Upload
+                  </button>
                   <div [ngStyle]="{'padding': '2px'}"></div>
                   <button pButton class="p-button-secondary p-button-link p-button-outlined"
                     [icon]="copySuccess ? 'pi pi-check' : 'pi pi-copy'"
@@ -128,11 +129,11 @@
 
             <div class="sort-row">
               <div class="sort-text">
-                Showing {{filterBySmiles(molecules, marvinJsSmiles).length}} / {{molecules.length}} identified molecules
+                Showing {{sortBySmiles(molecules, marvinJsSmiles).length}} / {{molecules.length}} identified molecules
               </div>
             </div>
             <div class="table-container">
-              <p-table #resultsTable [value]="filterBySmiles(molecules, marvinJsSmiles)" dataKey="id"
+              <p-table #resultsTable [value]="sortBySmiles(molecules, marvinJsSmiles)" dataKey="id"
                 selectionMode="single" [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)"
                 (onRowUnselect)="onRowUnselected($event)" [paginator]="true" [rows]="10"
                 [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="700px" styleClass="molecule_table"
@@ -314,30 +315,33 @@
     [style]="{ width: '50vw', height: '50vh' }" [draggable]="false" [resizable]="false">
 
     <div class="loader" *ngIf="!contentLoaded">
-        <div class="loadingTitle">
-            <h3>
-                Working on your analysis
-            </h3>
-            <!-- <p>Estimated time remaining: 1 minute and 30 seconds
+      <div class="loadingTitle">
+        <h3>
+          Working on your analysis
+        </h3>
+        <!-- <p>Estimated time remaining: 1 minute and 30 seconds
             </p> -->
-        </div>
-        <!-- <p-steps id="LoadingStages" [model]="stages" [activeIndex]="activeStage" [readonly]="true"></p-steps> -->
+      </div>
+      <!-- <p-steps id="LoadingStages" [model]="stages" [activeIndex]="activeStage" [readonly]="true"></p-steps> -->
 
-        <div class="loadingDiv">
-          <div><p-progressSpinner></p-progressSpinner></div>
-          <div><p>{{stages[activeStage].label}}</p></div>
+      <div class="loadingDiv">
+        <div><p-progressSpinner></p-progressSpinner></div>
+        <div>
+          <p>{{stages[activeStage].label}}</p>
         </div>
+      </div>
     </div>
 
     <div class="card" *ngIf="useExample">
-        <p-messages [(value)]="preComputedMessage" [enableService]="false" [closable]="false"></p-messages>
+      <p-messages [(value)]="preComputedMessage" [enableService]="false" [closable]="false"></p-messages>
     </div>
 
     <ng-container *ngIf="contentLoaded">
       <p-panel [showHeader]="false" styleClass="padded">
         <div class="result-header-container">
           <p-button (click)="DocsDropdown.toggle($event)" styleClass="p-button-outlined ui-button-success">
-            <i class="p-button-icon-left pi pi-file-pdf"></i> Documents <i class="p-button-icon-right pi pi-angle-down"></i>
+            <i class="p-button-icon-left pi pi-file-pdf"></i> Documents <i
+              class="p-button-icon-right pi pi-angle-down"></i>
           </p-button>
 
           <p-overlayPanel styleClass="files-overlay" #DocsDropdown>
@@ -347,10 +351,11 @@
           <div class="spacer"></div>
 
           <div><p-button (click)="ExportDropdown.toggle($event)" styleClass="ui-button-success">
-            <i class="p-button-icon-left pi pi-download"></i> Export
-          </p-button></div>
+              <i class="p-button-icon-left pi pi-download"></i> Export
+            </p-button></div>
           <p-overlayPanel styleClass="export-menu" #ExportDropdown>
-            <chemscraper-export-menu [tableRows]="resultsTable.value" [pages_count]="pages_count"></chemscraper-export-menu>
+            <chemscraper-export-menu [tableRows]="resultsTable.value"
+              [pages_count]="pages_count"></chemscraper-export-menu>
           </p-overlayPanel>
 
         </div>
@@ -359,37 +364,49 @@
             <div class="table-controls">
               <div class="marvin-filter-container">
                 <div class="p-inputgroup">
-                  <textarea pInputTextarea class="form-control" [(ngModel)]="marvinJsSmiles" [rows]="1" placeholder="Filter results by SMILES..."></textarea>
-                  <button pButton class="p-button-secondary p-button-link p-button-outlined" icon="pi pi-pencil" (click)="openMarvinjsEditor($event)"> {{ marvinJsSmiles ? 'Edit' : 'Draw' }} Structure</button>
+                  <textarea pInputTextarea class="form-control" [(ngModel)]="marvinJsSmiles" [rows]="1"
+                    placeholder="Filter results by SMILES..."></textarea>
+                  <button pButton class="p-button-secondary p-button-link p-button-outlined" icon="pi pi-pencil"
+                    (click)="openMarvinjsEditor($event)"> {{ marvinJsSmiles ? 'Edit' : 'Draw' }} Structure</button>
                 </div>
               </div>
               <div>
-                <p-button styleClass="p-button-outlined ui-button-success"><i class="p-button-icon-left pi pi-file-edit"></i></p-button>
+                <p-button styleClass="p-button-outlined ui-button-success"><i
+                    class="p-button-icon-left pi pi-file-edit"></i></p-button>
               </div>
               <div>
-                <p-button styleClass="p-button-outlined ui-button-success" (click)="sortOverlay.toggle($event)"><i class="p-button-icon-left pi pi-sort-alt"></i>{{selectedSortOption}}</p-button>
+                <p-button styleClass="p-button-outlined ui-button-success" (click)="sortOverlay.toggle($event)"><i
+                    class="p-button-icon-left pi pi-sort-alt"></i>{{selectedSortOption}}</p-button>
 
                 <p-overlayPanel #sortOverlay>
                   <div class="table-controls-overlay">
-                    <p class="table-controls-overlay-heading">Sort by<p>
-                    <p-dropdown [options]="sortOptions" [(ngModel)]="selectedSortOption" (onChange)="onSortChange($event)" placeholder="Select"></p-dropdown>
-                    <p-button *ngIf="isAscending" icon="pi pi-sort-amount-up-alt" (click)="toggleSort()"></p-button>
-                    <p-button *ngIf="!isAscending" icon="pi pi-sort-amount-down" (click)="toggleSort()"></p-button>
+                    <p class="table-controls-overlay-heading">Sort by
+                    <p>
+                      <p-dropdown [options]="sortOptions" [(ngModel)]="selectedSortOption"
+                        (onChange)="onSortChange($event)" placeholder="Select"></p-dropdown>
+                      <p-button *ngIf="isAscending" icon="pi pi-sort-amount-up-alt" (click)="toggleSort()"></p-button>
+                      <p-button *ngIf="!isAscending" icon="pi pi-sort-amount-down" (click)="toggleSort()"></p-button>
                   </div>
                 </p-overlayPanel>
 
               </div>
               <div>
-                <p-button styleClass="p-button-outlined ui-button-success" (click)="filterOverlay.toggle($event)"><i class="p-button-icon-left pi pi-filter"></i></p-button>
+                <p-button styleClass="p-button-outlined ui-button-success" (click)="filterOverlay.toggle($event)"><i
+                    class="p-button-icon-left pi pi-filter"></i></p-button>
 
                 <p-overlayPanel #filterOverlay>
                   <div class="table-controls-overlay">
-                    <p class="table-controls-overlay-heading">Molecule Status<p>
-                    <p-dropdown [options]="moleculeStatusFilterOptions" [(ngModel)]="selectedMoleculeStatusFilterOption" (onChange)="onFilterChange($event)" placeholder="Select"></p-dropdown>
+                    <p class="table-controls-overlay-heading">Molecule Status
+                    <p>
+                      <p-dropdown [options]="moleculeStatusFilterOptions"
+                        [(ngModel)]="selectedMoleculeStatusFilterOption" (onChange)="onFilterChange($event)"
+                        placeholder="Select"></p-dropdown>
                   </div>
                   <div class="table-controls-overlay">
-                    <p class="table-controls-overlay-heading">Flagged<p>
-                    <p-dropdown [options]="flaggedFilterOptions" [(ngModel)]="selectedFlaggedFilterOption" (onChange)="onFilterChange($event)" placeholder="Select"></p-dropdown>
+                    <p class="table-controls-overlay-heading">Flagged
+                    <p>
+                      <p-dropdown [options]="flaggedFilterOptions" [(ngModel)]="selectedFlaggedFilterOption"
+                        (onChange)="onFilterChange($event)" placeholder="Select"></p-dropdown>
                   </div>
                 </p-overlayPanel>
               </div>
@@ -397,11 +414,15 @@
 
             <div class="sort-row">
               <div class="sort-text">
-                Showing {{filterBySmiles(molecules, marvinJsSmiles).length}} / {{molecules.length}} identified molecules
+                Showing {{sortBySmiles(molecules, marvinJsSmiles).length}} / {{molecules.length}} identified molecules
               </div>
             </div>
             <div class="table-container">
-              <p-table #resultsTable [value]="filterBySmiles(molecules, marvinJsSmiles)" dataKey="id" selectionMode="single" paginatorDropdownAppendTo="body" [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)" (onRowUnselect)="onRowUnselected($event)" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="700px" styleClass="molecule_table" [(first)]="firstRowIndex">
+              <p-table #resultsTable [value]="sortBySmiles(molecules, marvinJsSmiles)" dataKey="id"
+                selectionMode="single" paginatorDropdownAppendTo="body" [(selection)]="selectedMolecule"
+                (onRowSelect)="onRowSelected($event)" (onRowUnselect)="onRowUnselected($event)" [paginator]="true"
+                [rows]="10" [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="700px"
+                styleClass="molecule_table" [(first)]="firstRowIndex">
                 <ng-template pTemplate="header">
                   <tr>
                     <!-- <th><p-tableCheckbox></p-tableCheckbox></th> -->
@@ -422,25 +443,32 @@
 
                     <td class="column_name">
                       <div class="column_container">
-                        <i [ngClass]="expanded ? 'pi pi-chevron-down p-button-icon-left' : 'pi pi-chevron-right p-button-icon-left'"></i>
+                        <i
+                          [ngClass]="expanded ? 'pi pi-chevron-down p-button-icon-left' : 'pi pi-chevron-right p-button-icon-left'"></i>
                         <div>{{ molecule.name }}</div>
                       </div>
                     </td>
                     <td class="svg-column" [innerHTML]="molecule.structure | safe:'html'"></td>
                     <td>
-                      <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [startX]="molecule.minX" [startY]="molecule.minY" [width]="molecule.width" [height]="molecule.height" [pageNumber]="molecule.page_no" [showContext]="false"></chemscraper-pdf-context-viewer>
+                      <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}"
+                        [startX]="molecule.minX" [startY]="molecule.minY" [width]="molecule.width"
+                        [height]="molecule.height" [pageNumber]="molecule.page_no"
+                        [showContext]="false"></chemscraper-pdf-context-viewer>
                     </td>
 
                     <td>{{ molecule.SMILE }}</td>
                     <td>
-                      <button class="p-button p-button-link" *ngIf="!molecule.flagged" (click)="flagMolecule(molecule, $event)"><i class="pi pi-flag"></i></button>
-                      <button class="p-button p-button-link" *ngIf="molecule.flagged" (click)="unflagMolecule(molecule, $event)"><i class="pi pi-flag-fill"></i></button>
+                      <button class="p-button p-button-link" *ngIf="!molecule.flagged"
+                        (click)="flagMolecule(molecule, $event)"><i class="pi pi-flag"></i></button>
+                      <button class="p-button p-button-link" *ngIf="molecule.flagged"
+                        (click)="unflagMolecule(molecule, $event)"><i class="pi pi-flag-fill"></i></button>
                     </td>
                     <td *ngIf="!splitView">{{ molecule.page_no }}</td>
                     <td *ngIf="!splitView">{{ molecule.PubChemCID }}</td>
                     <td *ngIf="!splitView">{{ molecule.confidence }}</td>
                     <td class="column_more">
-                      <p-button icon="pi pi-ellipsis-v" styleClass="p-button-rounded p-button-secondary p-button-text"></p-button>
+                      <p-button icon="pi pi-ellipsis-v"
+                        styleClass="p-button-rounded p-button-secondary p-button-text"></p-button>
                     </td>
                   </tr>
                 </ng-template>
@@ -450,7 +478,8 @@
                       <div class="result-molecules-details-container">
                         <p-panel>
                           <div class="molecule-details-header-container">
-                            <p-button styleClass="p-button-outlined p-button-secondary" (click)="similaritySort(molecule.SMILE);">View Similar Structures</p-button>
+                            <p-button styleClass="p-button-outlined p-button-secondary"
+                              (click)="similaritySort(molecule.SMILE);">View Similar Structures</p-button>
                           </div>
 
                           <div class="molecule-info-container">
@@ -473,11 +502,16 @@
                                 <div>
                                   <p class="molecule-details-header">Molecular Information</p>
                                   <p>Formula: {{molecule.molecularFormula}} <br>
-                                    Weight: {{ (molecule.molecularWeight) ? molecule.molecularWeight : 'Unavailable' }} <ng-container *ngIf="molecule.molecularWeight && molecule.molecularWeight != 'Unavailable'">g/mol</ng-container></p>
+                                    Weight: {{ (molecule.molecularWeight) ? molecule.molecularWeight : 'Unavailable' }}
+                                    <ng-container
+                                      *ngIf="molecule.molecularWeight && molecule.molecularWeight != 'Unavailable'">g/mol</ng-container>
+                                  </p>
                                 </div>
                                 <div>
                                   <p class="molecule-details-header">Chemical Safety</p>
-                                  <p *ngIf="molecule.chemicalSafety.length > 0"><span *ngFor="let chemicalSafetyProperty of molecule.chemicalSafety">{{chemicalSafetyProperty}}</span></p>
+                                  <p *ngIf="molecule.chemicalSafety.length > 0"><span
+                                      *ngFor="let chemicalSafetyProperty of molecule.chemicalSafety">{{chemicalSafetyProperty}}</span>
+                                  </p>
                                   <p *ngIf="molecule.chemicalSafety.length == 0">Unavailable</p>
                                 </div>
                                 <div>
@@ -485,7 +519,8 @@
                                   <p>PubChem ID: {{molecule.PubChemCID}}</p>
                                 </div>
                               </div>
-                              <div class="description" [ngClass]="splitView ? 'molecule-details-row2' : 'molecule-details-col3'">
+                              <div class="description"
+                                [ngClass]="splitView ? 'molecule-details-row2' : 'molecule-details-col3'">
                                 <p class="molecule-details-header">Description</p>
                                 <p>{{molecule.Description}}</p>
                               </div>
@@ -501,11 +536,14 @@
                                 <div class="original-structure-container">
                                   <p>Original Structure</p>
                                   <div class="bordered-div">
-                                    <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [startX]="molecule.minX" [startY]="molecule.minY" [width]="molecule.width" [height]="molecule.height" [pageNumber]="molecule.page_no" [showContext]="false"></chemscraper-pdf-context-viewer>
+                                    <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}"
+                                      [startX]="molecule.minX" [startY]="molecule.minY" [width]="molecule.width"
+                                      [height]="molecule.height" [pageNumber]="molecule.page_no"
+                                      [showContext]="false"></chemscraper-pdf-context-viewer>
                                   </div>
                                 </div>
 
-<!--
+                                <!--
                                 <div class="confidence-container">
                                   <p>Confidence</p>
                                   <div>{{ molecule.confidence }}</div>
@@ -527,7 +565,10 @@
                                 </div>
 
                                 <div class="bordered-div">
-                                  <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}" [startX]="molecule.minX" [startY]="molecule.minY" [width]="molecule.width" [height]="molecule.height" [pageNumber]="molecule.page_no" [showContext]="true"></chemscraper-pdf-context-viewer>
+                                  <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}"
+                                    [startX]="molecule.minX" [startY]="molecule.minY" [width]="molecule.width"
+                                    [height]="molecule.height" [pageNumber]="molecule.page_no"
+                                    [showContext]="true"></chemscraper-pdf-context-viewer>
                                 </div>
                               </div>
 
@@ -549,7 +590,7 @@
       </p-sidebar>
 
       <div class="failJob" *ngIf="failedJob">
-          <p-messages [(value)]="jobFailedMessage" [enableService]="false" [closable]="false"></p-messages>
+        <p-messages [(value)]="jobFailedMessage" [enableService]="false" [closable]="false"></p-messages>
       </div>
     </ng-container>
 
