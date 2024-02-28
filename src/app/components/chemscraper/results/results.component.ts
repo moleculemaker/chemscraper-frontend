@@ -37,8 +37,7 @@ export class ResultsComponent {
 
   // subscribe to result service to get the predictionRow. after receive, set contentLoaded to false.
   timeInterval: Subscription;
-  // contentLoaded: boolean = false;
-  contentLoaded: boolean = true;
+  contentLoaded: boolean = false;
   pdfURLs: string[] = [];
   currentPDF: string = "";
   currentPDFName: string = "";
@@ -49,8 +48,7 @@ export class ResultsComponent {
   jobID: string | undefined;
   downloadRows: string[][] = [['Identifier', 'Predicted EC Number']];
   statusResponse: Job;
-  // useExample: boolean = false;
-  useExample: boolean = true;
+  useExample: boolean = false;
   preComputedMessage: Message[];
   jobFailedMessage: Message[];
   stages: MenuItem[];
