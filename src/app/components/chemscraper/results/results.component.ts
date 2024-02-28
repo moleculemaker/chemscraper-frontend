@@ -33,7 +33,7 @@ import { OverlayPanel } from 'primeng/overlaypanel';
 })
 export class ResultsComponent {
   showMarvinJsEditor: boolean;
-  marvinJsSmiles: string = '';
+  // marvinJsSmiles: string = '';  using private field now
 
   // subscribe to result service to get the predictionRow. after receive, set contentLoaded to false.
   timeInterval: Subscription;
@@ -154,6 +154,22 @@ export class ResultsComponent {
 
     this.getResult();
 
+  }
+
+  private _marvinJsSmiles: string = '';
+
+  get marvinJsSmiles(): string {
+    return this._marvinJsSmiles;
+  }
+
+  set marvinJsSmiles(value: string) {
+    // When SMILES is updated, automatically enable sort in GUI.
+    this._marvinJsSmiles = value;
+    this.selectedSortOption = "Similarity";
+    this.similaritySort(value)
+    if (value === '') {
+      this.selectedSortOption = "Location In PDF";
+    }
   }
 
   flagMolecule(molecule: Molecule, event: Event) {
