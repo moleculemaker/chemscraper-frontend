@@ -490,6 +490,8 @@ export class ResultsComponent {
   }
 
   similaritySort(smile: string) {
+    this.selectedSortOption = "Similarity";
+    this.marvinJsSmiles = smile;
     this.similaritySortSMILE = smile;
     this.updateSimilaritySortDisabledState();
     if (this.jobID)

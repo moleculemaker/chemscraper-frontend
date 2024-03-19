@@ -86,11 +86,6 @@
                 </div>
               </div>
               <div>
-                <!-- TODO: no click() handler -- what is this button? -->
-                <p-button styleClass="p-button-outlined ui-button-success"><i
-                    class="p-button-icon-left pi pi-file-edit"></i></p-button>
-              </div>
-              <div>
                 <p-button styleClass="p-button-outlined ui-button-success" (click)="sortOverlay.toggle($event)"><i
                     class="p-button-icon-left pi pi-sort-alt"></i>{{selectedSortOption}}</p-button>
 
@@ -131,7 +126,7 @@
             <div class="sort-row">
               <div class="sort-text">
                 <!-- Showing {{sortBySmiles(molecules, marvinJsSmiles).length}} / {{molecules.length}} identified molecules -->
-                Showing {{molecules.length}} identified molecules
+                {{molecules.length}} molecules identified
               </div>
             </div>
             <div class="table-container">
@@ -150,7 +145,7 @@
                       pTooltip="SMILES strings correspond to extracted structures and may contain asterisks (*), which represent an abbreviation that ChemScraper is currently unable to expand."
                       tooltipPosition="top" pSortableColumn="SMILE">SMILES<p-sortIcon field="SMILE"></p-sortIcon></th>
                     <th
-                      pTooltip="Use the <strong>Flag</strong> icon to mark errors or molecules that you want to remember. You can also apply this field as a filter or use it to sort the extracted results."
+                      pTooltip="Use the Flag icon to mark errors or molecules that you want to remember. You can also apply this field as a filter or use it to sort the extracted results."
                       tooltipPosition="top" pSortableColumn="flagged">Flagged?<p-sortIcon field="flagged"></p-sortIcon>
                     </th>
                     <!-- <th *ngIf="!splitView">Document</th> -->
