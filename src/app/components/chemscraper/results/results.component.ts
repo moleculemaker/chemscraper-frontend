@@ -163,15 +163,16 @@ export class ResultsComponent {
   set marvinJsSmiles(value: string) {
     // When SMILES is updated, automatically enable sort in GUI.
     this._marvinJsSmiles = value;
-    this.selectedSortOption = "Similarity";
-    this.similaritySort(value)
     if (value === '') {
       this.selectedSortOption = "Location In PDF";
+      this.sortData("Location In PDF")
+      return;
     }
+    this.selectedSortOption = "Similarity";
+    this.similaritySort(value)
   }
 
   flagMolecule(molecule: Molecule, event: Event) {
-    event.stopPropagation();
     this._chemScraperService.flagMolecule(this.jobID + '', molecule).subscribe(result => {
       // finally, mark this as flagged
       molecule.flagged = true;
@@ -403,9 +404,9 @@ export class ResultsComponent {
     this.showMarvinJsEditor = false;
   }
 
-  // filterBySmiles(molecules: Molecule[], smiles: string) {
-  //   return molecules.filter((molecule) => molecule.SMILE?.includes(smiles));
-  // }
+  filterBySmiles(molecules: Molecule[], smiles: string): number {
+    return molecules.reduce((count, molecule) => molecule.SMILE.includes(this._marvinJsSmiles) ? count + 1 : count, 0);
+  }
 
   // filterBySmiles(molecules: Molecule[], smiles: string) {
   //   return molecules.sort((a, b) => {
@@ -490,13 +491,12 @@ export class ResultsComponent {
   }
 
   similaritySort(smile: string) {
-    this.selectedSortOption = "Similarity";
-    this.marvinJsSmiles = smile;
     this.similaritySortSMILE = smile;
     this.updateSimilaritySortDisabledState();
-    if (this.jobID)
-      this._chemScraperService.getSimilaritySortedOrder(this.jobID, smile).subscribe(
-        (response) => {
+    // console.log("Similarity sort: " + smile, "Ascending: " + this.isAscending, "JobID: " + this.jobID);
+    if (this.jobID) {
+      this._chemScraperService.getSimilaritySortedOrder(this.jobID, smile).subscribe({
+        next: (response) => {
           this.molecules.sort((data1: Molecule, data2: Molecule) => {
             const indexA = response.indexOf(data1.id);
             const indexB = response.indexOf(data2.id);
@@ -509,8 +509,14 @@ export class ResultsComponent {
 
           // Collapse all rows
           this.resultsTable.expandedRowKeys = {};
+        },
+        error: (error) => {
+          // Suppressing errors from appearing in the browser console
+          // Error handling logic can be implemented here if needed
+          console.debug("No similarity match found. Err: ", error);
         }
-      );
+      });
+    }
   }
 
   searchStructure() {
