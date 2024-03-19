@@ -20,7 +20,7 @@ import {
 import { ChemScraperService } from 'src/app/chemscraper.service';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 import { Table } from 'primeng/table';
-import {Molecule} from "@api/mmli-backend/v1";
+import { Molecule } from "@api/mmli-backend/v1";
 import { PdfViewerDialogServiceComponent } from '../pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { OverlayPanel } from 'primeng/overlaypanel';
@@ -33,7 +33,7 @@ import { OverlayPanel } from 'primeng/overlaypanel';
 })
 export class ResultsComponent {
   showMarvinJsEditor: boolean;
-  marvinJsSmiles: string = '';
+  // marvinJsSmiles: string = ''; using private field now
 
   // subscribe to result service to get the predictionRow. after receive, set contentLoaded to false.
   timeInterval: Subscription;
@@ -62,7 +62,7 @@ export class ResultsComponent {
   molecules: any[];
   filterPanelVisible: boolean = false;
 
-  tableFilterStateOptions: any[] = [{label: 'Off', value: 'off'}, {label: 'On', value: 'on'}];
+  tableFilterStateOptions: any[] = [{ label: 'Off', value: 'off' }, { label: 'On', value: 'on' }];
   tableFilterValue: string = 'off';
 
   pollForResult: boolean = true;
@@ -119,21 +119,21 @@ export class ResultsComponent {
       // { severity: 'info', detail: 'This is a pre-computed result for the example data. Real-time computation is currently disabled due to high demand, but please visit us again soon!' },
     ];
     this.jobFailedMessage = [
-      { severity: 'error', detail: 'Job failed possibly due to incorrect input or intermittent issues. Please use the “Run a new Request” button above to try again, or click the feedback link at the bottom of the page to report a problem.'}
+      { severity: 'error', detail: 'Job failed possibly due to incorrect input or intermittent issues. Please use the “Run a new Request” button above to try again, or click the feedback link at the bottom of the page to report a problem.' }
     ]
 
     this.jobID = window.location.href.split('/').at(-1);
 
     this.stages = [
       {
-          label: 'Running ChemScraper Job'
+        label: 'Running ChemScraper Job'
       },
       {
-          label: 'Fetching External Data'
+        label: 'Fetching External Data'
       },
       {
         label: 'Execution Complete, Showing Results'
-    }
+      }
     ];
     this.activeStage = 0;
 
@@ -152,6 +152,23 @@ export class ResultsComponent {
 
   }
 
+  private _marvinJsSmiles: string = '';
+
+  get marvinJsSmiles(): string {
+    return this._marvinJsSmiles;
+  }
+
+  set marvinJsSmiles(value: string) {
+    // When SMILES is updated, automatically enable sort in GUI.
+    if (value === '') {
+      this.selectedSortOption = "Location In PDF";
+    }
+
+    this._marvinJsSmiles = value;
+    this.selectedSortOption = "Similarity";
+    this.similaritySort(value)
+  }
+
   flagMolecule(molecule: Molecule) {
     this._chemScraperService.flagMolecule(this.jobID + '', molecule).subscribe(result => {
       // finally, mark this as flagged
@@ -167,18 +184,18 @@ export class ResultsComponent {
 
   }
 
-  updateStatusStage(currentStage: number){
+  updateStatusStage(currentStage: number) {
     this.activeStage = currentStage;
     const listItems = Array.from(document.querySelectorAll('#LoadingStages ul li'));
     // console.log(listItems);
     listItems.forEach((childElement, childIndex) => {
-      if(childIndex < currentStage){
+      if (childIndex < currentStage) {
         const stageElement = Array.from(childElement.querySelectorAll('a .p-steps-number'));
         const firstElement = stageElement[0];
         firstElement.classList.add('completed-stage')
       }
     })
-    if(currentStage == this.stages.length){
+    if (currentStage == this.stages.length) {
       // this.useExample = true;
     }
 
@@ -206,48 +223,48 @@ export class ResultsComponent {
     this.splitView = !this.splitView;
   }
 
-  filterResults(){
+  filterResults() {
     this.filterPanelVisible = true;
   }
 
-  selectRow(event: Event){
+  selectRow(event: Event) {
     // event.stopPropagation();
   }
 
-  getResult(){
+  getResult() {
     let jobID = window.location.href.split('/').at(-1);
-    if(jobID == "example_PDF"){
+    if (jobID == "example_PDF") {
       this.updateStatusStage(1);
       this.pollForResult = false;
-      if(jobID)
-      this._chemScraperService.getResult(jobID).subscribe(
-        (data) => {
-          this.molecules = data;
-          this.pages_count = Math.max(...this.molecules.map(molecule => parseInt(molecule.page_no)))
+      if (jobID)
+        this._chemScraperService.getResult(jobID).subscribe(
+          (data) => {
+            this.molecules = data;
+            this.pages_count = Math.max(...this.molecules.map(molecule => parseInt(molecule.page_no)))
 
-          this.updateStatusStage(2);
+            this.updateStatusStage(2);
 
-          this.getHighlightBoxes(1);
+            this.getHighlightBoxes(1);
 
-          if(jobID)
-          this._chemScraperService.getInputPDf(jobID).subscribe(
-            (urls) => {
-              this.pdfURLs = urls;
-              if(this.pdfURLs.length > 0) {
-                this.currentPDF = this.pdfURLs[0];
-                const pdfName = this.currentPDF.split("/").pop();
-                if(pdfName){
-                  this.currentPDFName = pdfName;
-                  this.fileNames.push(pdfName);
+            if (jobID)
+              this._chemScraperService.getInputPDf(jobID).subscribe(
+                (urls) => {
+                  this.pdfURLs = urls;
+                  if (this.pdfURLs.length > 0) {
+                    this.currentPDF = this.pdfURLs[0];
+                    const pdfName = this.currentPDF.split("/").pop();
+                    if (pdfName) {
+                      this.currentPDFName = pdfName;
+                      this.fileNames.push(pdfName);
+                    }
+                    this.contentLoaded = true;
+                  }
                 }
-                this.contentLoaded = true;
-              }
-            }
-          );
-        }
-      );
+              );
+          }
+        );
     }
-    else if(jobID){
+    else if (jobID) {
       timer(0, 10000).pipe(
         switchMap(() => this._chemScraperService.getResultStatus(jobID ? jobID : "example_PDF")),
         takeWhile(() => this.pollForResult)
@@ -259,45 +276,45 @@ export class ResultsComponent {
           if (jobStatus.phase == "completed") {
             this.updateStatusStage(1);
             this.pollForResult = false;
-            if(jobID)
-            this._chemScraperService.getResult(jobID).subscribe(
-              (data) => {
-                data.forEach(molecule => {
-                  molecule.structure = this.modifySvg(molecule.structure.toString());
-                })
+            if (jobID)
+              this._chemScraperService.getResult(jobID).subscribe(
+                (data) => {
+                  data.forEach(molecule => {
+                    molecule.structure = this.modifySvg(molecule.structure.toString());
+                  })
 
-                this.molecules = data;
-                this.pages_count = Math.max(...this.molecules.map(molecule => parseInt(molecule.page_no)))
+                  this.molecules = data;
+                  this.pages_count = Math.max(...this.molecules.map(molecule => parseInt(molecule.page_no)))
 
-                this.updateStatusStage(2);
+                  this.updateStatusStage(2);
 
-                this.getHighlightBoxes(1);
+                  this.getHighlightBoxes(1);
 
-                if(jobID)
-                this._chemScraperService.getInputPDf(jobID).subscribe(
-                  (urls) => {
-                    this.pdfURLs = urls;
-                    if(this.pdfURLs.length > 0) {
-                      this.currentPDF = this.pdfURLs[0];
-                      const pdfName = this.currentPDF.split("/").pop();
-                      if(pdfName){
-                        this.currentPDFName = pdfName;
-                        this.fileNames.push(pdfName);
+                  if (jobID)
+                    this._chemScraperService.getInputPDf(jobID).subscribe(
+                      (urls) => {
+                        this.pdfURLs = urls;
+                        if (this.pdfURLs.length > 0) {
+                          this.currentPDF = this.pdfURLs[0];
+                          const pdfName = this.currentPDF.split("/").pop();
+                          if (pdfName) {
+                            this.currentPDFName = pdfName;
+                            this.fileNames.push(pdfName);
+                          }
+                          this.contentLoaded = true;
+                        }
                       }
-                      this.contentLoaded = true;
-                    }
-                  }
-                );
-              }
-            );
+                    );
+                }
+              );
           } else if (jobStatus.phase == "error") {
-            if(jobID)
-            this._chemScraperService.getError(jobID).subscribe(
-              (response) => {
-                console.log(response);
-                this.pollForResult = false;
-              }
-            );
+            if (jobID)
+              this._chemScraperService.getError(jobID).subscribe(
+                (response) => {
+                  console.log(response);
+                  this.pollForResult = false;
+                }
+              );
           } else {
             console.log("Job execution underway");
           }
@@ -307,12 +324,12 @@ export class ResultsComponent {
 
   }
 
-  getHighlightBoxes(doc_no: number){
+  getHighlightBoxes(doc_no: number) {
     this.highlightBoxes = []
     let filteredMolecules = this.molecules.filter(molecule => molecule.doc_no === doc_no.toString());
-    for(const molecule of filteredMolecules){
-      if(!this.highlightBoxes[parseInt(molecule.page_no)]){
-        while(this.highlightBoxes.length < parseInt(molecule.page_no)){
+    for (const molecule of filteredMolecules) {
+      if (!this.highlightBoxes[parseInt(molecule.page_no)]) {
+        while (this.highlightBoxes.length < parseInt(molecule.page_no)) {
           this.highlightBoxes.push([]);
         }
         this.highlightBoxes[parseInt(molecule.page_no)] = [];
@@ -339,7 +356,7 @@ export class ResultsComponent {
     // }
   }
 
-  onRowUnselected(event: any){
+  onRowUnselected(event: any) {
     // if(event.data){
     //   this.pdfViewerComponent.highlightMolecule(-1);
     // }
@@ -402,10 +419,10 @@ export class ResultsComponent {
     return svgString; // return original if modifications failed
   }
 
-  OpenPDFOverlay(moleculeId: number){
+  OpenPDFOverlay(moleculeId: number) {
     this.ref = this.dialogService.open(PdfViewerDialogServiceComponent, {
-      height:'80%',
-      data:{
+      height: '80%',
+      data: {
         pdfURL: this.currentPDF,
         highlightBoxes: this.highlightBoxes,
         highlightedMoleculeId: moleculeId,
@@ -414,29 +431,30 @@ export class ResultsComponent {
     });
   }
 
-  similaritySort(smile: string){
+  similaritySort(smile: string) {
     this.similaritySortSMILE = smile;
     this.updateSimilaritySortDisabledState();
-    if(this.jobID)
-    this._chemScraperService.getSimilaritySortedOrder(this.jobID, smile).subscribe(
-      (response) => {
-        this.molecules.sort((data1: Molecule, data2: Molecule) => {
-          const indexA = response.indexOf(data1.id);
-          const indexB = response.indexOf(data2.id);
-          if(this.isAscending){
-            return indexA - indexB;
-          }
-          return indexB - indexA;
-        });
-        this.goToRow(0);
+    console.log("Similarity sort: " + smile, "Ascending: " + this.isAscending, "JobID: " + this.jobID);
+    if (this.jobID)
+      this._chemScraperService.getSimilaritySortedOrder(this.jobID, smile).subscribe(
+        (response) => {
+          this.molecules.sort((data1: Molecule, data2: Molecule) => {
+            const indexA = response.indexOf(data1.id);
+            const indexB = response.indexOf(data2.id);
+            if (this.isAscending) {
+              return indexA - indexB;
+            }
+            return indexB - indexA;
+          });
+          this.goToRow(0);
 
-        // Collapse all rows
-        this.resultsTable.expandedRowKeys = {};
-      }
-    );
+          // Collapse all rows
+          this.resultsTable.expandedRowKeys = {};
+        }
+      );
   }
 
-  searchStructure(){
+  searchStructure() {
     this.similaritySort(this.marvinJsSmiles);
     this.showMarvinJsEditor = false;
   }
@@ -459,15 +477,15 @@ export class ResultsComponent {
 
   }
 
-  sortData(value: string){
-    if(value == "Location In PDF"){
+  sortData(value: string) {
+    if (value == "Location In PDF") {
       this.molecules.sort((data1: Molecule, data2: Molecule) => {
-        if(this.isAscending){
+        if (this.isAscending) {
           return data1.id - data2.id;
         }
         return data2.id - data1.id;
       });
-    } else if(value == "Number of Atoms") {
+    } else if (value == "Number of Atoms") {
       this.molecules.sort((data1: Molecule, data2: Molecule) => {
         if (this.isAscending) {
           return data1.atom_count - data2.atom_count;
@@ -476,21 +494,21 @@ export class ResultsComponent {
       });
     } else if (value == "Molecular Weight") {
       this.molecules.sort((data1: Molecule, data2: Molecule) => {
-        if(!data2.molecularWeight || data2.molecularWeight == 'Unavailable'){
+        if (!data2.molecularWeight || data2.molecularWeight == 'Unavailable') {
           return -1;
         }
-        if(!data1.molecularWeight || data1.molecularWeight == 'Unavailable'){
+        if (!data1.molecularWeight || data1.molecularWeight == 'Unavailable') {
           return 1;
         }
         const weight1 = parseFloat(data1.molecularWeight);
         const weight2 = parseFloat(data2.molecularWeight);
-        if (isNaN(weight2)){
+        if (isNaN(weight2)) {
           return -1;
         }
-        if(isNaN(weight1)){
+        if (isNaN(weight1)) {
           return 1;
         }
-        if(this.isAscending){
+        if (this.isAscending) {
           return weight1 - weight2;
         }
         return weight2 - weight1;
@@ -498,7 +516,7 @@ export class ResultsComponent {
 
     } else if (value == "Occurrences") {
       this.molecules.sort((data1: Molecule, data2: Molecule) => {
-        if(this.isAscending){
+        if (this.isAscending) {
           return data1.OtherInstances.length - data2.OtherInstances.length;
         }
         return data2.OtherInstances.length - data1.OtherInstances.length;
@@ -508,7 +526,7 @@ export class ResultsComponent {
     }
   }
 
-  updateSimilaritySortDisabledState(){
+  updateSimilaritySortDisabledState() {
     this.sortOptions = this.sortOptions.map(sortOption => {
       if (sortOption.value === 'Similarity') {
         return { ...sortOption, label: "Similarity: " + this.similaritySortSMILE, disabled: this.similaritySortSMILE == "" };
