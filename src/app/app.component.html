@@ -31,18 +31,21 @@
     <p-menu #menu class="user_menu" [model]="userMenuItems" [popup]="true" appendTo="body"></p-menu>
     <div class="user_menu_button" *ngIf="userInfo" (click)="menu.toggle($event)">{{ userInfo.email }}</div>
 
-    <a class="login_button" href="#" *ngIf="!userInfo" (click)="$event.preventDefault();$event.stopPropagation();login()">Sign In</a>
+    <a class="login_button" href="#" *ngIf="!userInfo"
+        (click)="$event.preventDefault();$event.stopPropagation();login()">Sign In</a>
 
 
     <div class="coming_soon" [class.show_popup]="showComingSoonPopup">
-        <div class="coming_soon_button" (click)="autocloseComingSoonPopup=false;toggleComingSoonPopup();">Initial Release</div>
+        <div class="coming_soon_button" (click)="autocloseComingSoonPopup=false;toggleComingSoonPopup();">Initial
+            Release</div>
 
         <div class="coming_soon_popup" (click)="toggleComingSoonPopup()">
             <div class="close_btn"><i class="pi pi-times"></i></div>
 
             <h3>Welcome to our initial release</h3>
 
-            <p>We welcome your suggestions and <a [href]="emailstring" target="_top"><u>feedback</u></a>. New features and improvements will be released over the coming weeks.</p>
+            <p>We welcome your suggestions and <a [href]="emailstring" target="_top"><u>feedback</u></a>. New features
+                and improvements will be released over the coming weeks.</p>
         </div>
     </div>
 </header>
@@ -117,11 +120,34 @@
 <footer>
     <div class="page_container">
         <div class="container">
-            <!-- <a [href]="emailstring" target="_top"><u>Feedback</u></a>
-            <div class="divider">|</div> -->
-            <!-- <div>Copyright</div>
-            <div class="divider">|</div> -->
+            <a [href]="emailstring" target="_top"><u>Send Feedback</u></a>
+            <div class="divider">|</div>
             <div>Copyright 2023 University of Illinois Board of Trustees and Rochester Institute of Technology</div>
+        </div>
+
+    </div>
+    <div class="centered-content">
+        <div style="padding-bottom: .2rem;">Please cite this work as:</div>
+        <div class="cite-this-work">
+            <code><a href="https://arxiv.org/abs/2311.12161" target="_blank">
+                @misc{{ '{' }}shah2023chemscraper,
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;title={{ '{' }}ChemScraper: Graphics Extraction, Molecular Diagram Parsing, and Annotated Data Generation for PDF Images{{ '}' }}, 
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;author={{ '{' }}Ayush Kumar Shah and Bryan Manrique Amador and Abhisek Dey and Ming Creekmore and Blake Ocampo and Scott Denmark and Richard Zanibbi{{ '}' }},
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;year={{ '{' }}2023{{ '}' }},
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;eprint={{ '{' }}2311.12161{{ '}' }},
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;archivePrefix={{ '{' }}arXiv{{ '}' }},
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;primaryClass={{ '{' }}cs.CV{{ '}' }}
+                <br>
+                {{ '}' }}
+                <br>
+                Or find us on Arxiv: <u>https://arxiv.org/abs/2311.12161</u>
+            </a></code>
         </div>
     </div>
 </footer>
