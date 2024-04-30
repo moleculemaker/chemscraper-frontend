@@ -74,10 +74,13 @@ export class ResultsComponent {
   ref: DynamicDialogRef;
   sortOptions: any[];
   moleculeStatusFilterOptions: any[];
+  moleculeNameFilterOptions: any[];
   flaggedFilterOptions: any[];
   selectedSortOption: any;
   selectedMoleculeStatusFilterOption: any;
+  selectedMoleculeNameFilterOption: any;
   selectedFlaggedFilterOption: any;
+  countActiveFilters: any;
   similaritySortSMILE: string = "";
   isAscending: boolean = true;
 
@@ -105,6 +108,11 @@ export class ResultsComponent {
       { label: 'All molecules found', value: 'all' },
       { label: 'Has converted CDXML structure', value: 'hasCDXML' },
       { label: 'No converted CDXML structure', value: 'noCDXML' }
+    ];
+    this.moleculeNameFilterOptions = [
+      { label: 'All', value: 'all' },
+      { label: 'Available', value: 'hasCDXML' },
+      { label: 'Unavailable', value: 'noCDXML' }
     ];
     this.flaggedFilterOptions = [
       { label: 'All', value: 'all' },
@@ -148,6 +156,7 @@ export class ResultsComponent {
     // this.process_example_file();
     this.selectedSortOption = "Location In PDF";
     this.selectedMoleculeStatusFilterOption = "all";
+    this.selectedMoleculeNameFilterOption = "all";
     this.selectedFlaggedFilterOption = "all";
 
     this.getResult();
@@ -166,6 +175,7 @@ export class ResultsComponent {
     if (value === '') {
       this.selectedSortOption = "Location In PDF";
       this.sortData("Location In PDF")
+      this.similaritySortSMILE = "";
       return;
     }
     this.selectedSortOption = "Similarity";
@@ -404,21 +414,36 @@ export class ResultsComponent {
     this.showMarvinJsEditor = false;
   }
 
-  filterBySmiles(molecules: Molecule[], smiles: string): number {
-    return molecules.reduce((count, molecule) => molecule.SMILE.includes(this._marvinJsSmiles) ? count + 1 : count, 0);
+  // TODO: replace longest common substring with: https://github.com/moleculemaker/mmli-backend/blob/34f2568b138524f17385426fc53da84f3e24df97/app/routers/chemscraper.py#L58
+  getNumberOfValidMoleculesAfterFilters(molecules: Molecule[], smiles: string): number {
+    return this.filterBySmiles(molecules, smiles).length;
   }
 
-  // filterBySmiles(molecules: Molecule[], smiles: string) {
-  //   return molecules.sort((a, b) => {
-  //     const aIncludesSmiles = a.SMILE?.includes(smiles) ? 1 : 0;
-  //     const bIncludesSmiles = b.SMILE?.includes(smiles) ? 1 : 0;
-  //     return bIncludesSmiles - aIncludesSmiles;
-  //   });
-  // }
+  filterBySmiles(molecules: Molecule[], smiles: string): Molecule[] {
+    return molecules.filter(molecule => {
+      // Account for filter options
+      const matchesSmiles = molecule.SMILE.includes(smiles);
+      const matchesStatus = this.selectedMoleculeStatusFilterOption === 'all' ||
+        (this.selectedMoleculeStatusFilterOption === 'hasCDXML' && molecule.structure) ||
+        (this.selectedMoleculeStatusFilterOption === 'noCDXML' && !molecule.structure);
+      const matchesName = this.selectedMoleculeNameFilterOption === 'all' ||
+        (this.selectedMoleculeNameFilterOption === 'hasCDXML' && (molecule.name != 'Unavailable')) ||
+        (this.selectedMoleculeNameFilterOption === 'noCDXML' && (!molecule.name || molecule.name === 'Unavailable'));
+      const matchesFlagged = this.selectedFlaggedFilterOption === 'all' ||
+        (this.selectedFlaggedFilterOption === 'yes' && molecule.flagged) ||
+        (this.selectedFlaggedFilterOption === 'no' && !molecule.flagged);
 
+      if (matchesSmiles && matchesStatus && matchesName && matchesFlagged) {
+        console.log("PASSES FILTER:", molecule.name, molecule.molecularFormula, molecule.SMILE, matchesSmiles, matchesStatus, matchesName, matchesFlagged);
+      }
+      return matchesSmiles && matchesStatus && matchesName && matchesFlagged;
+    });
+  }
 
   sortBySmiles(molecules: Molecule[], smiles: string) {
-    return molecules.sort((a, b) => {
+    const availableMolecules = this.filterBySmiles(molecules, smiles);
+
+    return availableMolecules.sort((a: any, b: any) => {
       const lengthA = this.longestCommonSubstring(a.SMILE, smiles).length;
       const lengthB = this.longestCommonSubstring(b.SMILE, smiles).length;
       return lengthB - lengthA; // Sort in descending order of match length
@@ -537,10 +562,20 @@ export class ResultsComponent {
   }
 
   onFilterChange(event: any) {
-    console.log(this.selectedMoleculeStatusFilterOption);
-    console.log(this.selectedFlaggedFilterOption);
-
+    // Update a "badge" w/ the number of currently active filters.
+    let countActiveFilters = 0
+    if (this.selectedMoleculeStatusFilterOption != 'all') {
+      countActiveFilters++;
+    }
+    if (this.selectedMoleculeNameFilterOption != 'all') {
+      countActiveFilters++;
+    }
+    if (this.selectedFlaggedFilterOption != 'all') {
+      countActiveFilters++;
+    }
+    this.countActiveFilters = countActiveFilters;
   }
+
 
   sortData(value: string) {
     if (value == "Location In PDF") {

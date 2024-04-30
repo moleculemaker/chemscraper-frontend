@@ -102,10 +102,20 @@
 
               </div>
               <div>
-                <p-button styleClass="p-button-outlined ui-button-success" (click)="filterOverlay.toggle($event)"><i
-                    class="p-button-icon-left pi pi-filter"></i></p-button>
-
+                <p-button styleClass="p-button-outlined ui-button-success" (click)="filterOverlay.toggle($event)">
+                  <i class="p-button-icon-left pi pi-filter"></i>
+                  <!-- Num active filters badge -->
+                  <span *ngIf="countActiveFilters > 0" class="filter-count-badge" style="padding: 0px 0;">
+                    <span class="p-badge p-badge-info">{{countActiveFilters}}</span>
+                  </span>
+                </p-button>
                 <p-overlayPanel #filterOverlay>
+                  <div class="table-controls-overlay">
+                    <p class="table-controls-overlay-heading">Molecule Name
+                    <p>
+                      <p-dropdown [options]="moleculeNameFilterOptions" [(ngModel)]="selectedMoleculeNameFilterOption"
+                        (onChange)="onFilterChange($event)" placeholder="Select"></p-dropdown>
+                  </div>
                   <div class="table-controls-overlay">
                     <p class="table-controls-overlay-heading">Molecule Status
                     <p>
@@ -126,8 +136,8 @@
             <div class="sort-row">
               <div class="sort-text">
                 {{molecules.length}} molecules identified.
-                <span *ngIf="filterBySmiles(molecules, similaritySortSMILE) != molecules.length">Exact matches:
-                  {{filterBySmiles(molecules, similaritySortSMILE)}}</span>
+                <span *ngIf="similaritySortSMILE || countActiveFilters">Exact matches:
+                  {{getNumberOfValidMoleculesAfterFilters(molecules, similaritySortSMILE)}}</span>
               </div>
             </div>
             <div class="table-container">
