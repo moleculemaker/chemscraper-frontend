@@ -213,6 +213,12 @@ header {
 }
 }
 
+.uppercased {
+    text: {
+        transform: uppercase;
+    }
+}
+
 .tool_header {
     top: 0px;
     z-index: get_index(interface);
