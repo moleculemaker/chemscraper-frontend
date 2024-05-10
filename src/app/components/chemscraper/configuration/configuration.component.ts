@@ -1,4 +1,4 @@
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChemScraperService } from 'src/app/chemscraper.service';
@@ -35,7 +35,7 @@ export class ConfigurationComponent {
 
   inputMethods = [
     { label: 'Upload File', icon: 'pi pi-upload', value: 'upload_file' },
-    { label: 'Example PDF', icon: 'pi pi-file-pdf', value: 'use_example' },
+    { label: 'Use Example PDF', icon: 'pi pi-file-pdf', value: 'use_example' },
   ];
   selectedInputMethod: any | null = 'upload_file'; //this.inputMethods[0];
 
@@ -76,7 +76,7 @@ export class ConfigurationComponent {
     if (this.selectedInputMethod == 'use_example') {
       let label = "example_PDF"
       this._chemScraperService.getExampleResponse(label)
-        .subscribe( data => {
+        .subscribe(data => {
           this.router.navigate(['/results', data.jobId]);
         });
     } else {
@@ -105,11 +105,11 @@ export class ConfigurationComponent {
     this.requestBody.user_email = this.userEmail;
   }
 
-  onFileSelected(e: Event){
+  onFileSelected(e: Event) {
     let upload_fileList = (e.target as HTMLInputElement).files;
-    if(upload_fileList){
+    if (upload_fileList) {
       Array.from(upload_fileList).forEach((file) => {
-        if(file.type === 'application/pdf') {
+        if (file.type === 'application/pdf') {
 
           // File Upload
           const fd = new FormData();
@@ -127,9 +127,9 @@ export class ConfigurationComponent {
     }
   }
 
-  onFileDropped(files: FileList){
+  onFileDropped(files: FileList) {
     Array.from(files).forEach((file) => {
-      if(file.type === 'application/pdf') {
+      if (file.type === 'application/pdf') {
 
         // File Upload
         const fd = new FormData();
@@ -146,18 +146,18 @@ export class ConfigurationComponent {
     // console.log(this.uploaded_files);
   }
 
-  deleteFile(index: number){
+  deleteFile(index: number) {
     this.uploaded_files.splice(index, 1);
   }
 
-  viewFile(index: number){
+  viewFile(index: number) {
     this._chemScraperService.getInputPDf(this.jobID).subscribe(
       (urls) => {
         let pdfURLs = urls;
-        if(pdfURLs.length > 0) {
+        if (pdfURLs.length > 0) {
           this.ref = this.dialogService.open(PdfViewerDialogServiceComponent, {
-            height:'60%',
-            data:{
+            height: '60%',
+            data: {
               pdfURL: pdfURLs[0]
             }
           });
