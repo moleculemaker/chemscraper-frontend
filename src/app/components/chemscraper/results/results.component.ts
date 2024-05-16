@@ -20,7 +20,7 @@ import {
 import { ChemScraperService } from 'src/app/chemscraper.service';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 import { Table } from 'primeng/table';
-import { Molecule } from "@api/mmli-backend/v1";
+import {Configuration, Molecule} from "@api/mmli-backend/v1";
 import { PdfViewerDialogServiceComponent } from '../pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { OverlayPanel } from 'primeng/overlaypanel';
@@ -47,7 +47,7 @@ export class ResultsComponent {
   failedJob: boolean = false;
   jobID: string | undefined;
   downloadRows: string[][] = [['Identifier', 'Predicted EC Number']];
-  statusResponse: Job;
+  statusResponse?: Job;
   useExample: boolean = false;
   preComputedMessage: Message[];
   jobFailedMessage: Message[];
@@ -293,13 +293,22 @@ export class ResultsComponent {
     else if (jobID) {
       timer(0, 10000).pipe(
         switchMap(() => this._chemScraperService.getResultStatus(jobID ? jobID : "example_PDF")),
-        takeWhile(() => this.pollForResult)
+        takeWhile(() => this.pollForResult),
       ).subscribe(
-        (jobStatus) => {
-          this.statusResponse = jobStatus;
-          console.log(jobStatus);
+        (jobs: Array<Job>) => {
+          const firstMatch = jobs?.find(() => true);
+          this.statusResponse = firstMatch;
+          console.log(firstMatch);
 
-          if (jobStatus.phase == "completed") {
+          if (!firstMatch || firstMatch?.phase == "error") {
+            if (jobID)
+              this._chemScraperService.getError(jobID).subscribe(
+                (response) => {
+                  console.log(response);
+                  this.pollForResult = false;
+                }
+              );
+          } else if (firstMatch?.phase == "completed") {
             this.updateStatusStage(1);
             this.pollForResult = false;
             if (jobID)
@@ -331,14 +340,6 @@ export class ResultsComponent {
                         }
                       }
                     );
-                }
-              );
-          } else if (jobStatus.phase == "error") {
-            if (jobID)
-              this._chemScraperService.getError(jobID).subscribe(
-                (response) => {
-                  console.log(response);
-                  this.pollForResult = false;
                 }
               );
           } else {

@@ -29,7 +29,7 @@ export class ChemScraperService {
 
     private jobsService: JobsService,
     private filesService: FilesService,
-    private chemscraperService: ChemScraperApiService
+    public chemscraperService: ChemScraperApiService
   ) {  }
 
   getExampleResponse(dataLabel: string): Observable<PostResponse>{
@@ -47,8 +47,9 @@ export class ChemScraperService {
     return this.filesService.uploadFileBucketNameUploadPost('chemscraper', fileData, jobID);
   }
 
-  getResultStatus(jobID: string): Observable<Job>{
-    return this.jobsService.getJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdGet('chemscraper', jobID, '0');
+  getResultStatus(jobID: string): Observable<Array<Job>>{
+    return this.jobsService.listJobsByTypeAndJobIdJobTypeJobsJobIdGet('chemscraper', jobID);
+    //return this.jobsService.getJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdGet('chemscraper', jobID, '0');
   }
 
   getResult(jobID: string): Observable<Molecule[]>{
