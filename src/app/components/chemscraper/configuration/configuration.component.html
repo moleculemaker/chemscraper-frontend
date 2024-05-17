@@ -109,7 +109,8 @@
         <!-- Alighn this button to the right of the page (overall bottom right submit option) -->
         <div class="controls" style="display: flex; justify-content: flex-end;">
             <div class="buttons">
-                <button pButton type="button" [disabled]="uploaded_files.length == 0 ||  disableCopyPaste"
+                <button pButton type="button"
+                    [disabled]="(uploaded_files.length == 0 && selectedInputMethod != 'use_example') || disableCopyPaste"
                     label="Analyze using ChemScraper" (click)="submitData()" icon="pi pi-arrow-right" iconPos="right"
                     styleClass="p-button-xs"></button>
             </div>
