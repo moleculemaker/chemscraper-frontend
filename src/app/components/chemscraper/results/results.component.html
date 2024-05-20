@@ -70,25 +70,29 @@
             <div class="table-controls">
               <div class="marvin-filter-container">
                 <div class="p-inputgroup">
-                  <input type="text" pInputText class="form-control" [(ngModel)]="marvinJsSmiles"
-                    placeholder="Sort results by SMILES or &quot;Draw / Upload&quot; another format..." />
+                  <div class="p-inputgroup">
+                    <span class="search-icon">
+                      <i class="pi pi-search"></i>
+                    </span>
+                    <input type="text" pInputText class="form-control sort-results-input-radius"
+                      [(ngModel)]="marvinJsSmiles"
+                      placeholder="Sort results by SMILES or &quot;Draw / Upload&quot; another format...">
+                  </div>
                   <div [ngStyle]="{'padding': '2px'}"></div>
-                  <button pButton class="p-button-secondary p-button-link p-button-outlined"
-                    [ngStyle]="{'padding': '8px'}" (click)="openMarvinjsEditor($event)">
-                    <img src="assets/MarvinJS_Logo.svg" alt="MarvinJS Logo" />{{ marvinJsSmiles ? '&nbsp;Edit' :
-                    '&nbsp;Draw' }} / Upload
+                  <button pButton class="p-button-secondary p-button-link p-button-outlined dynamic-width-button "
+                    (click)="openMarvinjsEditor($event)">
+                    <img src="assets/MarvinJS_Logo.svg" alt="MarvinJS Logo" /><span class="semi-bold-text">{{
+                      marvinJsSmiles
+                      ? '&nbsp;Edit' :
+                      '&nbsp;Draw&nbsp;/&nbsp;Upload' }}</span>
                   </button>
-                  <div [ngStyle]="{'padding': '2px'}"></div>
-                  <button pButton class="p-button-secondary p-button-link p-button-outlined"
-                    [icon]="copySuccess ? 'pi pi-check' : 'pi pi-copy'"
-                    [ngStyle]="{'color': copySuccess ? 'green' : 'inherit', 'padding': '8px'}"
-                    (click)="copySmilesToClipboard()">&nbsp;Copy</button>
                 </div>
               </div>
-              <div>
-                <p-button styleClass="p-button-outlined ui-button-success" (click)="sortOverlay.toggle($event)"><i
+              <div [ngStyle]="{'margin-left': '-10px'}">
+                <!-- Currently active sort param button - 2nd from right -->
+                <p-button styleClass="p-button-vertical-padding p-button-outlined ui-button-success"
+                  (click)="sortOverlay.toggle($event)"><i
                     class="p-button-icon-left pi pi-sort-alt"></i>{{selectedSortOption}}</p-button>
-
                 <p-overlayPanel #sortOverlay>
                   <div class="table-controls-overlay">
                     <p class="table-controls-overlay-heading">Sort by
@@ -99,10 +103,12 @@
                       <p-button *ngIf="!isAscending" icon="pi pi-sort-amount-down" (click)="toggleSort()"></p-button>
                   </div>
                 </p-overlayPanel>
-
               </div>
-              <div>
-                <p-button styleClass="p-button-outlined ui-button-success" (click)="filterOverlay.toggle($event)">
+
+              <div [ngStyle]="{'margin-left': '-6px'}">
+                <!-- Filter icon - far right -->
+                <p-button styleClass="p-button-vertical-padding-extra-on-top p-button-outlined ui-button-success"
+                  (click)="filterOverlay.toggle($event)">
                   <i class="p-button-icon-left pi pi-filter"></i>
                   <!-- Num active filters badge -->
                   <span *ngIf="countActiveFilters > 0" class="filter-count-badge" style="padding: 0px 0;">
@@ -133,8 +139,8 @@
               </div>
             </div>
 
-            <div class="sort-row">
-              <div class="sort-text">
+            <div class="sort-row" [ngClass]="{'padding-bottom': '40px'}">
+              <div class="sort-text" [ngClass]="{'padding-bottom': '40px'}">
                 {{molecules.length}} molecules identified.
                 <span *ngIf="similaritySortSMILE || countActiveFilters">Exact matches:
                   {{getNumberOfValidMoleculesAfterFilters(molecules, similaritySortSMILE)}}</span>

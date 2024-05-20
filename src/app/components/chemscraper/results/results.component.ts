@@ -5,7 +5,7 @@ import { interval } from "rxjs/internal/observable/interval";
 import { Subscription, timer } from 'rxjs';
 import { finalize, startWith, switchMap, takeWhile } from "rxjs/operators";
 import { Router } from '@angular/router';
-import { MenuItem, Message } from 'primeng/api';
+import { MenuItem, Message, MessageService } from 'primeng/api';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import {
@@ -20,7 +20,7 @@ import {
 import { ChemScraperService } from 'src/app/chemscraper.service';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 import { Table } from 'primeng/table';
-import { Molecule } from "@api/mmli-backend/v1";
+import { JobsService, Molecule } from "@api/mmli-backend/v1";
 import { PdfViewerDialogServiceComponent } from '../pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { OverlayPanel } from 'primeng/overlaypanel';
@@ -95,7 +95,8 @@ export class ResultsComponent {
     private httpClient: HttpClient,
     private _chemScraperService: ChemScraperService,
     private sanitizer: DomSanitizer,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private messageService: MessageService,
   ) {
     this.sortOptions = [
       { label: 'Location In PDF (default)', value: 'Location In PDF', disabled: false },
@@ -161,6 +162,9 @@ export class ResultsComponent {
 
     this.getResult();
 
+    // this.showMessage("info", "Info", "Testing toast popups.");
+    // this.showMessage("error", "Error", "Testing error toast popups.");
+
   }
 
   private _marvinJsSmiles: string = '';
@@ -180,6 +184,10 @@ export class ResultsComponent {
     }
     this.selectedSortOption = "Similarity";
     this.similaritySort(value)
+  }
+
+  showMessage(severity: string, summary: string, detail: string) {
+    this.messageService.add({ severity: severity, summary: summary, detail: detail });
   }
 
   flagMolecule(molecule: Molecule, event: Event) {
@@ -265,6 +273,8 @@ export class ResultsComponent {
       if (jobID)
         this._chemScraperService.getResult(jobID).subscribe(
           (data) => {
+            console.log("In getResult.subscribe()", data);
+            // this.showMessage('info', 'Info', `Got results for job ${jobID}. Data: ${data}`);
             this.molecules = data;
             this.pages_count = Math.max(...this.molecules.map(molecule => parseInt(molecule.page_no)))
 
@@ -287,6 +297,10 @@ export class ResultsComponent {
                   }
                 }
               );
+          },
+          (error) => {
+            console.error(`Failed to fetch results for job ${jobID}. Error: ${error}`);
+            this.showMessage('error', 'Error', `Failed to fetch results for job ${jobID}. Error: ${error}`);
           }
         );
     }
@@ -298,6 +312,7 @@ export class ResultsComponent {
         (jobStatus) => {
           this.statusResponse = jobStatus;
           console.log(jobStatus);
+          this.showMessage('info', 'Info', `Got results for job ${jobID}. Data: ${jobStatus}`);
 
           if (jobStatus.phase == "completed") {
             this.updateStatusStage(1);
@@ -331,14 +346,23 @@ export class ResultsComponent {
                         }
                       }
                     );
+                },
+                (error) => {
+                  console.error(`Failed to fetch results for job ${jobID}. Error: ${error}`);
+                  this.showMessage('error', 'Error', `Failed to fetch results for job ${jobID}. Error: ${error}`);
                 }
               );
           } else if (jobStatus.phase == "error") {
             if (jobID)
               this._chemScraperService.getError(jobID).subscribe(
                 (response) => {
-                  console.log(response);
+                  console.log("Fetching jobStatus error:", response);
+                  this.showMessage('info', 'Info', `Fetching jobStatus error ${jobID}. Data: ${jobStatus}`);
                   this.pollForResult = false;
+                },
+                (error) => {
+                  console.error(`Failed to fetch error details for job ${jobID}. Error: ${error}`);
+                  this.showMessage('error', 'Error', `Failed to fetch error details for job ${jobID}. Error: ${error}`);
                 }
               );
           } else {
@@ -638,3 +662,18 @@ export class ResultsComponent {
 }
 
 
+// @Component({
+//   selector: 'app-some-component',
+//   templateUrl: './some.component.html'
+// })
+// export class SomeComponent {
+//   constructor(private messageService: MessageService) { }
+
+//   showError() {
+//     this.messageService.add({
+//       severity: 'error',
+//       summary: 'Error Message',
+//       detail: 'This is a detailed error message.'
+//     });
+//   }
+// }
