@@ -174,7 +174,7 @@ a:active {
 .dynamic-width-button {
   white-space: nowrap;
   padding: 8px;
-  padding-right: 28px;
+  padding-right: 30px;
 }
 
 
@@ -371,7 +371,7 @@ p-panel {
 .search-input,
 .sort-text {
   flex: 8;
-  padding: ($padding * .75) ($padding * 1.2);
+  padding: ($padding * .75) ($padding * .75);
 }
 
 .filter-button,
@@ -672,12 +672,32 @@ p-panel {
   margin-bottom: -3px;
 }
 
-// .sort-results-input-radius {
-//   border-radius: 6px;
+:host ::ng-deep {
+  .p-button-outlined.p-button-secondary.kasbutton {
+    border-radius: 6px;
+    color: #495057;
+    border: 1px solid #495057;
+    white-space: nowrap; // Ensure text does not wrap
+    width: auto; // Allow width to expand to fit content
+    min-width: max-content; // Ensure minimum width is content width
+    padding: 15px;
+  }
+}
+
+// :host ::ng-deep {
+//   .p-button-outlined.p-button-secondary.kasbutton {
+//     border-radius: 6px;
+//     color: #495057;
+//     border: 1px solid #495057;
+//   }
 // }
 
+
 .marvin-filter-container {
-  padding: 5px;
+  padding-left: 0px;
+  padding-right: 5px;
+  padding-bottom: 5px;
+  padding-top: 5px;
   flex: 1;
 
 
@@ -685,6 +705,7 @@ p-panel {
     border-radius: 6px;
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
+    padding-left: 1px;
 
     textarea {
       border-width: 0px;

@@ -5,6 +5,8 @@ import { ChemScraperService } from 'src/app/chemscraper.service';
 import { TrackingService } from 'src/app/tracking.service';
 import { Message } from 'primeng/api';
 import { switchMap } from 'rxjs/operators';
+import { MessageService } from 'primeng/api'; // Ensure this import is added
+
 
 import { PostResponse, ChemScraperAnalyzeRequestBody, SingleSeqData, ExampleData } from '../../../models';
 import { ResultsComponent } from '../results/results.component';
@@ -55,7 +57,9 @@ export class ConfigurationComponent {
     private httpClient: HttpClient,
     private trackingService: TrackingService,
     private dialogService: DialogService,
-    private envService: EnvironmentService
+    private envService: EnvironmentService,
+    private messageService: MessageService,
+
   ) { }
 
   ngOnInit() {
@@ -84,16 +88,21 @@ export class ConfigurationComponent {
       const fileNames: string[] = this.uploaded_files.map(file => file.name);
       this.requestBody.fileList = fileNames;
       this._chemScraperService.analyzeDocument(this.requestBody).subscribe({
-        next: (res) => this.router.navigate(['/results', this.jobID]),
+        next: (res) => {
+          this.router.navigate(['/results', this.jobID]);
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Document analysis started successfully.', life: 15000 });
+        },
         error: (err: HttpErrorResponse) => {
           if (err.status === 429) {
             const h = err.headers;
             const retryAfter = h.get('Retry-After');
             const retryIn = h.get('X-Retry-In');
 
-            window.alert(`Too many requests.. try again in ${retryIn}`)
+            window.alert(`Too many requests.. try again in ${retryIn}`);
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: `Too many requests. Please try again after ${retryAfter}`, life: 15000 });
             console.log(`Too many requests.. try again after ${retryAfter}:`, err);
           } else {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to submit new job request. Please try again later.', life: 15000 });
             console.log('Failed to submit new job request:', err);
           }
         }

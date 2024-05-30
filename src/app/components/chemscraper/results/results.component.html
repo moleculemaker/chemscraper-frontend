@@ -74,12 +74,11 @@
                     <span class="search-icon">
                       <i class="pi pi-search"></i>
                     </span>
-                    <input type="text" pInputText class="form-control sort-results-input-radius"
-                      [(ngModel)]="marvinJsSmiles"
+                    <input type="text" pInputText class="form-control" [(ngModel)]="marvinJsSmiles"
                       placeholder="Sort results by SMILES or &quot;Draw / Upload&quot; another format...">
                   </div>
                   <div [ngStyle]="{'padding': '2px'}"></div>
-                  <button pButton class="p-button-secondary p-button-link p-button-outlined dynamic-width-button "
+                  <button pButton class="p-button-secondary p-button-link p-button-outlined dynamic-width-button"
                     (click)="openMarvinjsEditor($event)">
                     <img src="assets/MarvinJS_Logo.svg" alt="MarvinJS Logo" /><span class="semi-bold-text">{{
                       marvinJsSmiles
@@ -139,16 +138,18 @@
               </div>
             </div>
 
-            <div class="sort-row" [ngClass]="{'padding-bottom': '40px'}">
-              <div class="sort-text" [ngClass]="{'padding-bottom': '40px'}">
-                {{molecules.length}} molecules identified.
-                <span *ngIf="similaritySortSMILE || countActiveFilters">Exact matches:
-                  {{getNumberOfValidMoleculesAfterFilters(molecules, similaritySortSMILE)}}</span>
+            <div class="sort-row">
+              <div class="sort-text">
+                {{molecules.length}} results
+                <span *ngIf="similaritySortSMILE || countActiveFilters"> |
+                  {{getNumberOfValidMoleculesAfterFilters(molecules, similaritySortSMILE)}}
+                  exact matches
+                </span>
               </div>
             </div>
             <div class="table-container">
-              <p-table #resultsTable [value]="sortBySmiles(molecules, marvinJsSmiles)" dataKey="id"
-                selectionMode="single" [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)"
+              <p-table #resultsTable [value]="molecules" dataKey="id" selectionMode="single"
+                [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)"
                 (onRowUnselect)="onRowUnselected($event)" [paginator]="true" [rows]="10"
                 [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="700px" styleClass="molecule_table"
                 [(first)]="firstRowIndex">
@@ -156,20 +157,25 @@
                   <tr>
                     <!-- <th><p-tableCheckbox></p-tableCheckbox></th> -->
                     <th pSortableColumn="name">Molecule<p-sortIcon field="name"></p-sortIcon></th>
-                    <th>Structure (Extracted)</th>
-                    <th>Structure (Original)</th>
+                    <th>Extracted Structure</th>
+                    <th>Original Structure</th>
                     <th
                       pTooltip="SMILES strings correspond to extracted structures and may contain asterisks (*), which represent an abbreviation that ChemScraper is currently unable to expand."
-                      tooltipPosition="top" pSortableColumn="SMILE">SMILES<p-sortIcon field="SMILE"></p-sortIcon></th>
+                      tooltipPosition="top" pSortableColumn="SMILE"><span
+                        style="white-space: nowrap; text-decoration: underline dotted;">SMILES<p-sortIcon
+                          field="SMILE"></p-sortIcon></span>
+                    </th>
                     <th
                       pTooltip="Use the Flag icon to mark errors or molecules that you want to remember. You can also apply this field as a filter or use it to sort the extracted results."
-                      tooltipPosition="top" pSortableColumn="flagged">Flagged?<p-sortIcon field="flagged"></p-sortIcon>
+                      tooltipPosition="top" pSortableColumn="flagged">
+                      <span style="white-space: nowrap; text-decoration: underline dotted;">Flag <p-sortIcon
+                          field="flagged"></p-sortIcon></span>
                     </th>
                     <!-- <th *ngIf="!splitView">Document</th> -->
                     <th *ngIf="!splitView">Page</th>
                     <th *ngIf="!splitView">PubChem CID</th>
                     <th *ngIf="!splitView">Confidence</th>
-                    <th></th>
+                    <!-- <th></th> -->
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-molecule let-expanded="expanded">
@@ -198,10 +204,10 @@
                     <td *ngIf="!splitView">{{ molecule.page_no }}</td>
                     <td *ngIf="!splitView">{{ molecule.PubChemCID }}</td>
                     <td *ngIf="!splitView">{{ molecule.confidence }}</td>
-                    <td class="column_more">
+                    <!-- <td class="column_more">
                       <p-button icon="pi pi-ellipsis-v"
                         styleClass="p-button-rounded p-button-secondary p-button-text"></p-button>
-                    </td>
+                    </td> -->
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-molecule>
@@ -210,8 +216,11 @@
                       <div class="result-molecules-details-container">
                         <p-panel>
                           <div class="molecule-details-header-container">
-                            <p-button styleClass="p-button-outlined p-button-secondary"
-                              (click)="similaritySort(molecule.SMILE)">View Similar Structures</p-button>
+                            <p-button styleClass="kasbutton p-button-outlined p-button-secondary"
+                              (click)="similaritySort(molecule.SMILE)">
+                              <i class="pi pi-plus-circle" style="margin-right: 5px;"></i>
+                              View Similar Structures
+                            </p-button>
                           </div>
 
                           <div class="molecule-info-container">
