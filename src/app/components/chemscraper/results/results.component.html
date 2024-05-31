@@ -75,16 +75,17 @@
                       <i class="pi pi-search"></i>
                     </span>
                     <input type="text" pInputText class="form-control" [(ngModel)]="marvinJsSmiles"
-                      placeholder="Sort results by SMILES or &quot;Draw / Upload&quot; another format...">
+                      placeholder="Sort results by SMILES or &quot;Draw / Upload&quot; another format:"
+                      style="border: none;">
+                    <button pButton class="p-button-secondary p-button-link p-button-outlined dynamic-width-button"
+                      (click)="openMarvinjsEditor($event)">
+                      <img src="assets/MarvinJS_Logo.svg" alt="MarvinJS Logo" /><span class="semi-bold-text">{{
+                        marvinJsSmiles
+                        ? '&nbsp;Edit' :
+                        '&nbsp;Draw&nbsp;/&nbsp;Upload' }}</span>
+                    </button>
                   </div>
                   <div [ngStyle]="{'padding': '2px'}"></div>
-                  <button pButton class="p-button-secondary p-button-link p-button-outlined dynamic-width-button"
-                    (click)="openMarvinjsEditor($event)">
-                    <img src="assets/MarvinJS_Logo.svg" alt="MarvinJS Logo" /><span class="semi-bold-text">{{
-                      marvinJsSmiles
-                      ? '&nbsp;Edit' :
-                      '&nbsp;Draw&nbsp;/&nbsp;Upload' }}</span>
-                  </button>
                 </div>
               </div>
               <div [ngStyle]="{'margin-left': '-10px'}">
