@@ -1,10 +1,12 @@
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChemScraperService } from 'src/app/chemscraper.service';
 import { TrackingService } from 'src/app/tracking.service';
 import { Message } from 'primeng/api';
 import { switchMap } from 'rxjs/operators';
+import { MessageService } from 'primeng/api'; // Ensure this import is added
+
 
 import { PostResponse, ChemScraperAnalyzeRequestBody, SingleSeqData, ExampleData } from '../../../models';
 import { ResultsComponent } from '../results/results.component';
@@ -35,7 +37,7 @@ export class ConfigurationComponent {
 
   inputMethods = [
     { label: 'Upload File', icon: 'pi pi-upload', value: 'upload_file' },
-    { label: 'Example PDF', icon: 'pi pi-file-pdf', value: 'use_example' },
+    { label: 'Use Example PDF', icon: 'pi pi-file-pdf', value: 'use_example' },
   ];
   selectedInputMethod: any | null = 'upload_file'; //this.inputMethods[0];
 
@@ -55,7 +57,9 @@ export class ConfigurationComponent {
     private httpClient: HttpClient,
     private trackingService: TrackingService,
     private dialogService: DialogService,
-    private envService: EnvironmentService
+    private envService: EnvironmentService,
+    private messageService: MessageService,
+
   ) { }
 
   ngOnInit() {
@@ -76,7 +80,7 @@ export class ConfigurationComponent {
     if (this.selectedInputMethod == 'use_example') {
       let label = "example_PDF"
       this._chemScraperService.getExampleResponse(label)
-        .subscribe( data => {
+        .subscribe(data => {
           this.router.navigate(['/results', data.jobId]);
         });
     } else {
@@ -84,16 +88,21 @@ export class ConfigurationComponent {
       const fileNames: string[] = this.uploaded_files.map(file => file.name);
       this.requestBody.fileList = fileNames;
       this._chemScraperService.analyzeDocument(this.requestBody).subscribe({
-        next: (res) => this.router.navigate(['/results', this.jobID]),
+        next: (res) => {
+          this.router.navigate(['/results', this.jobID]);
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Document analysis started successfully.', life: 15000 });
+        },
         error: (err: HttpErrorResponse) => {
           if (err.status === 429) {
             const h = err.headers;
             const retryAfter = h.get('Retry-After');
             const retryIn = h.get('X-Retry-In');
 
-            window.alert(`Too many requests.. try again in ${retryIn}`)
+            window.alert(`Too many requests.. try again in ${retryIn}`);
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: `Too many requests. Please try again after ${retryAfter}`, life: 15000 });
             console.log(`Too many requests.. try again after ${retryAfter}:`, err);
           } else {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to submit new job request. Please try again later.', life: 15000 });
             console.log('Failed to submit new job request:', err);
           }
         }
@@ -105,11 +114,11 @@ export class ConfigurationComponent {
     this.requestBody.user_email = this.userEmail;
   }
 
-  onFileSelected(e: Event){
+  onFileSelected(e: Event) {
     let upload_fileList = (e.target as HTMLInputElement).files;
-    if(upload_fileList){
+    if (upload_fileList) {
       Array.from(upload_fileList).forEach((file) => {
-        if(file.type === 'application/pdf') {
+        if (file.type === 'application/pdf') {
 
           // File Upload
           const fd = new FormData();
@@ -127,9 +136,9 @@ export class ConfigurationComponent {
     }
   }
 
-  onFileDropped(files: FileList){
+  onFileDropped(files: FileList) {
     Array.from(files).forEach((file) => {
-      if(file.type === 'application/pdf') {
+      if (file.type === 'application/pdf') {
 
         // File Upload
         const fd = new FormData();
@@ -146,18 +155,18 @@ export class ConfigurationComponent {
     // console.log(this.uploaded_files);
   }
 
-  deleteFile(index: number){
+  deleteFile(index: number) {
     this.uploaded_files.splice(index, 1);
   }
 
-  viewFile(index: number){
+  viewFile(index: number) {
     this._chemScraperService.getInputPDf(this.jobID).subscribe(
       (urls) => {
         let pdfURLs = urls;
-        if(pdfURLs.length > 0) {
+        if (pdfURLs.length > 0) {
           this.ref = this.dialogService.open(PdfViewerDialogServiceComponent, {
-            height:'60%',
-            data:{
+            height: '60%',
+            data: {
               pdfURL: pdfURLs[0]
             }
           });

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {UserInfoService} from "./services/userinfo.service";
-import {MenuItem} from "primeng/api";
+import { UserInfoService } from "./services/userinfo.service";
+import { MenuItem } from "primeng/api";
 
 @Component({
   selector: 'app-root',
@@ -9,10 +9,10 @@ import {MenuItem} from "primeng/api";
 })
 export class AppComponent {
   emailstring: string = "mailto:chemscraper-feedback@moleculemaker.org?Subject=User feedback for ChemScraper";
-  showCite: boolean = false;
+  showCite: boolean = true;
 
   showComingSoonPopup: boolean = false;
-  comingSoonTimerID: number|null = null;
+  comingSoonTimerID: number | null = null;
   autocloseComingSoonPopup: boolean = true;
 
   get userMenuItems(): Array<MenuItem> {
@@ -29,9 +29,9 @@ export class AppComponent {
 
   ngOnInit() {
     this.userInfoService.fetchUserInfo();
-      this.comingSoonTimerID = setTimeout(()=>{
-        this.toggleComingSoonPopup();
-      }, 2000);
+    this.comingSoonTimerID = setTimeout(() => {
+      this.toggleComingSoonPopup();
+    }, 2000);
   }
 
   citeButton() {
@@ -41,12 +41,12 @@ export class AppComponent {
   toggleComingSoonPopup() {
     this.showComingSoonPopup = !this.showComingSoonPopup;
 
-    if (this.comingSoonTimerID) {clearTimeout(this.comingSoonTimerID);}
+    if (this.comingSoonTimerID) { clearTimeout(this.comingSoonTimerID); }
 
     if (this.autocloseComingSoonPopup) {
       this.autocloseComingSoonPopup = false;
 
-      this.comingSoonTimerID = setTimeout(()=>{
+      this.comingSoonTimerID = setTimeout(() => {
         this.toggleComingSoonPopup();
       }, 8000);
     }

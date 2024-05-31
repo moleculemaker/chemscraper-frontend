@@ -15,8 +15,9 @@
 }
 
 .panel_content {
+
     //fill the space with the textarea
-//    margin: -($padding * .75) (-($padding * .5));
+    //    margin: -($padding * .75) (-($padding * .5));
     margin: {
         top: -($padding * 1.25);
         right: -($padding * 1.25);
@@ -48,11 +49,28 @@
     }
 }
 
+.custom-delete-button {
+    color: #6C757D;
+    // 224063 // color: #00b98e;
+}
+
+.custom-view-button {
+    font-weight: 600 !important;
+    color: red;
+}
+
+// :host ::ng-deep .custom-view-button .p-button .p-button-label {
+//     font-weight: 800 !important;
+//     /* Just to test if styling is applied */
+
+// }
+
 :host ::ng-deep .p-message.p-message-info {
     background: css_var('interface_background_tint');
     border-width: 0 0 0 0;
     color: #224063;
     text-align: center;
+
     .p-message-icon {
         display: none;
     }
@@ -82,17 +100,18 @@
     }
 }
 
-.dropzone ::ng-deep{
-   .p-button{
-    gap: $padding;
-    font-size: 0.75em;
-   }
-   .drag-comment{
-    margin-top: 15px;
-    font-size: 0.75em;
-    color: #6C757D;
-    font-weight: 200;
-   }
+.dropzone ::ng-deep {
+    .p-button {
+        gap: $padding;
+        font-size: 0.75em;
+    }
+
+    .drag-comment {
+        margin-top: 15px;
+        font-size: 0.75em;
+        color: #6C757D;
+        font-weight: 200;
+    }
 }
 
 .validation {
@@ -105,56 +124,62 @@
         align-items: flex-start;
         gap: $padding * .5;
 
-        padding: $padding ($padding * 1.5);
+        padding: $padding (
+            $padding * 1.5
+        );
 
-        @include border-top-radius($border_radius);
+    @include border-top-radius($border_radius);
 
-        &.error {
-            color: css_var('status_error_text');
-            background: {
-                color: css_var('status_error');
-            }
-        }
+    &.error {
+        color: css_var('status_error_text');
 
-        &.warning {
-            color: css_var('status_warning_text');
-            background: {
-                color: css_var('status_warning');
-            }
-        }
-
-        .status_label {
-            font: {
-                weight: bold;
-            }
+        background: {
+            color: css_var('status_error');
         }
     }
 
-    .info {
-        display: flex;
-        align-items: flex-start;
-        gap: $padding * .5;
+    &.warning {
+        color: css_var('status_warning_text');
 
-        padding: $padding ($padding * 1.5);
-
-        .message {
-            flex-grow: 1;
-
-            padding: {
-                top: $padding * .25;
-            }
-        }
-
-        .progress_icon {
-            .pi {
-                margin: .2rem;
-
-                font: {
-                    size: 1.25rem;
-                }
-            }
+        background: {
+            color: css_var('status_warning');
         }
     }
+
+    .status_label {
+        font: {
+            weight: bold;
+        }
+    }
+}
+
+.info {
+    display: flex;
+    align-items: flex-start;
+    gap: $padding * .5;
+
+    padding: $padding (
+        $padding * 1.5
+    );
+
+.message {
+    flex-grow: 1;
+
+    padding: {
+        top: $padding * .25;
+    }
+}
+
+.progress_icon {
+    .pi {
+        margin: .2rem;
+
+        font: {
+            size: 1.25rem;
+        }
+    }
+}
+}
 }
 
 .controls {
@@ -184,6 +209,7 @@
         .p-button {
             &:disabled {
                 color: css_var('button_disabled_label');
+
                 background: {
                     color: css_var('button_disabled');
                 }
@@ -204,9 +230,11 @@
     overflow: {
         y: auto;
     }
+
     min: {
         height: 8rem;
     }
+
     max: {
         height: 30rem;
     }
@@ -219,14 +247,14 @@
 
 // File drop zone
 .text-wrapper {
-  display: table-cell;
-  vertical-align: middle;
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .centered {
-  font-family: sans-serif;
-  font-size: 1.3em;
-  text-align:center;
+    font-family: sans-serif;
+    font-size: 1.3em;
+    text-align: center;
 }
 
 .dropzone {
@@ -240,19 +268,19 @@
 
 }
 
-input[type="file"]{
-  display:none;
+input[type="file"] {
+    display: none;
 }
 
-.files_table{
-  &::deep .files_table_data_col{
-    width: 20%;
-  }
+.files_table {
+    &::deep .files_table_data_col {
+        width: 20%;
+    }
 
-  &::deep .files_table_button_col{
-    width: 60%;
-    text-align: right;
-  }
+    &::deep .files_table_button_col {
+        width: 60%;
+        text-align: right;
+    }
 }
 
 ::ng-deep .p-datatable {
@@ -264,6 +292,7 @@ input[type="file"]{
                 margin: {
                     right: $padding * .35;
                 }
+
                 padding: ($padding * .25) ($padding);
             }
         }

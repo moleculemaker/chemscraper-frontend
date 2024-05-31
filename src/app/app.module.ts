@@ -1,4 +1,4 @@
-import {APP_INITIALIZER, NgModule} from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -9,7 +9,8 @@ import { AppComponent } from './app.component';
 import { ButtonModule } from 'primeng/button';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { PanelModule } from 'primeng/panel';
-import { PrimeIcons} from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { MessageService, PrimeIcons } from 'primeng/api';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -26,9 +27,9 @@ import { SidebarModule } from 'primeng/sidebar';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CheckboxModule } from 'primeng/checkbox';
 
-import { LandingPageComponent} from './components/landing-page/landing-page.component';
+import { LandingPageComponent } from './components/landing-page/landing-page.component';
 
-import { ConfigurationComponent} from './components/chemscraper/configuration/configuration.component';
+import { ConfigurationComponent } from './components/chemscraper/configuration/configuration.component';
 import { ResultsComponent } from './components/chemscraper/results/results.component';
 
 import { ChemScraperService } from './chemscraper.service';
@@ -69,6 +70,7 @@ const initAppFn = (envService: EnvironmentService) => {
     PdfContextViewerComponent
   ],
   imports: [
+    ToastModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -107,6 +109,7 @@ const initAppFn = (envService: EnvironmentService) => {
     DialogModule
   ],
   providers: [
+    MessageService,
     ChemScraperService,
     EnvironmentService,
     {
