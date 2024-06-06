@@ -26,7 +26,7 @@ header {
 
     padding: 0px ($padding * 2);
 
-    > div {
+    >div {
         padding: $padding 0px;
     }
 
@@ -37,6 +37,7 @@ header {
             //design called for Montserrat font, kept as Inter to avoid loading extra fonts only used here?
             size: .65rem;
         }
+
         text: {
             transform: uppercase;
         }
@@ -66,7 +67,8 @@ header {
         z-index: 5500;
     }
 
-    .login_button, .user_menu_button {
+    .login_button,
+    .user_menu_button {
         cursor: pointer !important;
 
         color: css_var('button_secondary');
@@ -76,6 +78,7 @@ header {
         font: {
             size: .75rem;
         }
+
         text: {
             transform: uppercase;
         }
@@ -84,8 +87,9 @@ header {
 
         &:hover {
             color: css_var('background');
+
             background: {
-               color: css_var('button_secondary');
+                color: css_var('button_secondary');
             }
         }
     }
@@ -109,6 +113,7 @@ header {
             font: {
                 size: .75rem;
             }
+
             text: {
                 transform: uppercase;
             }
@@ -117,6 +122,7 @@ header {
 
             &:hover {
                 color: css_var('background');
+
                 background: {
                     color: css_var('button_secondary');
                 }
@@ -133,74 +139,83 @@ header {
 
             width: 30rem;
 
-            padding: $padding ($padding * 1.5);
+            padding: $padding (
+                $padding * 1.5
+            );
 
-            color: css_var('background');
-            background: {
-//                color: css_var('background');
-                color: css_var('header_popup_background');
-            }
+        color: css_var('background');
 
-            @include border-bottom-radius($border_radius);
-            @include transition(#{transform .2s easing($ease-in-out)});
-            @include translate(0%, -100%);
+        background: {
+            //                color: css_var('background');
+            color: css_var('header_popup_background');
+        }
 
-            &:hover {
-                .close_btn {
-                    @include opacity(80);
-                }
-            }
+        @include border-bottom-radius($border_radius);
+        @include transition(#{transform .2s easing($ease-in-out)});
+        @include translate(0%, -100%);
 
+        &:hover {
             .close_btn {
-                cursor: pointer;
-
-                position: absolute;
-                right: $padding * .75;
-                top: $padding * .75;
-                z-index: 100;
-
-                @include opacity(50);
-
-                &:hover {
-                    @include opacity(80);
-                }
-            }
-
-            h2,
-            h3 {
-                margin: {
-                    top: $padding * .5;
-                }
-
-                text: {
-                    transform: uppercase;
-                }
-            }
-
-            p {
-                margin: {
-                    top: $padding * .5;
-                }
-
-                font: {
-                    size: .85rem;
-                }
-            }
-
-            a,
-            a:link,
-            a:visited {
-                color: css_var('header_link');
-
-                font: {
-                    weight: bold;
-                }
-            }
-
-            a:hover {
-                color: css_var('header_link_hover');
+                @include opacity(80);
             }
         }
+
+        .close_btn {
+            cursor: pointer;
+
+            position: absolute;
+            right: $padding * .75;
+            top: $padding * .75;
+            z-index: 100;
+
+            @include opacity(50);
+
+            &:hover {
+                @include opacity(80);
+            }
+        }
+
+        h2,
+        h3 {
+            margin: {
+                top: $padding * .5;
+            }
+
+            text: {
+                transform: uppercase;
+            }
+        }
+
+        p {
+            margin: {
+                top: $padding * .5;
+            }
+
+            font: {
+                size: .85rem;
+            }
+        }
+
+        a,
+        a:link,
+        a:visited {
+            color: css_var('header_link');
+
+            font: {
+                weight: bold;
+            }
+        }
+
+        a:hover {
+            color: css_var('header_link_hover');
+        }
+    }
+}
+}
+
+.uppercased {
+    text: {
+        transform: uppercase;
     }
 }
 
@@ -210,6 +225,7 @@ header {
     @include position(sticky);
 
     color: css_var('background');
+
     background: {
         color: css_var('header_background');
         image: css_var('header_background_gradient');
@@ -314,9 +330,6 @@ footer {
     font: {
         size: .75rem;
     }
-    text: {
-        transform: uppercase;
-    }
 
     .container {
         display: flex;
@@ -325,7 +338,32 @@ footer {
         gap: $padding * .5;
     }
 
-    a:link, a:visited, a:active {
+    .centered-content {
+        width: 45%; // Set the width to 60% of the parent container
+        margin: 0 auto; // Center the container horizontally
+        text-align: left; // Align the text from left to right
+        padding-bottom: 1rem;
+    }
+
+    .cite-this-work {
+        display: block;
+        text-align: left;
+        width: 100%;
+        padding: 1rem;
+        font-size: .75rem;
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        overflow-x: auto; // Ensures horizontal scrolling if the content overflows
+        // word-wrap: break-word;
+
+        code {
+            white-space: pre; // Force preserve whitespace and line breaks
+        }
+    }
+
+    a:link,
+    a:visited,
+    a:active {
         color: #495057;
     }
 }
@@ -338,6 +376,7 @@ cite {
     font: {
         size: .75rem;
     }
+
     text: {
         transform: normal;
     }
@@ -350,7 +389,10 @@ cite {
         align-items: center;
         gap: $padding * .5;
         line-height: 1.5;
-        a:link, a:visited, a:active {
+
+        a:link,
+        a:visited,
+        a:active {
             color: #224063;
         }
 
