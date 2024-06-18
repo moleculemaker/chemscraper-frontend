@@ -9,7 +9,7 @@
         <!-- todo: change to output job summary data -->
         <div class="details">
           <div *ngIf="statusResponse" class="sequence_time">Document Submitted: {{statusResponse.job_info}} | Submission
-            Time: {{statusResponse.time_created | date:'short' }}</div>
+            Time: {{(1000 * statusResponse.time_created) | date:'short' }}</div>
         </div>
       </div>
       <div class="spacer"></div>
