@@ -20,7 +20,7 @@ import {
 import { ChemScraperService } from 'src/app/chemscraper.service';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 import { Table } from 'primeng/table';
-import { JobsService, Molecule } from "@api/mmli-backend/v1";
+import { JobsService, Configuration, Molecule } from "@api/mmli-backend/v1";
 import { PdfViewerDialogServiceComponent } from '../pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { OverlayPanel } from 'primeng/overlaypanel';
@@ -47,7 +47,7 @@ export class ResultsComponent {
   failedJob: boolean = false;
   jobID: string | undefined;
   downloadRows: string[][] = [['Identifier', 'Predicted EC Number']];
-  statusResponse: Job;
+  statusResponse?: Job;
   useExample: boolean = false;
   preComputedMessage: Message[];
   jobFailedMessage: Message[];
@@ -186,8 +186,8 @@ export class ResultsComponent {
     this.similaritySort(value)
   }
 
-  showMessage(severity: string, summary: string, detail: string) {
-    this.messageService.add({ severity: severity, summary: summary, detail: detail, life: 15000 });
+  showMessage(severity: string, summary: string, detail: string, life: number = 15000) {
+    this.messageService.add({ severity: severity, summary: summary, detail: detail, life: life });
   }
 
   flagMolecule(molecule: Molecule, event: Event) {
@@ -307,21 +307,23 @@ export class ResultsComponent {
     else if (jobID) {
       console.log("Starting timer to fetch results for jobID:", jobID);
       timer(0, 10000).pipe(
-        switchMap(() => {
-          console.log("in results.component, Fetching result status for jobID:", jobID);
-          return this._chemScraperService.getResultStatus(jobID ? jobID : "example_PDF");
-        }),
-        takeWhile(() => {
-          console.log("Polling condition, this.pollForResult:", this.pollForResult);
-          return this.pollForResult;
-        })
+        switchMap(() => this._chemScraperService.getResultStatus(jobID ? jobID : "example_PDF")),
+        takeWhile(() => this.pollForResult),
       ).subscribe(
-        (jobStatus) => {
-          this.statusResponse = jobStatus;
-          // console.log("Received job status:", jobStatus); // Log detailed job status
-          // this.showMessage('info', 'Info', `Got results for job ${jobID}. Data: ${JSON.stringify(jobStatus)}`);
+        (jobs: Array<Job>) => {
+          const firstMatch = jobs?.find(() => true);
+          this.statusResponse = firstMatch;
+          console.log(firstMatch);
 
-          if (jobStatus.phase == "completed") {
+          if (!firstMatch || firstMatch?.phase == "error") {
+            if (jobID)
+              this._chemScraperService.getError(jobID).subscribe(
+                (response) => {
+                  console.log(response);
+                  this.pollForResult = false;
+                }
+              );
+          } else if (firstMatch?.phase == "completed") {
             this.updateStatusStage(1);
             this.pollForResult = false;
             if (jobID)
@@ -356,20 +358,7 @@ export class ResultsComponent {
                 },
                 (error) => {
                   console.error(`Failed to fetch results for job ${jobID}. Error: ${error}`);
-                  this.showMessage('error', 'Error', `Failed to fetch results for job ${jobID}. Error: ${error}`);
-                }
-              );
-          } else if (jobStatus.phase == "error") {
-            if (jobID)
-              this._chemScraperService.getError(jobID).subscribe(
-                (response) => {
-                  this.showMessage('info', 'Info', `Fetching jobStatus error ${jobID}. Response: ${response}`);
-                  console.log("Fetching jobStatus error:", response);
-                  this.pollForResult = false;
-                },
-                (error) => {
-                  console.error(`Failed to fetch error details for job ${jobID}. Error: ${error}`);
-                  this.showMessage('error', 'Error', `Failed to fetch error details for job ${jobID}. Error: ${error}`);
+                  this.showMessage('error', `Failed to fetch results for job ${jobID}.`, `Error: ${error}`);
                 }
               );
           } else {
@@ -381,13 +370,12 @@ export class ResultsComponent {
           if (jobID)
             this._chemScraperService.getError(jobID).subscribe(
               (response) => {
-                console.log("Fetching jobStatus error:", response);
-                this.showMessage('info', 'Error status', `Attempting to fetch reason for error: ${response}`);
+                this.showMessage('info', 'Error details', `${response}`);
                 this.pollForResult = false;
               },
               (error) => {
                 console.error(`Failed to fetch error details for job ${jobID}. Error: ${error}`);
-                this.showMessage('error', 'Error', `Failed to fetch error details for job ${jobID}. Error: ${error}`);
+                this.showMessage('error', 'Failed to fetch error details', `Error: ${JSON.stringify(error)}`);
               }
             );
 
@@ -555,7 +543,7 @@ export class ResultsComponent {
         },
         error: (error) => {
           console.debug("No similarity match found. Err: ", error);
-          this.showMessage('error', 'Similarity Sort Error', 'No similarity matches could be found for the provided SMILE: ' + smile);
+          this.showMessage('info', `No exact matches found for '${smile}'`, 'The molecules are sorted by similarity, but no exact matches found for SMILE: ' + smile, 4000);
         }
       });
     }

@@ -66,7 +66,7 @@
                                     <p-button (click)="viewFile(i)" style="font-weight: 600;"
                                         styleClass="custom-view-button">View</p-button> -->
                                     <p-button (click)="deleteFile(i)" styleClass="p-button-text p-button-xs"
-                                        style="color: #6C757D">Delete</p-button>
+                                        [ngStyle]="{'color': '#6C757D'}">Delete</p-button>
                                     <p-button (click)="viewFile(i)"
                                         styleClass="p-button-text p-button-xs"><strong>View</strong></p-button>
                                 </td>

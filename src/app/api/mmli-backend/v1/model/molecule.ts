@@ -14,8 +14,8 @@
 export interface Molecule {
     id: number;
     flagged: boolean;
-    atom_count: number;
     doc_no: string;
+    atom_count: number;
     file_path: string;
     page_no: string;
     name?: string;

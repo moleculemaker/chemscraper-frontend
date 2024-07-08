@@ -190,7 +190,7 @@
                     </td>
                     <td class="svg-column" [innerHTML]="molecule.structure | safe:'html'"></td>
                     <td>
-                      <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}"
+                      <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" [pdfUrl]="currentPDF"
                         [startX]="molecule.minX" [startY]="molecule.minY" [width]="molecule.width"
                         [height]="molecule.height" [pageNumber]="molecule.page_no"
                         [showContext]="false"></chemscraper-pdf-context-viewer>
@@ -278,7 +278,7 @@
                                 <div class="original-structure-container">
                                   <p>Original Structure</p>
                                   <div class="bordered-div">
-                                    <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}"
+                                    <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" [pdfUrl]="currentPDF"
                                       [startX]="molecule.minX" [startY]="molecule.minY" [width]="molecule.width"
                                       [height]="molecule.height" [pageNumber]="molecule.page_no"
                                       [showContext]="false"></chemscraper-pdf-context-viewer>
@@ -305,7 +305,7 @@
                                 </div>
 
                                 <div class="bordered-div">
-                                  <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" pdfUrl="{{currentPDF}}"
+                                  <chemscraper-pdf-context-viewer *ngIf="pdfURLs.length > 0" [pdfUrl]="currentPDF"
                                     [startX]="molecule.minX" [startY]="molecule.minY" [width]="molecule.width"
                                     [height]="molecule.height" [pageNumber]="molecule.page_no"
                                     [showContext]="true"></chemscraper-pdf-context-viewer>
