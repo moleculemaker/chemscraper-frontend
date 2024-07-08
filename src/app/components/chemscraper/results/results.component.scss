@@ -393,36 +393,49 @@ p-panel {
     }
   }
 
-  .p-datatable-thead {
-    position: relative;
-
-    &:after,
-    &:before {
-      content: '';
-      position: absolute;
-      left: 0px;
-      right: 0px;
-      z-index: get_index(interface);
-
-      pointer-events: none;
-    }
-
-    &:after {
-      top: 0px;
-
-      border: {
-        top: 1px solid css_var('interface_border');
-      }
-    }
-
-    &:after {
-      bottom: 0px;
-
-      border: {
-        bottom: 1px solid css_var('interface_border');
-      }
-    }
+  .p-datatable-tbody>tr:hover {
+    // On hover effect
+    background: linear-gradient(to bottom right, #D3D3D3 .5%, white 20%) !important;
+    outline: 2px solid #D3D3D3;
   }
+
+  .p-datatable-tbody>tr.p-highlight {
+    // While row is active/exapnded in detail view
+    background: linear-gradient(to bottom right, #D3D3D3 .5%, white 20%) !important;
+    outline: 2px solid #D3D3D3;
+    color: get_color('text'); // #495057 -- text color when row is in expanded state
+  }
+
+  // .p-datatable-thead {
+  //   position: relative;
+
+  //   &:after,
+  //   &:before {
+  //     content: '';
+  //     position: absolute;
+  //     left: 0px;
+  //     right: 0px;
+  //     z-index: get_index(interface);
+
+  //     pointer-events: none;
+  //   }
+
+  //   &:after {
+  //     top: 0px;
+
+  //     border: {
+  //       top: 1px solid css_var('interface_border');
+  //     }
+  //   }
+
+  //   &:after {
+  //     bottom: 0px;
+
+  //     border: {
+  //       bottom: 1px solid css_var('interface_border');
+  //     }
+  //   }
+  // }
 
   .column_name {
     width: 17rem;
@@ -437,11 +450,11 @@ p-panel {
   tr.p-highlight {
     outline: 0px !important;
 
-    >td {
-      border: {
-        bottom: 0px;
-      }
-    }
+    // >td {
+    //   border: {
+    //     bottom: 0px;
+    //   }
+    // }
   }
 
   .row_expansion {
@@ -450,7 +463,10 @@ p-panel {
     }
 
     td {
+      background-color: #eff6ff !important;
       border: none !important;
+      border: 1px solid css_var('interface_border');
+      outline: 1px solid css_var('interface_border');
     }
   }
 }
