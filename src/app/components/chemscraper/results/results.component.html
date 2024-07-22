@@ -258,7 +258,13 @@
                                 </div>
                                 <div>
                                   <p class="molecule-details-header">External References</p>
-                                  <p>PubChem ID: {{molecule.PubChemCID}}</p>
+                                  <p *ngIf="molecule.PubChemCID && molecule.PubChemCID !== 'Unavailable'">
+                                    <a [href]="'https://pubchem.ncbi.nlm.nih.gov/compound/' + molecule.PubChemCID"
+                                      target="_blank" class="pubchem-link">PubChem ID: {{molecule.PubChemCID}}</a>
+                                  </p>
+                                  <p *ngIf="!molecule.PubChemCID || molecule.PubChemCID === 'Unavailable'">
+                                    PubChem ID: Unavailable
+                                  </p>
                                 </div>
                               </div>
                               <div class="description"

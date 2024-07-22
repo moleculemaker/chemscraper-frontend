@@ -775,3 +775,12 @@ p-panel {
   font-weight: 700;
   margin-bottom: 12px;
 }
+
+.pubchem-link {
+  color: blue;
+  text-decoration: underline;
+}
+
+.pubchem-link:visited {
+  color: purple;
+}
