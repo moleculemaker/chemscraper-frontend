@@ -143,13 +143,13 @@
               <div class="sort-text">
                 {{molecules.length}} results
                 <span *ngIf="similaritySortSMILE || countActiveFilters"> |
-                  {{getNumberOfValidMoleculesAfterFilters(molecules, similaritySortSMILE)}}
+                  {{moleculesToDisplay.length}}
                   exact matches
                 </span>
               </div>
             </div>
             <div class="table-container">
-              <p-table #resultsTable [value]="molecules" dataKey="id" selectionMode="single"
+              <p-table #resultsTable [value]="moleculesToDisplay" dataKey="id" selectionMode="single"
                 [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)"
                 (onRowUnselect)="onRowUnselected($event)" [paginator]="true" [rows]="10"
                 [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="700px" styleClass="molecule_table"
@@ -158,8 +158,8 @@
                   <tr>
                     <!-- <th><p-tableCheckbox></p-tableCheckbox></th> -->
                     <th pSortableColumn="name">Molecule<p-sortIcon field="name"></p-sortIcon></th>
-                    <th>Extracted Structure</th>
-                    <th>Original Structure</th>
+                    <th class="extracted-structure-column">Extracted Structure</th>
+                    <th class="extracted-structure-column">Original Structure</th>
                     <th
                       pTooltip="SMILES strings correspond to extracted structures and may contain asterisks (*), which represent an abbreviation that ChemScraper is currently unable to expand."
                       tooltipPosition="top" pSortableColumn="SMILE"><span
