@@ -505,6 +505,32 @@ export class ResultsComponent {
   similaritySort(smile: string): Molecule[] {
     // ⭐️ MAIN SORT FUNCTION
     console.log("In similarity sort with SMILE:", smile);
+    // Iterate through this.molecules and print all their info
+    this.molecules.forEach((molecule: Molecule) => {
+      console.log('Molecule Information:');
+      console.log('ID:', molecule.id);
+      console.log('Flagged:', molecule.flagged);
+      console.log('Document Number:', molecule.doc_no);
+      console.log('Atom Count:', molecule.atom_count);
+      console.log('File Path:', molecule.file_path);
+      console.log('Page Number:', molecule.page_no);
+      console.log('Name:', molecule.name);
+      console.log('SMILE:', molecule.SMILE);
+      console.log('Structure:', molecule.structure);
+      console.log('Min X:', molecule.minX);
+      console.log('Min Y:', molecule.minY);
+      console.log('Width:', molecule.width);
+      console.log('Height:', molecule.height);
+      console.log('PubChem CID:', molecule.PubChemCID);
+      console.log('Molecular Formula:', molecule.molecularFormula);
+      console.log('Molecular Weight:', molecule.molecularWeight);
+      console.log('Chemical Safety:', molecule.chemicalSafety);
+      console.log('Description:', molecule.Description);
+      console.log('Location:', molecule.Location);
+      console.log('Other Instances:', molecule.OtherInstances);
+      console.log('Fingerprint:', molecule.fingerprint);
+      console.log('------------------------');
+    });
 
     if (smile === '') {
       this.moleculesToDisplay = this.filterBySmiles(this.molecules, smile);

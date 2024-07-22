@@ -229,15 +229,21 @@
                               <div class="molecule-details-col1">
                                 <div>
                                   <p class="molecule-details-header">Results Summary</p>
-                                  <p>Identified, Found {{molecule.OtherInstances.length}} time(s) in 1 document</p>
+                                  <p>
+                                    <ng-container *ngIf="molecule.name !== 'Unavailable'">Identified as
+                                      {{molecule.name}}.<br />
+                                    </ng-container>Found {{molecule.OtherInstances.length}}
+                                    time(s) in 1 document
+                                  </p>
                                 </div>
                                 <div>
                                   <p class="molecule-details-header">Location in PDF</p>
-                                  <p>{{currentPDFName}}{{molecule.Location}}</p>
+                                  <!-- Remove the first two characters w/ random pipe. e.g. "| " -->
+                                  <p>{{molecule.Location.substring(2)}}</p>
                                 </div>
                                 <div>
                                   <p class="molecule-details-header">Other Occurrences</p>
-                                  <p>{{currentPDFName}} | page(s): {{molecule.OtherInstances.join(', ')}}</p>
+                                  <p>page(s): {{molecule.OtherInstances.join(', ')}}</p>
                                 </div>
                               </div>
                               <div class="molecule-details-col2">
@@ -251,10 +257,16 @@
                                 </div>
                                 <div>
                                   <p class="molecule-details-header">Chemical Safety</p>
-                                  <p *ngIf="molecule.chemicalSafety.length > 0"><span
-                                      *ngFor="let chemicalSafetyProperty of molecule.chemicalSafety">{{chemicalSafetyProperty}}</span>
-                                  </p>
-                                  <p *ngIf="molecule.chemicalSafety.length == 0">Unavailable</p>
+                                  <ng-container
+                                    *ngIf="molecule.chemicalSafety[0] && molecule.chemicalSafety[0] !== 'nan'; else unavailable">
+                                    <p>
+                                      <span
+                                        *ngFor="let chemicalSafetyProperty of molecule.chemicalSafety">{{chemicalSafetyProperty}}</span>
+                                    </p>
+                                  </ng-container>
+                                  <ng-template #unavailable>
+                                    <p>Unavailable</p>
+                                  </ng-template>
                                 </div>
                                 <div>
                                   <p class="molecule-details-header">External References</p>
