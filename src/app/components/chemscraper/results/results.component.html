@@ -157,20 +157,25 @@
                 <ng-template pTemplate="header">
                   <tr>
                     <!-- <th><p-tableCheckbox></p-tableCheckbox></th> -->
-                    <th pSortableColumn="name">Molecule<p-sortIcon field="name"></p-sortIcon></th>
-                    <th class="extracted-structure-column">Extracted Structure</th>
-                    <th class="extracted-structure-column">Original Structure</th>
+                    <th pSortableColumn="name">Molecule<p-sortIcon field="name" />
+                    </th>
+                    <th class="extracted-structure-column"
+                      pTooltip="A rendering of the extracted chemical, as intrepreted by the PDF parsing algorithm."
+                      tooltipPosition="top"><span
+                        style="white-space: nowrap; text-decoration: underline dotted;">Extracted Structure</span></th>
+                    <th
+                      pTooltip="A screenshot of the original structure extracted from the PDF. Click the icon to view the original context in the PDF."
+                      tooltipPosition="top" class="extracted-structure-column"><span
+                        style="white-space: nowrap; text-decoration: underline dotted;">Original Structure</span></th>
                     <th
                       pTooltip="SMILES strings correspond to extracted structures and may contain asterisks (*), which represent an abbreviation that ChemScraper is currently unable to expand."
-                      tooltipPosition="top" pSortableColumn="SMILE"><span
-                        style="white-space: nowrap; text-decoration: underline dotted;">SMILES<p-sortIcon
-                          field="SMILE"></p-sortIcon></span>
+                      tooltipPosition="top"><span
+                        style="white-space: nowrap; text-decoration: underline dotted;">SMILES</span>
                     </th>
                     <th
                       pTooltip="Use the Flag icon to mark errors or molecules that you want to remember. You can also apply this field as a filter or use it to sort the extracted results."
-                      tooltipPosition="top" pSortableColumn="flagged">
-                      <span style="white-space: nowrap; text-decoration: underline dotted;">Flag <p-sortIcon
-                          field="flagged"></p-sortIcon></span>
+                      tooltipPosition="top">
+                      <span style="white-space: nowrap; text-decoration: underline dotted;">Flag</span>
                     </th>
                     <!-- <th *ngIf="!splitView">Document</th> -->
                     <th *ngIf="!splitView">Page</th>
