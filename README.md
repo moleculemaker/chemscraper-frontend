@@ -9,7 +9,7 @@ Chemscraper frontend leverages these backends to parse chemical symbols and rend
 * [YOLO container](https://gitlab.com/dprl/yolov8sever) for localizing chemical symbols.
 * [Line-of-sight with Graph Attention Parser (LGAP)](https://gitlab.com/dprl/lgap-parser), visual parser to recognize chemical symbols from images.
 
-These 4 containers are built via [this Docker Compose](https://gitlab.com/dprl/dprl-alphasynthesis), and deployed via [this Helm chart](https://github.com/moleculemaker/chemscraper-helm-chart) in Kubernets.
+These 4 containers are built via [this Docker Compose](https://gitlab.com/dprl/dprl-alphasynthesis), and deployed via [this Helm chart](https://github.com/moleculemaker/chemscraper-helm-chart) in Kubernetes.
 
 ## Development server
 
