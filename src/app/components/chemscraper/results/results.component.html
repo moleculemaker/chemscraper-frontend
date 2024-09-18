@@ -70,25 +70,29 @@
             <div class="table-controls">
               <div class="marvin-filter-container">
                 <div class="p-inputgroup">
-                  <input type="text" pInputText class="form-control" [(ngModel)]="marvinJsSmiles"
-                    placeholder="Sort results by SMILES or &quot;Draw / Upload&quot; another format..." />
+                  <div class="p-inputgroup">
+                    <span class="search-icon">
+                      <i class="pi pi-search"></i>
+                    </span>
+                    <input type="text" pInputText class="form-control" [(ngModel)]="marvinJsSmiles"
+                      placeholder="Sort results by SMILES or &quot;Draw / Upload&quot; another format:"
+                      style="border: none;">
+                    <button pButton class="p-button-secondary p-button-link p-button-outlined dynamic-width-button"
+                      (click)="openMarvinjsEditor($event)">
+                      <img src="assets/MarvinJS_Logo.svg" alt="MarvinJS Logo" /><span class="semi-bold-text">{{
+                        marvinJsSmiles
+                        ? '&nbsp;Edit' :
+                        '&nbsp;Draw&nbsp;/&nbsp;Upload' }}</span>
+                    </button>
+                  </div>
                   <div [ngStyle]="{'padding': '2px'}"></div>
-                  <button pButton class="p-button-secondary p-button-link p-button-outlined"
-                    [ngStyle]="{'padding': '8px'}" (click)="openMarvinjsEditor($event)">
-                    <img src="assets/MarvinJS_Logo.svg" alt="MarvinJS Logo" />{{ marvinJsSmiles ? '&nbsp;Edit' :
-                    '&nbsp;Draw' }} / Upload
-                  </button>
-                  <div [ngStyle]="{'padding': '2px'}"></div>
-                  <button pButton class="p-button-secondary p-button-link p-button-outlined"
-                    [icon]="copySuccess ? 'pi pi-check' : 'pi pi-copy'"
-                    [ngStyle]="{'color': copySuccess ? 'green' : 'inherit', 'padding': '8px'}"
-                    (click)="copySmilesToClipboard()">&nbsp;Copy</button>
                 </div>
               </div>
-              <div>
-                <p-button styleClass="p-button-outlined ui-button-success" (click)="sortOverlay.toggle($event)"><i
+              <div [ngStyle]="{'margin-left': '-10px'}">
+                <!-- Currently active sort param button - 2nd from right -->
+                <p-button styleClass="p-button-vertical-padding p-button-outlined ui-button-success"
+                  (click)="sortOverlay.toggle($event)"><i
                     class="p-button-icon-left pi pi-sort-alt"></i>{{selectedSortOption}}</p-button>
-
                 <p-overlayPanel #sortOverlay>
                   <div class="table-controls-overlay">
                     <p class="table-controls-overlay-heading">Sort by
@@ -99,10 +103,12 @@
                       <p-button *ngIf="!isAscending" icon="pi pi-sort-amount-down" (click)="toggleSort()"></p-button>
                   </div>
                 </p-overlayPanel>
-
               </div>
-              <div>
-                <p-button styleClass="p-button-outlined ui-button-success" (click)="filterOverlay.toggle($event)">
+
+              <div [ngStyle]="{'margin-left': '-6px'}">
+                <!-- Filter icon - far right -->
+                <p-button styleClass="p-button-vertical-padding-extra-on-top p-button-outlined ui-button-success"
+                  (click)="filterOverlay.toggle($event)">
                   <i class="p-button-icon-left pi pi-filter"></i>
                   <!-- Num active filters badge -->
                   <span *ngIf="countActiveFilters > 0" class="filter-count-badge" style="padding: 0px 0;">
@@ -135,35 +141,47 @@
 
             <div class="sort-row">
               <div class="sort-text">
-                {{molecules.length}} molecules identified.
-                <span *ngIf="similaritySortSMILE || countActiveFilters">Exact matches:
-                  {{getNumberOfValidMoleculesAfterFilters(molecules, similaritySortSMILE)}}</span>
+                {{molecules.length}} results
+                <span *ngIf="similaritySortSMILE || countActiveFilters"> |
+                  {{moleculesToDisplay.length}}
+                  exact matches
+                </span>
               </div>
             </div>
             <div class="table-container">
-              <p-table #resultsTable [value]="sortBySmiles(molecules, marvinJsSmiles)" dataKey="id"
-                selectionMode="single" [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)"
+              <p-table #resultsTable [value]="moleculesToDisplay" dataKey="id" selectionMode="single"
+                [(selection)]="selectedMolecule" (onRowSelect)="onRowSelected($event)"
                 (onRowUnselect)="onRowUnselected($event)" [paginator]="true" [rows]="10"
                 [rowsPerPageOptions]="[5, 10, 25]" [scrollable]="true" scrollHeight="700px" styleClass="molecule_table"
                 [(first)]="firstRowIndex">
                 <ng-template pTemplate="header">
                   <tr>
                     <!-- <th><p-tableCheckbox></p-tableCheckbox></th> -->
-                    <th pSortableColumn="name">Molecule<p-sortIcon field="name"></p-sortIcon></th>
-                    <th>Structure (Extracted)</th>
-                    <th>Structure (Original)</th>
+                    <th pSortableColumn="name">Molecule<p-sortIcon field="name" />
+                    </th>
+                    <th class="extracted-structure-column"
+                      pTooltip="A rendering of the extracted chemical, as intrepreted by the PDF parsing algorithm."
+                      tooltipPosition="top"><span
+                        style="white-space: nowrap; text-decoration: underline dotted;">Extracted Structure</span></th>
+                    <th
+                      pTooltip="A screenshot of the original structure extracted from the PDF. Click the icon to view the original context in the PDF."
+                      tooltipPosition="top" class="extracted-structure-column"><span
+                        style="white-space: nowrap; text-decoration: underline dotted;">Original Structure</span></th>
                     <th
                       pTooltip="SMILES strings correspond to extracted structures and may contain asterisks (*), which represent an abbreviation that ChemScraper is currently unable to expand."
-                      tooltipPosition="top" pSortableColumn="SMILE">SMILES<p-sortIcon field="SMILE"></p-sortIcon></th>
+                      tooltipPosition="top"><span
+                        style="white-space: nowrap; text-decoration: underline dotted;">SMILES</span>
+                    </th>
                     <th
                       pTooltip="Use the Flag icon to mark errors or molecules that you want to remember. You can also apply this field as a filter or use it to sort the extracted results."
-                      tooltipPosition="top" pSortableColumn="flagged">Flagged?<p-sortIcon field="flagged"></p-sortIcon>
+                      tooltipPosition="top">
+                      <span style="white-space: nowrap; text-decoration: underline dotted;">Flag</span>
                     </th>
                     <!-- <th *ngIf="!splitView">Document</th> -->
                     <th *ngIf="!splitView">Page</th>
                     <th *ngIf="!splitView">PubChem CID</th>
                     <th *ngIf="!splitView">Confidence</th>
-                    <th></th>
+                    <!-- <th></th> -->
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-molecule let-expanded="expanded">
@@ -192,10 +210,10 @@
                     <td *ngIf="!splitView">{{ molecule.page_no }}</td>
                     <td *ngIf="!splitView">{{ molecule.PubChemCID }}</td>
                     <td *ngIf="!splitView">{{ molecule.confidence }}</td>
-                    <td class="column_more">
+                    <!-- <td class="column_more">
                       <p-button icon="pi pi-ellipsis-v"
                         styleClass="p-button-rounded p-button-secondary p-button-text"></p-button>
-                    </td>
+                    </td> -->
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-molecule>
@@ -204,8 +222,11 @@
                       <div class="result-molecules-details-container">
                         <p-panel>
                           <div class="molecule-details-header-container">
-                            <p-button styleClass="p-button-outlined p-button-secondary"
-                              (click)="similaritySort(molecule.SMILE)">View Similar Structures</p-button>
+                            <p-button styleClass="kasbutton p-button-outlined p-button-secondary"
+                              (click)="similaritySort(molecule.SMILE)">
+                              <i class="pi pi-plus-circle" style="margin-right: 5px;"></i>
+                              View Similar Structures
+                            </p-button>
                           </div>
 
                           <div class="molecule-info-container">
@@ -213,15 +234,21 @@
                               <div class="molecule-details-col1">
                                 <div>
                                   <p class="molecule-details-header">Results Summary</p>
-                                  <p>Identified, Found {{molecule.OtherInstances.length}} time(s) in 1 document</p>
+                                  <p>
+                                    <ng-container *ngIf="molecule.name !== 'Unavailable'">Identified as
+                                      {{molecule.name}}.<br />
+                                    </ng-container>Found {{molecule.OtherInstances.length}}
+                                    time(s) in 1 document
+                                  </p>
                                 </div>
                                 <div>
                                   <p class="molecule-details-header">Location in PDF</p>
-                                  <p>{{currentPDFName}}{{molecule.Location}}</p>
+                                  <!-- Remove the first two characters w/ random pipe. e.g. "| " -->
+                                  <p>{{molecule.Location.substring(2)}}</p>
                                 </div>
                                 <div>
                                   <p class="molecule-details-header">Other Occurrences</p>
-                                  <p>{{currentPDFName}} | page(s): {{molecule.OtherInstances.join(', ')}}</p>
+                                  <p>page(s): {{molecule.OtherInstances.join(', ')}}</p>
                                 </div>
                               </div>
                               <div class="molecule-details-col2">
@@ -235,14 +262,26 @@
                                 </div>
                                 <div>
                                   <p class="molecule-details-header">Chemical Safety</p>
-                                  <p *ngIf="molecule.chemicalSafety.length > 0"><span
-                                      *ngFor="let chemicalSafetyProperty of molecule.chemicalSafety">{{chemicalSafetyProperty}}</span>
-                                  </p>
-                                  <p *ngIf="molecule.chemicalSafety.length == 0">Unavailable</p>
+                                  <ng-container
+                                    *ngIf="molecule.chemicalSafety[0] && molecule.chemicalSafety[0] !== 'nan'; else unavailable">
+                                    <p>
+                                      <span
+                                        *ngFor="let chemicalSafetyProperty of molecule.chemicalSafety">{{chemicalSafetyProperty}}</span>
+                                    </p>
+                                  </ng-container>
+                                  <ng-template #unavailable>
+                                    <p>Unavailable</p>
+                                  </ng-template>
                                 </div>
                                 <div>
                                   <p class="molecule-details-header">External References</p>
-                                  <p>PubChem ID: {{molecule.PubChemCID}}</p>
+                                  <p *ngIf="molecule.PubChemCID && molecule.PubChemCID !== 'Unavailable'">
+                                    <a [href]="'https://pubchem.ncbi.nlm.nih.gov/compound/' + molecule.PubChemCID"
+                                      target="_blank" class="pubchem-link">PubChem ID: {{molecule.PubChemCID}}</a>
+                                  </p>
+                                  <p *ngIf="!molecule.PubChemCID || molecule.PubChemCID === 'Unavailable'">
+                                    PubChem ID: Unavailable
+                                  </p>
                                 </div>
                               </div>
                               <div class="description"

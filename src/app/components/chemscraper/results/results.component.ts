@@ -5,7 +5,7 @@ import { interval } from "rxjs/internal/observable/interval";
 import { Subscription, timer } from 'rxjs';
 import { finalize, startWith, switchMap, takeWhile } from "rxjs/operators";
 import { Router } from '@angular/router';
-import { MenuItem, Message } from 'primeng/api';
+import { MenuItem, Message, MessageService } from 'primeng/api';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import {
@@ -20,7 +20,7 @@ import {
 import { ChemScraperService } from 'src/app/chemscraper.service';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 import { Table } from 'primeng/table';
-import {Configuration, Molecule} from "@api/mmli-backend/v1";
+import { JobsService, Configuration, Molecule } from "@api/mmli-backend/v1";
 import { PdfViewerDialogServiceComponent } from '../pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { OverlayPanel } from 'primeng/overlaypanel';
@@ -59,7 +59,8 @@ export class ResultsComponent {
   splitView: boolean = true;
   highlightBoxes: HighlightBox[][];
   searchText: string;
-  molecules: any[];
+  molecules: any[]; // all received from backend
+  moleculesToDisplay: any[]; // the ones shown to the user, after search + filtering.
   filterPanelVisible: boolean = false;
 
   tableFilterStateOptions: any[] = [{ label: 'Off', value: 'off' }, { label: 'On', value: 'on' }];
@@ -95,7 +96,8 @@ export class ResultsComponent {
     private httpClient: HttpClient,
     private _chemScraperService: ChemScraperService,
     private sanitizer: DomSanitizer,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private messageService: MessageService,
   ) {
     this.sortOptions = [
       { label: 'Location In PDF (default)', value: 'Location In PDF', disabled: false },
@@ -151,6 +153,7 @@ export class ResultsComponent {
     this.fileNames = [];
 
     this.molecules = [];
+    this.moleculesToDisplay = [];
 
     // Temp file read function
     // this.process_example_file();
@@ -160,6 +163,9 @@ export class ResultsComponent {
     this.selectedFlaggedFilterOption = "all";
 
     this.getResult();
+
+    // this.showMessage("info", "Info", "Testing toast popups.");
+    // this.showMessage("error", "Error", "Testing error toast popups.");
 
   }
 
@@ -176,10 +182,15 @@ export class ResultsComponent {
       this.selectedSortOption = "Location In PDF";
       this.sortData("Location In PDF")
       this.similaritySortSMILE = "";
+      this.similaritySort(value)
       return;
     }
     this.selectedSortOption = "Similarity";
     this.similaritySort(value)
+  }
+
+  showMessage(severity: string, summary: string, detail: string, life: number = 15000) {
+    this.messageService.add({ severity: severity, summary: summary, detail: detail, life: life });
   }
 
   flagMolecule(molecule: Molecule, event: Event) {
@@ -213,18 +224,6 @@ export class ResultsComponent {
       // this.useExample = true;
     }
 
-  }
-
-  copySmilesToClipboard() {
-    navigator.clipboard.writeText(this.marvinJsSmiles).then(() => {
-      this.copySuccess = true;
-      setTimeout(() => {
-        this.copySuccess = false;
-      }, 5000);
-
-    }, () => {
-      alert('Failure: Unable to copy SMILES string to clipboard.');
-    });
   }
 
   copyAndPasteURL(): void {
@@ -265,7 +264,10 @@ export class ResultsComponent {
       if (jobID)
         this._chemScraperService.getResult(jobID).subscribe(
           (data) => {
+            // console.log("In getResult.subscribe()", data);
+            // this.showMessage('info', 'Info', `Got results for job ${jobID}. Data: ${data}`);
             this.molecules = data;
+            this.moleculesToDisplay = data;
             this.pages_count = Math.max(...this.molecules.map(molecule => parseInt(molecule.page_no)))
 
             this.updateStatusStage(2);
@@ -287,10 +289,16 @@ export class ResultsComponent {
                   }
                 }
               );
+          },
+          (error) => {
+            // TODO: Update UI, not just toast. 
+            console.error(`Failed to fetch results for job ${jobID}. Error: ${error}`);
+            this.showMessage('error', 'Error', `Failed to fetch results for job ${jobID}. Error: ${error}`);
           }
         );
     }
     else if (jobID) {
+      console.log("Starting timer to fetch results for jobID:", jobID);
       timer(0, 10000).pipe(
         switchMap(() => this._chemScraperService.getResultStatus(jobID ? jobID : "example_PDF")),
         takeWhile(() => this.pollForResult),
@@ -319,6 +327,7 @@ export class ResultsComponent {
                   })
 
                   this.molecules = data;
+                  this.moleculesToDisplay = data;
                   this.pages_count = Math.max(...this.molecules.map(molecule => parseInt(molecule.page_no)))
 
                   this.updateStatusStage(2);
@@ -340,11 +349,30 @@ export class ResultsComponent {
                         }
                       }
                     );
+                },
+                (error) => {
+                  console.error(`Failed to fetch results for job ${jobID}. Error: ${error}`);
+                  this.showMessage('error', `Failed to fetch results for job ${jobID}.`, `Error: ${error}`);
                 }
               );
           } else {
             console.log("Job execution underway");
           }
+        },
+        (error) => {
+          this.showMessage('error', `Error: failed to fetch results for job ${jobID}.`, `${error.code, error.message || JSON.stringify(error)}`);
+          if (jobID)
+            this._chemScraperService.getError(jobID).subscribe(
+              (response) => {
+                this.showMessage('info', 'Error details', `${response}`);
+                this.pollForResult = false;
+              },
+              (error) => {
+                console.error(`Failed to fetch error details for job ${jobID}. Error: ${error}`);
+                this.showMessage('error', 'Failed to fetch error details', `Error: ${JSON.stringify(error)}`);
+              }
+            );
+
         }
       );
     }
@@ -415,11 +443,6 @@ export class ResultsComponent {
     this.showMarvinJsEditor = false;
   }
 
-  // TODO: replace longest common substring with: https://github.com/moleculemaker/mmli-backend/blob/34f2568b138524f17385426fc53da84f3e24df97/app/routers/chemscraper.py#L58
-  getNumberOfValidMoleculesAfterFilters(molecules: Molecule[], smiles: string): number {
-    return this.filterBySmiles(molecules, smiles).length;
-  }
-
   filterBySmiles(molecules: Molecule[], smiles: string): Molecule[] {
     return molecules.filter(molecule => {
       // Account for filter options
@@ -434,48 +457,12 @@ export class ResultsComponent {
         (this.selectedFlaggedFilterOption === 'yes' && molecule.flagged) ||
         (this.selectedFlaggedFilterOption === 'no' && !molecule.flagged);
 
-      if (matchesSmiles && matchesStatus && matchesName && matchesFlagged) {
-        console.log("PASSES FILTER:", molecule.name, molecule.molecularFormula, molecule.SMILE, matchesSmiles, matchesStatus, matchesName, matchesFlagged);
-      }
+      // if (matchesSmiles && matchesStatus && matchesName && matchesFlagged) {
+      //   console.log("PASSES FILTER:", molecule.name, molecule.molecularFormula, molecule.SMILE, matchesSmiles, matchesStatus, matchesName, matchesFlagged);
+      // }
       return matchesSmiles && matchesStatus && matchesName && matchesFlagged;
     });
   }
-
-  sortBySmiles(molecules: Molecule[], smiles: string) {
-    const availableMolecules = this.filterBySmiles(molecules, smiles);
-
-    return availableMolecules.sort((a: any, b: any) => {
-      const lengthA = this.longestCommonSubstring(a.SMILE, smiles).length;
-      const lengthB = this.longestCommonSubstring(b.SMILE, smiles).length;
-      return lengthB - lengthA; // Sort in descending order of match length
-    });
-  }
-
-  // Helper method to find the longest common substring
-  longestCommonSubstring(s1: string = '', s2: string = ''): string {
-    if (!s1 || !s2) return '';
-
-    const matrix = Array(s2.length + 1).fill(null).map(() => Array(s1.length + 1).fill(0));
-    let longestLength = 0;
-    let longestEndPos = 0;
-
-    for (let i = 1; i <= s2.length; i++) {
-      for (let j = 1; j <= s1.length; j++) {
-        if (s1[j - 1] === s2[i - 1]) {
-          matrix[i][j] = matrix[i - 1][j - 1] + 1;
-          if (matrix[i][j] > longestLength) {
-            longestLength = matrix[i][j];
-            longestEndPos = j;
-          }
-        } else {
-          matrix[i][j] = 0;
-        }
-      }
-    }
-
-    return s1.substring(longestEndPos - longestLength, longestEndPos);
-  }
-
 
   modifySvg(svgString: string): string {
     const parser = new DOMParser();
@@ -516,34 +503,49 @@ export class ResultsComponent {
     });
   }
 
-  similaritySort(smile: string) {
+  similaritySort(smile: string): Molecule[] {
+    // ⭐️ MAIN SORT FUNCTION ⭐️
+
+    if (smile === '') {
+      this.moleculesToDisplay = this.filterBySmiles(this.molecules, smile);
+    }
+
+    this._marvinJsSmiles = smile;
     this.similaritySortSMILE = smile;
     this.updateSimilaritySortDisabledState();
-    // console.log("Similarity sort: " + smile, "Ascending: " + this.isAscending, "JobID: " + this.jobID);
-    if (this.jobID) {
-      this._chemScraperService.getSimilaritySortedOrder(this.jobID, smile).subscribe({
-        next: (response) => {
-          this.molecules.sort((data1: Molecule, data2: Molecule) => {
-            const indexA = response.indexOf(data1.id);
-            const indexB = response.indexOf(data2.id);
-            if (this.isAscending) {
-              return indexA - indexB;
-            }
-            return indexB - indexA;
-          });
-          this.goToRow(0);
 
-          // Collapse all rows
-          this.resultsTable.expandedRowKeys = {};
-        },
-        error: (error) => {
-          // Suppressing errors from appearing in the browser console
-          // Error handling logic can be implemented here if needed
-          console.debug("No similarity match found. Err: ", error);
-        }
-      });
+    if (!this.jobID) {
+      this.moleculesToDisplay = this.molecules;
+      return this.moleculesToDisplay;
     }
+
+    this._chemScraperService.getSimilaritySortedOrder(this.jobID, smile).subscribe({
+      next: (response) => {
+        // this.sortMoleculesBySimilarity(response);
+        this.molecules.sort((data1: Molecule, data2: Molecule) => {
+          const indexA = response.indexOf(data1.id);
+          const indexB = response.indexOf(data2.id);
+          if (this.isAscending) {
+            return indexA - indexB;
+          }
+          return indexB - indexA;
+        });
+
+        this.moleculesToDisplay = this.filterBySmiles(this.molecules, smile);
+        this.goToRow(0);
+        this.resultsTable.expandedRowKeys = {};
+      },
+      error: (error) => {
+        console.debug("No similarity match found. Err: ", error);
+        this.showMessage('info', `No exact matches found for '${smile}'`,
+          'The molecules are sorted by similarity, but no exact matches found for SMILE: ' + smile, 4000);
+      }
+    });
+
+    return this.moleculesToDisplay;
   }
+
+
 
   searchStructure() {
     this.similaritySort(this.marvinJsSmiles);
@@ -575,6 +577,8 @@ export class ResultsComponent {
       countActiveFilters++;
     }
     this.countActiveFilters = countActiveFilters;
+
+    this.similaritySort(this.similaritySortSMILE);
   }
 
 
@@ -639,3 +643,18 @@ export class ResultsComponent {
 }
 
 
+// @Component({
+//   selector: 'app-some-component',
+//   templateUrl: './some.component.html'
+// })
+// export class SomeComponent {
+//   constructor(private messageService: MessageService) { }
+
+//   showError() {
+//     this.messageService.add({
+//       severity: 'error',
+//       summary: 'Error Message',
+//       detail: 'This is a detailed error message.'
+//     });
+//   }
+// }
