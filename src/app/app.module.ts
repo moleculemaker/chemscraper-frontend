@@ -46,6 +46,7 @@ import { MarvinJsModule } from "./components/chemscraper/marvinjs/marvinjs.modul
 import { DialogModule } from "primeng/dialog";
 import { ExportMenuComponent } from './components/chemscraper/results/export-menu/export-menu.component';
 import { PdfContextViewerComponent } from './components/chemscraper/results/pdf-context-viewer/pdf-context-viewer.component';
+import { KetcherComponent } from './components/chemscraper/ketcher/ketcher.component';
 
 import { ApiModule, Configuration } from "@api/mmli-backend/v1";
 import { SafePipe } from "./pipes/safe.pipe";
@@ -67,7 +68,8 @@ const initAppFn = (envService: EnvironmentService) => {
     PdfViewerComponent,
     PdfViewerDialogServiceComponent,
     ExportMenuComponent,
-    PdfContextViewerComponent
+    PdfContextViewerComponent,
+    KetcherComponent
   ],
   imports: [
     ToastModule,
