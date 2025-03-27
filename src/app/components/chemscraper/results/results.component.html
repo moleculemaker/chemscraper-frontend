@@ -296,7 +296,7 @@
                               <div class="structural-info-container">
                                 <div class="extracted-structure-container">
                                   <p>Extracted Structure</p>
-                                  <div class="bordered-div" [innerHTML]="molecule.structure"></div>
+                                  <div class="bordered-div" [innerHTML]="molecule.structure | safe:'html'"></div>
                                 </div>
                                 <div class="original-structure-container">
                                   <p>Original Structure</p>
