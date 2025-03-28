@@ -11,14 +11,11 @@
  */
 
 
-export interface ExportRequestBody { 
-    jobId: string;
-    input_filename?: string;
-    cdxml: boolean;
-    cdxml_filter: string;
-    cdxml_selected_pages: Array<number>;
-    csv: boolean;
-    csv_filter: string;
-    csv_molecules: Array<number>;
+export interface CheckReactionSiteResponse { 
+    reaction_site_idxes: Array<number>;
+    smiles: string;
+    has_chiral: boolean;
+    num_heavy_atoms: number;
+    svg: string;
 }
 

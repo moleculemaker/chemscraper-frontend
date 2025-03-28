@@ -11,14 +11,13 @@
  */
 
 
-export interface ExportRequestBody { 
-    jobId: string;
-    input_filename?: string;
-    cdxml: boolean;
-    cdxml_filter: string;
-    cdxml_selected_pages: Array<number>;
-    csv: boolean;
-    csv_filter: string;
-    csv_molecules: Array<number>;
+export interface ChemicalAutoCompleteResponse { 
+    name: string;
+    smiles: string;
+    inchi: string;
+    inchi_key: string;
+    metanetx_id: string;
+    kegg_id: string;
+    structure?: string;
 }
 

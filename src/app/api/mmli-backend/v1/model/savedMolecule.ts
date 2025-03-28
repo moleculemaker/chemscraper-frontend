@@ -11,14 +11,11 @@
  */
 
 
-export interface ExportRequestBody { 
-    jobId: string;
-    input_filename?: string;
-    cdxml: boolean;
-    cdxml_filter: string;
-    cdxml_selected_pages: Array<number>;
-    csv: boolean;
-    csv_filter: string;
-    csv_molecules: Array<number>;
+export interface SavedMolecule { 
+    id?: number;
+    email?: string;
+    job_id?: string;
+    molecule_id?: string;
+    time_created?: number;
 }
 

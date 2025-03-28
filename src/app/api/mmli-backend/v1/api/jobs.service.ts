@@ -11,31 +11,30 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
-import { Inject, Injectable, Optional } from '@angular/core';
-import {
-    HttpClient, HttpHeaders, HttpParams,
-    HttpResponse, HttpEvent, HttpParameterCodec, HttpContext
-} from '@angular/common/http';
-import { CustomHttpParameterCodec } from '../encoder';
-import { Observable } from 'rxjs';
+import { Inject, Injectable, Optional }                      from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams,
+         HttpResponse, HttpEvent, HttpParameterCodec, HttpContext 
+        }       from '@angular/common/http';
+import { CustomHttpParameterCodec }                          from '../encoder';
+import { Observable }                                        from 'rxjs';
 
+// @ts-ignore
+import { BodyCreateJobJobTypeJobsPost } from '../model/bodyCreateJobJobTypeJobsPost';
 // @ts-ignore
 import { HTTPValidationError } from '../model/hTTPValidationError';
 // @ts-ignore
 import { Job } from '../model/job';
 // @ts-ignore
-import { JobCreate } from '../model/jobCreate';
-// @ts-ignore
 import { JobUpdate } from '../model/jobUpdate';
 
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
-import { Configuration } from '../configuration';
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
 
 
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class JobsService {
 
@@ -44,7 +43,7 @@ export class JobsService {
     public configuration = new Configuration();
     public encoder: HttpParameterCodec;
 
-    constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string | string[], @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string|string[], @Optional() configuration: Configuration) {
         if (configuration) {
             this.configuration = configuration;
         }
@@ -79,15 +78,15 @@ export class JobsService {
 
         if (typeof value === "object") {
             if (Array.isArray(value)) {
-                (value as any[]).forEach(elem => httpParams = this.addToHttpParamsRecursive(httpParams, elem, key));
+                (value as any[]).forEach( elem => httpParams = this.addToHttpParamsRecursive(httpParams, elem, key));
             } else if (value instanceof Date) {
                 if (key != null) {
                     httpParams = httpParams.append(key, (value as Date).toISOString().substr(0, 10));
                 } else {
-                    throw Error("key may not be null if value is Date");
+                   throw Error("key may not be null if value is Date");
                 }
             } else {
-                Object.keys(value).forEach(k => httpParams = this.addToHttpParamsRecursive(
+                Object.keys(value).forEach( k => httpParams = this.addToHttpParamsRecursive(
                     httpParams, value[k], key != null ? `${key}.${k}` : k));
             }
         } else if (key != null) {
@@ -102,19 +101,16 @@ export class JobsService {
      * Create Job
      * Create a new run for a new or existing Job
      * @param jobType 
-     * @param jobCreate 
+     * @param bodyCreateJobJobTypeJobsPost 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createJobJobTypeJobsPost(jobType: string, jobCreate: JobCreate, observe?: 'body', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<Job>;
-    public createJobJobTypeJobsPost(jobType: string, jobCreate: JobCreate, observe?: 'response', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpResponse<Job>>;
-    public createJobJobTypeJobsPost(jobType: string, jobCreate: JobCreate, observe?: 'events', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpEvent<Job>>;
-    public createJobJobTypeJobsPost(jobType: string, jobCreate: JobCreate, observe: any = 'body', reportProgress: boolean = false, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<any> {
+    public createJobJobTypeJobsPost(jobType: string, bodyCreateJobJobTypeJobsPost?: BodyCreateJobJobTypeJobsPost, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Job>;
+    public createJobJobTypeJobsPost(jobType: string, bodyCreateJobJobTypeJobsPost?: BodyCreateJobJobTypeJobsPost, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Job>>;
+    public createJobJobTypeJobsPost(jobType: string, bodyCreateJobJobTypeJobsPost?: BodyCreateJobJobTypeJobsPost, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Job>>;
+    public createJobJobTypeJobsPost(jobType: string, bodyCreateJobJobTypeJobsPost?: BodyCreateJobJobTypeJobsPost, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (jobType === null || jobType === undefined) {
             throw new Error('Required parameter jobType was null or undefined when calling createJobJobTypeJobsPost.');
-        }
-        if (jobCreate === null || jobCreate === undefined) {
-            throw new Error('Required parameter jobCreate was null or undefined when calling createJobJobTypeJobsPost.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -157,11 +153,11 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/${this.configuration.encodeParam({ name: "jobType", value: jobType, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined })}/jobs`;
+        let localVarPath = `/${this.configuration.encodeParam({name: "jobType", value: jobType, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/jobs`;
         return this.httpClient.request<Job>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: jobCreate,
+                body: bodyCreateJobJobTypeJobsPost,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -180,10 +176,10 @@ export class JobsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdDelete(jobType: string, jobId: string, runId: string, observe?: 'body', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<any>;
-    public deleteJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdDelete(jobType: string, jobId: string, runId: string, observe?: 'response', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpResponse<any>>;
-    public deleteJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdDelete(jobType: string, jobId: string, runId: string, observe?: 'events', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpEvent<any>>;
-    public deleteJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdDelete(jobType: string, jobId: string, runId: string, observe: any = 'body', reportProgress: boolean = false, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<any> {
+    public deleteJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdDelete(jobType: string, jobId: string, runId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
+    public deleteJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdDelete(jobType: string, jobId: string, runId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
+    public deleteJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdDelete(jobType: string, jobId: string, runId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
+    public deleteJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdDelete(jobType: string, jobId: string, runId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (jobType === null || jobType === undefined) {
             throw new Error('Required parameter jobType was null or undefined when calling deleteJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdDelete.');
         }
@@ -225,7 +221,7 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/${this.configuration.encodeParam({ name: "jobType", value: jobType, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined })}/jobs/${this.configuration.encodeParam({ name: "jobId", value: jobId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined })}/${this.configuration.encodeParam({ name: "runId", value: runId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined })}`;
+        let localVarPath = `/${this.configuration.encodeParam({name: "jobType", value: jobType, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/jobs/${this.configuration.encodeParam({name: "jobId", value: jobId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "runId", value: runId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -247,13 +243,10 @@ export class JobsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdGet(jobType: string, jobId: string, runId: string, observe?: 'body', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<any>;
-    public getJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdGet(jobType: string, jobId: string, runId: string, observe?: 'response', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpResponse<any>>;
-    public getJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdGet(jobType: string, jobId: string, runId: string, observe?: 'events', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpEvent<any>>;
-    public getJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdGet(jobType: string, jobId: string, runId: string, observe: any = 'body', reportProgress: boolean = false, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<any> {
-
-        console.log('in getJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdGet, jobType', jobType);
-
+    public getJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdGet(jobType: string, jobId: string, runId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
+    public getJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdGet(jobType: string, jobId: string, runId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
+    public getJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdGet(jobType: string, jobId: string, runId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
+    public getJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdGet(jobType: string, jobId: string, runId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (jobType === null || jobType === undefined) {
             throw new Error('Required parameter jobType was null or undefined when calling getJobByTypeAndJobIdAndRunIdJobTypeJobsJobIdRunIdGet.');
         }
@@ -295,9 +288,8 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/${this.configuration.encodeParam({ name: "jobType", value: jobType, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined })}/jobs/${this.configuration.encodeParam({ name: "jobId", value: jobId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined })}/${this.configuration.encodeParam({ name: "runId", value: runId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined })}`;
-        console.log('right before return in getJobById..ETC..... localVarPath', localVarPath);
-        const response = this.httpClient.request<any>('get', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/${this.configuration.encodeParam({name: "jobType", value: jobType, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/jobs/${this.configuration.encodeParam({name: "jobId", value: jobId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "runId", value: runId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        return this.httpClient.request<any>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -307,9 +299,6 @@ export class JobsService {
                 reportProgress: reportProgress
             }
         );
-        console.log('response', response);
-        // console.log('response', response.json());
-        return response;
     }
 
     /**
@@ -320,10 +309,10 @@ export class JobsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listJobsByTypeAndJobIdJobTypeJobsJobIdGet(jobType: string, jobId: string, observe?: 'body', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<any>;
-    public listJobsByTypeAndJobIdJobTypeJobsJobIdGet(jobType: string, jobId: string, observe?: 'response', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpResponse<any>>;
-    public listJobsByTypeAndJobIdJobTypeJobsJobIdGet(jobType: string, jobId: string, observe?: 'events', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpEvent<any>>;
-    public listJobsByTypeAndJobIdJobTypeJobsJobIdGet(jobType: string, jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<any> {
+    public listJobsByTypeAndJobIdJobTypeJobsJobIdGet(jobType: string, jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
+    public listJobsByTypeAndJobIdJobTypeJobsJobIdGet(jobType: string, jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
+    public listJobsByTypeAndJobIdJobTypeJobsJobIdGet(jobType: string, jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
+    public listJobsByTypeAndJobIdJobTypeJobsJobIdGet(jobType: string, jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (jobType === null || jobType === undefined) {
             throw new Error('Required parameter jobType was null or undefined when calling listJobsByTypeAndJobIdJobTypeJobsJobIdGet.');
         }
@@ -362,7 +351,7 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/${this.configuration.encodeParam({ name: "jobType", value: jobType, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined })}/jobs/${this.configuration.encodeParam({ name: "jobId", value: jobId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined })}`;
+        let localVarPath = `/${this.configuration.encodeParam({name: "jobType", value: jobType, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/jobs/${this.configuration.encodeParam({name: "jobId", value: jobId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         return this.httpClient.request<any>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -382,10 +371,10 @@ export class JobsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listJobsByTypeJobTypeJobsGet(jobType: string, observe?: 'body', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<any>;
-    public listJobsByTypeJobTypeJobsGet(jobType: string, observe?: 'response', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpResponse<any>>;
-    public listJobsByTypeJobTypeJobsGet(jobType: string, observe?: 'events', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpEvent<any>>;
-    public listJobsByTypeJobTypeJobsGet(jobType: string, observe: any = 'body', reportProgress: boolean = false, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<any> {
+    public listJobsByTypeJobTypeJobsGet(jobType: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
+    public listJobsByTypeJobTypeJobsGet(jobType: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
+    public listJobsByTypeJobTypeJobsGet(jobType: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
+    public listJobsByTypeJobTypeJobsGet(jobType: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (jobType === null || jobType === undefined) {
             throw new Error('Required parameter jobType was null or undefined when calling listJobsByTypeJobTypeJobsGet.');
         }
@@ -421,7 +410,7 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/${this.configuration.encodeParam({ name: "jobType", value: jobType, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined })}/jobs`;
+        let localVarPath = `/${this.configuration.encodeParam({name: "jobType", value: jobType, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/jobs`;
         return this.httpClient.request<any>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -442,10 +431,10 @@ export class JobsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public patchExistingJobJobTypeJobsJobIdRunIdPatch(jobType: string, jobUpdate: JobUpdate, observe?: 'body', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<Job>;
-    public patchExistingJobJobTypeJobsJobIdRunIdPatch(jobType: string, jobUpdate: JobUpdate, observe?: 'response', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpResponse<Job>>;
-    public patchExistingJobJobTypeJobsJobIdRunIdPatch(jobType: string, jobUpdate: JobUpdate, observe?: 'events', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpEvent<Job>>;
-    public patchExistingJobJobTypeJobsJobIdRunIdPatch(jobType: string, jobUpdate: JobUpdate, observe: any = 'body', reportProgress: boolean = false, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<any> {
+    public patchExistingJobJobTypeJobsJobIdRunIdPatch(jobType: string, jobUpdate: JobUpdate, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Job>;
+    public patchExistingJobJobTypeJobsJobIdRunIdPatch(jobType: string, jobUpdate: JobUpdate, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Job>>;
+    public patchExistingJobJobTypeJobsJobIdRunIdPatch(jobType: string, jobUpdate: JobUpdate, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Job>>;
+    public patchExistingJobJobTypeJobsJobIdRunIdPatch(jobType: string, jobUpdate: JobUpdate, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (jobType === null || jobType === undefined) {
             throw new Error('Required parameter jobType was null or undefined when calling patchExistingJobJobTypeJobsJobIdRunIdPatch.');
         }
@@ -493,7 +482,7 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/${this.configuration.encodeParam({ name: "jobType", value: jobType, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined })}/jobs//`;
+        let localVarPath = `/${this.configuration.encodeParam({name: "jobType", value: jobType, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/jobs//`;
         return this.httpClient.request<Job>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -515,10 +504,10 @@ export class JobsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateExistingJobJobTypeJobsJobIdRunIdPut(jobType: string, job: Job, observe?: 'body', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<Job>;
-    public updateExistingJobJobTypeJobsJobIdRunIdPut(jobType: string, job: Job, observe?: 'response', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpResponse<Job>>;
-    public updateExistingJobJobTypeJobsJobIdRunIdPut(jobType: string, job: Job, observe?: 'events', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpEvent<Job>>;
-    public updateExistingJobJobTypeJobsJobIdRunIdPut(jobType: string, job: Job, observe: any = 'body', reportProgress: boolean = false, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<any> {
+    public updateExistingJobJobTypeJobsJobIdRunIdPut(jobType: string, job: Job, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Job>;
+    public updateExistingJobJobTypeJobsJobIdRunIdPut(jobType: string, job: Job, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Job>>;
+    public updateExistingJobJobTypeJobsJobIdRunIdPut(jobType: string, job: Job, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Job>>;
+    public updateExistingJobJobTypeJobsJobIdRunIdPut(jobType: string, job: Job, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (jobType === null || jobType === undefined) {
             throw new Error('Required parameter jobType was null or undefined when calling updateExistingJobJobTypeJobsJobIdRunIdPut.');
         }
@@ -566,7 +555,7 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/${this.configuration.encodeParam({ name: "jobType", value: jobType, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined })}/jobs//`;
+        let localVarPath = `/${this.configuration.encodeParam({name: "jobType", value: jobType, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/jobs//`;
         return this.httpClient.request<Job>('put', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
