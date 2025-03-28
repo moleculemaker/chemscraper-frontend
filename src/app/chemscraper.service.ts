@@ -10,8 +10,8 @@ import {
   //ExportRequestBody,
   JobsService,
   FilesService,
-  Molecule
 } from "./api/mmli-backend/v1";
+import { Molecule } from "@api/mmli-backend/v1/model/molecule";
 import { EnvironmentService } from "./services/environment.service";
 
 @Injectable({
@@ -65,7 +65,7 @@ export class ChemScraperService {
   }
 
   exportFiles(requestBody: ExportRequestBody): Observable<any> {
-    return this.filesService.analyzeDocumentsBucketNameExportResultsPost('chemscraper', requestBody, 'body', false, { httpHeaderAccept: 'application/zip' as any });
+    return this.filesService.exportResultsBucketNameExportResultsPost('chemscraper', requestBody, 'body', false, { httpHeaderAccept: 'application/zip' as any });
   }
 
   getSimilaritySortedOrder(jobID: string, smile: string): Observable<number[]> {

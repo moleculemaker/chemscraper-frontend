@@ -20,7 +20,8 @@ import {
 import { ChemScraperService } from 'src/app/chemscraper.service';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 import { Table } from 'primeng/table';
-import { JobsService, Configuration, Molecule } from "@api/mmli-backend/v1";
+import { JobsService, Configuration } from "@api/mmli-backend/v1";
+import { Molecule } from "@api/mmli-backend/v1/model/molecule";
 import { PdfViewerDialogServiceComponent } from '../pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { OverlayPanel } from 'primeng/overlaypanel';
@@ -291,7 +292,7 @@ export class ResultsComponent {
               );
           },
           (error) => {
-            // TODO: Update UI, not just toast. 
+            // TODO: Update UI, not just toast.
             console.error(`Failed to fetch results for job ${jobID}. Error: ${error}`);
             this.showMessage('error', 'Error', `Failed to fetch results for job ${jobID}. Error: ${error}`);
           }
