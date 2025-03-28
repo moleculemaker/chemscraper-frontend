@@ -13,6 +13,7 @@ export * from './jobStatus';
 export * from './jobType';
 export * from './jobUpdate';
 export * from './locationInner';
+export * from './molecule';
 export * from './reactionMinerSearchResponse';
 export * from './savedMolecule';
 export * from './savedMoleculeDelete';

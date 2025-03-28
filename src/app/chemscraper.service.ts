@@ -1,17 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
-import { PostResponse, ChemScraperAnalyzeRequestBody, ExampleData, FileUploadResponse, ExportRequestBody, Job } from './models';
+import {
+  PostResponse,
+  ChemScraperAnalyzeRequestBody,
+  ExampleData,
+  FileUploadResponse,
+  Job
+} from './models';
 import {
   AnalyzeRequestBody,
   ChemScraperService as ChemScraperApiService,
   DefaultService,
-  //Molecule,
-  //ExportRequestBody,
+  ExportRequestBody,
   JobsService,
-  FilesService,
+  FilesService, Molecule,
 } from "./api/mmli-backend/v1";
-import { Molecule } from "@api/mmli-backend/v1/model/molecule";
 import { EnvironmentService } from "./services/environment.service";
 
 @Injectable({

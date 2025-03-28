@@ -61,7 +61,9 @@
             </p-button></div>
           <p-overlayPanel styleClass="export-menu" #ExportDropdown>
             <chemscraper-export-menu [tableRows]="resultsTable.value"
-              [pages_count]="pages_count"></chemscraper-export-menu>
+                                     [input_filename]="currentPDFName"
+                                     [pages_count]="pages_count">
+            </chemscraper-export-menu>
           </p-overlayPanel>
 
         </div>
