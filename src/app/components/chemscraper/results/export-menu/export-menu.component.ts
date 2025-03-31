@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ChemScraperService } from 'src/app/chemscraper.service';
-import { ExportRequestBody } from 'src/app/models';
+import {ExportRequestBody} from "@api/mmli-backend/v1";
 
 @Component({
   selector: 'chemscraper-export-menu',
@@ -12,6 +12,8 @@ export class ExportMenuComponent implements OnInit{
 
   @Input() pages_count: number;
 
+  @Input() input_filename: string;
+
   format_checkbox: string[] = [];
   isExportDisabled: boolean;
 
@@ -20,7 +22,9 @@ export class ExportMenuComponent implements OnInit{
   selectedPage: any;
 
   exportRequestBody : ExportRequestBody = {
+
     jobId: '',
+    input_filename: '',
     cdxml: false,
     cdxml_filter: 'all_molecules',
     cdxml_selected_pages: [],
@@ -55,6 +59,7 @@ export class ExportMenuComponent implements OnInit{
       this.exportRequestBody.csv_molecules = this.tableRows.map(row => row.id)
     }
 
+    this.exportRequestBody.input_filename = this.input_filename;
     this._chemScraperService.exportFiles(this.exportRequestBody).subscribe((file: Blob) => {
       const url = window.URL.createObjectURL(file);
       const link = document.createElement('a');

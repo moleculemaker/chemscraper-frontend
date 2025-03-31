@@ -11,10 +11,9 @@
  */
 
 
-export interface JobCreate { 
-    job_info?: string;
-    email?: string;
-    job_id?: string;
-    run_id?: number;
+export interface ReactionMinerSearchResponse { 
+    status: string;
+    passage_results: Array<object>;
+    image_results: Array<object>;
 }
 

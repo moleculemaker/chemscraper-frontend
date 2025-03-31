@@ -14,11 +14,19 @@
 /**
  * An enumeration.
  */
-export type JobType = 'clean' | 'chemscraper' | 'molli';
+export type JobType = 'aceretro' | 'clean' | 'chemscraper' | 'molli' | 'novostoic-optstoic' | 'novostoic-pathways' | 'novostoic-enzrank' | 'novostoic-dgpredictor' | 'reactionminer' | 'somn' | 'defaults';
 
 export const JobType = {
+    Aceretro: 'aceretro' as JobType,
     Clean: 'clean' as JobType,
     Chemscraper: 'chemscraper' as JobType,
-    Molli: 'molli' as JobType
+    Molli: 'molli' as JobType,
+    NovostoicOptstoic: 'novostoic-optstoic' as JobType,
+    NovostoicPathways: 'novostoic-pathways' as JobType,
+    NovostoicEnzrank: 'novostoic-enzrank' as JobType,
+    NovostoicDgpredictor: 'novostoic-dgpredictor' as JobType,
+    Reactionminer: 'reactionminer' as JobType,
+    Somn: 'somn' as JobType,
+    Defaults: 'defaults' as JobType
 };
 

@@ -1,16 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
-import { PostResponse, ChemScraperAnalyzeRequestBody, ExampleData, FileUploadResponse, ExportRequestBody, Job } from './models';
+import {
+  PostResponse,
+  ChemScraperAnalyzeRequestBody,
+  ExampleData,
+  FileUploadResponse,
+  Job
+} from './models';
 import {
   AnalyzeRequestBody,
   ChemScraperService as ChemScraperApiService,
   DefaultService,
-  //Molecule,
-  //ExportRequestBody,
+  ExportRequestBody,
   JobsService,
-  FilesService,
-  Molecule
+  FilesService, Molecule,
 } from "./api/mmli-backend/v1";
 import { EnvironmentService } from "./services/environment.service";
 
@@ -65,7 +69,7 @@ export class ChemScraperService {
   }
 
   exportFiles(requestBody: ExportRequestBody): Observable<any> {
-    return this.filesService.analyzeDocumentsBucketNameExportResultsPost('chemscraper', requestBody, 'body', false, { httpHeaderAccept: 'application/zip' as any });
+    return this.filesService.exportResultsBucketNameExportResultsPost('chemscraper', requestBody, 'body', false, { httpHeaderAccept: 'application/zip' as any });
   }
 
   getSimilaritySortedOrder(jobID: string, smile: string): Observable<number[]> {

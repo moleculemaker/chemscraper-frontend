@@ -14,6 +14,9 @@
     "openapi:sync": "curl https://mmli.fastapi.mmli1.ncsa.illinois.edu/openapi.json > openapi/mmli-backend.openapi.json && cat openapi/mmli-backend.openapi.json",
     "openapi:live": "npm run openapi:sync && npm run openapi",
 
+    "openapi:sync:staging": "curl https://mmli.fastapi.staging.mmli1.ncsa.illinois.edu/openapi.json > openapi/mmli-backend.openapi.json && cat openapi/mmli-backend.openapi.json",
+    "openapi:live:staging": "npm run openapi:staging:sync && npm run openapi",
+
     "openapi:sync:local": "curl http://localhost:8080/openapi.json > openapi/mmli-backend.openapi.json && cat openapi/mmli-backend.openapi.json",
     "openapi:live:local": "npm run openapi:sync:local && npm run openapi"
   },
