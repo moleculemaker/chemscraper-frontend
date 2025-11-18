@@ -8,8 +8,11 @@
         </h3>
         <!-- todo: change to output job summary data -->
         <div class="details">
-          <div *ngIf="statusResponse" class="sequence_time">Document Submitted: {{statusResponse.job_info}} | Submission
-            Time: {{(1000 * statusResponse.time_created) | date:'short' }}</div>
+          <div *ngIf="statusResponse" class="sequence_time">Document Submitted: {{statusResponse.job_info}}
+            <span *ngIf="statusResponse?.time_created">
+              | Submission Time: {{(1000 * statusResponse.time_created) | date:'short' }
+            </span>
+          </div>
         </div>
       </div>
       <div class="spacer"></div>
