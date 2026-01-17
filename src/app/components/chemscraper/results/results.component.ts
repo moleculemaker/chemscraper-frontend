@@ -1,26 +1,18 @@
-import { HttpClient } from '@angular/common/http';
+
 import { Component, ViewChild } from '@angular/core';
-import { ResultService } from 'src/app/result.service';
-import { interval } from "rxjs/internal/observable/interval";
 import { Subscription, timer } from 'rxjs';
-import { finalize, startWith, switchMap, takeWhile } from "rxjs/operators";
-import { Router } from '@angular/router';
+import { switchMap, takeWhile } from "rxjs/operators";
 import { MenuItem, Message, MessageService } from 'primeng/api';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import {
   PredictionRow,
   PollingResponseResult,
-  PollingResponseStatus,
-  SingleSeqResult,
-  SeqResult,
   HighlightBox,
-  Job
 } from '../../../models';
 import { ChemScraperService } from 'src/app/chemscraper.service';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 import { Table } from 'primeng/table';
-import { JobsService, Configuration } from "@api/mmli-backend/v1";
+import { Job } from "@api/mmli-backend/v1";
 import { Molecule } from "@api/mmli-backend/v1/model/molecule";
 import { PdfViewerDialogServiceComponent } from '../pdf-viewer-dialog-service/pdf-viewer-dialog-service.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -92,11 +84,7 @@ export class ResultsComponent {
   @ViewChild('sortOverlay') sortOverlay: OverlayPanel;
 
   constructor(
-    private router: Router,
-    private _resultService: ResultService,
-    private httpClient: HttpClient,
     private _chemScraperService: ChemScraperService,
-    private sanitizer: DomSanitizer,
     private dialogService: DialogService,
     private messageService: MessageService,
   ) {

@@ -26,6 +26,8 @@ import { FlaggedMolecule } from '../model/flaggedMolecule';
 import { FlaggedMoleculeDelete } from '../model/flaggedMoleculeDelete';
 // @ts-ignore
 import { HTTPValidationError } from '../model/hTTPValidationError';
+// @ts-ignore
+import { Molecule } from '../model/molecule';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -103,9 +105,9 @@ export class ChemScraperService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public analyzeDocumentsChemscraperAnalyzePost(analyzeRequestBody: AnalyzeRequestBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public analyzeDocumentsChemscraperAnalyzePost(analyzeRequestBody: AnalyzeRequestBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public analyzeDocumentsChemscraperAnalyzePost(analyzeRequestBody: AnalyzeRequestBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
+    public analyzeDocumentsChemscraperAnalyzePost(analyzeRequestBody: AnalyzeRequestBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<Molecule>>;
+    public analyzeDocumentsChemscraperAnalyzePost(analyzeRequestBody: AnalyzeRequestBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<Molecule>>>;
+    public analyzeDocumentsChemscraperAnalyzePost(analyzeRequestBody: AnalyzeRequestBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<Molecule>>>;
     public analyzeDocumentsChemscraperAnalyzePost(analyzeRequestBody: AnalyzeRequestBody, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
         if (analyzeRequestBody === null || analyzeRequestBody === undefined) {
             throw new Error('Required parameter analyzeRequestBody was null or undefined when calling analyzeDocumentsChemscraperAnalyzePost.');
@@ -152,7 +154,7 @@ export class ChemScraperService {
         }
 
         let localVarPath = `/chemscraper/analyze`;
-        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<Array<Molecule>>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: analyzeRequestBody,
