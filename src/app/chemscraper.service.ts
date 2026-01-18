@@ -6,7 +6,6 @@ import {
   ChemScraperAnalyzeRequestBody,
   ExampleData,
   FileUploadResponse,
-  Job
 } from './models';
 import {
   AnalyzeRequestBody,
@@ -14,7 +13,7 @@ import {
   DefaultService,
   ExportRequestBody,
   JobsService,
-  FilesService, Molecule,
+  FilesService, Molecule, Job,
 } from "./api/mmli-backend/v1";
 import { EnvironmentService } from "./services/environment.service";
 
@@ -42,8 +41,14 @@ export class ChemScraperService {
     return respond;
   }
 
-  analyzeDocument(requestBody: AnalyzeRequestBody): Observable<PostResponse> {
-    return this.chemscraperService.analyzeDocumentsChemscraperAnalyzePost(requestBody);
+  analyzeDocument(requestBody: AnalyzeRequestBody): Observable<Job> {
+    // Submit first file
+    const fileName = requestBody.fileList.find(() => true);
+    return this.jobsService.createJobJobTypeJobsPost('chemscraper', {
+      job_id: requestBody.jobId,
+      email: requestBody.user_email,
+      job_info: JSON.stringify({input_file: fileName})
+    });
   }
 
   fileUpload(formData: FormData, jobID?: string): Observable<FileUploadResponse> {
