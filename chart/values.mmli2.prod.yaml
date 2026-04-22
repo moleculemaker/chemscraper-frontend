@@ -2,6 +2,7 @@ ingress:
   hostname: chemscraper.platform.moleculemaker.org
   extraHosts:
   - chemscraper.frontend.mmli2.ncsa.illinois.edu
+  - chemscraper.frontend.mmli1.ncsa.illinois.edu
   tls: true
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
@@ -27,6 +28,6 @@ extraDeploy:
     namespace: alphasynthesis
   spec:
     redirectRegex:
-      regex: "^https://chemscraper.frontend.mmli2.ncsa.illinois.edu/(.*)"
+      regex: "^https:\\/\\/chemscraper\\.frontend\\.mmli\\d\\.ncsa\\.illinois\\.edu(\\/.*)"
       replacement: "https://chemscraper.platform.moleculemaker.org/${1}"
       permanent: true
