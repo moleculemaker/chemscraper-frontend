@@ -23,7 +23,7 @@ extraDeploy:
 - apiVersion: traefik.io/v1alpha1
   kind: Middleware
   metadata:
-    name: clean-staging-domain-redirect
+    name: chemscraper-staging-domain-redirect
     namespace: staging
   spec:
     redirectRegex:
