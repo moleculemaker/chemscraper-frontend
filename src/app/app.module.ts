@@ -42,7 +42,6 @@ import { PdfViewerDialogServiceComponent } from './components/chemscraper/pdf-vi
 
 import { EnvironmentService } from "@services/environment.service";
 import { MenuModule } from "primeng/menu";
-import { MarvinJsModule } from "./components/chemscraper/marvinjs/marvinjs.module";
 import { DialogModule } from "primeng/dialog";
 import { ExportMenuComponent } from './components/chemscraper/results/export-menu/export-menu.component';
 import { PdfContextViewerComponent } from './components/chemscraper/results/pdf-context-viewer/pdf-context-viewer.component';
@@ -107,7 +106,6 @@ const initAppFn = (envService: EnvironmentService) => {
 
     ApiModule.forRoot(() => new Configuration()),
     ReactiveFormsModule,
-    MarvinJsModule,
     DialogModule
   ],
   providers: [

@@ -15,18 +15,6 @@ These 4 containers are built via [this Docker Compose](https://gitlab.com/dprl/d
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.1.6.
 
-For marvin.js license add the following lines to your `~/.npmrc`:
-```
-@chemaxon:registry=https://hub.chemaxon.com/artifactory/api/npm/npm/
-hub.chemaxon.com/artifactory/api/npm/npm/:_auth="<auth>"
-hub.chemaxon.com/artifactory/api/npm/npm/:_password="<password>"
-hub.chemaxon.com/artifactory/api/npm/npm/:username=<user>
-hub.chemaxon.com/artifactory/api/npm/npm/:email=<email>
-hub.chemaxon.com/artifactory/api/npm/npm/:always-auth=true
-```
-
-MMLI members can reach out to developers for the secrets. Non-MMLI members will need to make arrangements for their own MarvinJS license.
-
 Run `npm start` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
 ## Code scaffolding
